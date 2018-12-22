@@ -11,7 +11,7 @@ public class Turret : MonoBehaviour {
     public GameObject projectile;
     public int projectilePierce;
     public float projectileSpeed;
-    public int projectileDamage;
+    public int projectileDamage = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -44,7 +44,7 @@ public class Turret : MonoBehaviour {
             instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
             instProj.SendMessage("SetDamage", this.projectileDamage);
             instProj.SendMessage("SetPierce", this.projectilePierce);
-
+            instProj.SendMessage("SetBuilder", this.builder);
             lastFireTime = Time.time;
         }
     }

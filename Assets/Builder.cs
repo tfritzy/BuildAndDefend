@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+
 public class Builder : MonoBehaviour {
 
     // Private fields
@@ -9,23 +11,30 @@ public class Builder : MonoBehaviour {
     float wallZAxis = 0f;
     private HashSet<Zombie> needNewPaths;
     private Text woodLabel;
+    private int woodWallCost = 100;
 
     // Pulic Fields
     public GameObject wallSegment;
     public bool[,] grid;
     public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;
-    public int woodCount = 5;
+    public int woodCount = 500;
+    public bool deleteMode = false;
+    public GameObject water;
+    public GameObject brush;
+    public GameObject chasm;
+    public GameObject wire;
 
     private void Awake()
     {
-        this.grid = new bool[32, 64];
+        this.grid = new bool[16, 32];
         pathTakers = new Dictionary<string, HashSet<Zombie>>();
+        LoadMap("Lowland");
     }
 
     // Use this for initialization
     void Start()
-    {
+    { 
         this.needNewPaths = new HashSet<Zombie>();
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
@@ -41,11 +50,13 @@ public class Builder : MonoBehaviour {
             Time.timeScale = 1f;
             ProcessPathsNeeded();
         }
-            
     }
 
-    
-	
+    private void ToggleDeleteMode()
+    {
+        this.deleteMode = !deleteMode;
+    }
+
 	// Update is called once per frame
 	void Update () {
         BuildBlock();
@@ -60,24 +71,32 @@ public class Builder : MonoBehaviour {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
             int[] gridLoc = WorldPointToGridPoint(location);
-            if (gridLoc[0] < 1 || gridLoc[0] > 30 || gridLoc[1] < 1 || gridLoc[1] > 14)
+            if (gridLoc[1] < 1 || gridLoc[1] > 14 || gridLoc[0] < 1 || gridLoc[0] > 30)
             {
                 return;
             }
-            if (this.woodCount <= 0)
+            if (this.woodCount < woodWallCost)
             {
                 return;
             }
-            if (grid[gridLoc[0], gridLoc[1]])
+            if (grid[gridLoc[1], gridLoc[0]])
             {
                 return;
             }
-            grid[gridLoc[0], gridLoc[1]] = true;
-            NotifyZombieSubs(gridLoc);
-            Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
 
-            this.woodCount -= 1;
-            woodLabel.text = woodCount.ToString();
+            if (!deleteMode)
+            {
+                grid[gridLoc[1], gridLoc[0]] = true;
+                NotifyZombieSubs(gridLoc);
+                Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
+                AddWood(-1 * woodWallCost);
+            } else
+            {
+
+                grid[gridLoc[1], gridLoc[0]] = false;
+            }
+
+            
 
         }
     }
@@ -167,4 +186,48 @@ public class Builder : MonoBehaviour {
 
         return loc;
     }
+
+    public void LoadMap(string mapName)
+    {
+        string path = "Assets/Maps/" + mapName;
+        StreamReader reader = new StreamReader(path);
+        string[] strMap = reader.ReadLine().Split(' ');
+        for (int i = 0; i < strMap.Length-1; i++)
+        {
+            int x = i % 32;
+            int y = i / 32;
+            int value = int.Parse(strMap[i]);
+            grid[y , x] = value != 0;
+            PlaceBlock(value, x, y);
+        }
+    }
+
+    public void AddWood(int amount)
+    {
+        this.woodCount += amount;
+        woodLabel.text = woodCount.ToString();
+    }
+
+    private void PlaceBlock(int type, int x, int y)
+    {
+        if (type == 0)
+            return;
+        GameObject selectedBlock = water;
+        if (type == 2)
+        {
+            selectedBlock = brush;
+        } else if (type == 3)
+        {
+            selectedBlock = wire;
+        }else if (type == 4)
+        {
+            selectedBlock = chasm;
+        }
+
+        Instantiate(selectedBlock, GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
+
+
+    }
+
+
 }

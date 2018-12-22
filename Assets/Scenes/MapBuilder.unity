@@ -199,9 +199,8 @@ GameObject:
   - component: {fileID: 371392512}
   - component: {fileID: 371392511}
   - component: {fileID: 371392510}
-  - component: {fileID: 371392509}
   m_Layer: 5
-  m_Name: BuildModeButton (2)
+  m_Name: BrushButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,24 +222,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 269.3, y: 51}
+  m_AnchoredPosition: {x: 269, y: 51}
   m_SizeDelta: {x: 74.12, y: 58.19}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &371392509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 371392507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallSegment: {fileID: 1814081141760916, guid: ff0ffbc50cbaa7a42ad2c39374977bd3,
-    type: 2}
-  inBuildMode: 0
-  woodCount: 5
 --- !u!114 &371392510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +264,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 371392509}
+      - m_Target: {fileID: 1292659880}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -288,7 +272,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ToggleBuildMode
+          m_StringArgument: SelectBrush
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -338,9 +322,8 @@ GameObject:
   - component: {fileID: 410410259}
   - component: {fileID: 410410258}
   - component: {fileID: 410410257}
-  - component: {fileID: 410410256}
   m_Layer: 5
-  m_Name: BuildModeButton (1)
+  m_Name: WaterButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -362,24 +345,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 177.6, y: 51}
+  m_AnchoredPosition: {x: 177.5, y: 51}
   m_SizeDelta: {x: 74.12, y: 58.19}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &410410256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 410410254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallSegment: {fileID: 1814081141760916, guid: ff0ffbc50cbaa7a42ad2c39374977bd3,
-    type: 2}
-  inBuildMode: 0
-  woodCount: 5
 --- !u!114 &410410257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +387,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 410410256}
+      - m_Target: {fileID: 1292659880}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -427,7 +395,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ToggleBuildMode
+          m_StringArgument: SelectWater
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -444,7 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.07075471, g: 0.676592, b: 1, a: 1}
+  m_Color: {r: 0.3537736, g: 0.5668224, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -557,8 +525,9 @@ RectTransform:
   - {fileID: 410410255}
   - {fileID: 371392508}
   - {fileID: 1003595988}
-  - {fileID: 946579968}
   - {fileID: 561229120}
+  - {fileID: 946579968}
+  - {fileID: 529554494}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -567,6 +536,75 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &529554493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 529554494}
+  - component: {fileID: 529554496}
+  - component: {fileID: 529554495}
+  m_Layer: 5
+  m_Name: Image (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &529554494
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 529554493}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 514393120}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 51.487}
+  m_SizeDelta: {x: 800, y: 347.02}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &529554495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 529554493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.4528302, g: 0.37278044, b: 0.21146315, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &529554496
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 529554493}
+  m_CullTransparentMesh: 0
 --- !u!1 &561229119
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,9 +616,8 @@ GameObject:
   - component: {fileID: 561229124}
   - component: {fileID: 561229123}
   - component: {fileID: 561229122}
-  - component: {fileID: 561229121}
   m_Layer: 5
-  m_Name: Bridge (1)
+  m_Name: ChasmButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,28 +635,13 @@ RectTransform:
   m_Children:
   - {fileID: 934347360}
   m_Father: {fileID: 514393120}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 550.5, y: 51}
+  m_AnchoredPosition: {x: 461.9, y: 51}
   m_SizeDelta: {x: 74.12, y: 58.19}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &561229121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 561229119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallSegment: {fileID: 1814081141760916, guid: ff0ffbc50cbaa7a42ad2c39374977bd3,
-    type: 2}
-  inBuildMode: 0
-  woodCount: 5
 --- !u!114 &561229122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,7 +681,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 561229121}
+      - m_Target: {fileID: 1292659880}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -667,7 +689,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ToggleBuildMode
+          m_StringArgument: SelectChasm
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -869,7 +891,7 @@ GameObject:
   - component: {fileID: 946579970}
   - component: {fileID: 946579969}
   m_Layer: 5
-  m_Name: Bridge
+  m_Name: Save
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -887,11 +909,11 @@ RectTransform:
   m_Children:
   - {fileID: 1857346002}
   m_Father: {fileID: 514393120}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 458, y: 51}
+  m_AnchoredPosition: {x: 717.06, y: 51}
   m_SizeDelta: {x: 74.12, y: 58.19}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &946579969
@@ -909,6 +931,10 @@ MonoBehaviour:
     type: 2}
   inBuildMode: 0
   woodCount: 5
+  water: {fileID: 0}
+  brush: {fileID: 0}
+  chasm: {fileID: 0}
+  wire: {fileID: 0}
 --- !u!114 &946579970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -948,7 +974,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 946579969}
+      - m_Target: {fileID: 1292659880}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -956,7 +982,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ToggleBuildMode
+          m_StringArgument: Save
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -973,7 +999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5377358, g: 0.3409876, b: 0, a: 1}
+  m_Color: {r: 0.11681662, g: 0.8679245, b: 0.08597365, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1006,9 +1032,8 @@ GameObject:
   - component: {fileID: 1003595992}
   - component: {fileID: 1003595991}
   - component: {fileID: 1003595990}
-  - component: {fileID: 1003595989}
   m_Layer: 5
-  m_Name: BuildModeButton (3)
+  m_Name: WireButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1030,24 +1055,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 364.9, y: 51}
+  m_AnchoredPosition: {x: 365, y: 51}
   m_SizeDelta: {x: 74.12, y: 58.19}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1003595989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1003595987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallSegment: {fileID: 1814081141760916, guid: ff0ffbc50cbaa7a42ad2c39374977bd3,
-    type: 2}
-  inBuildMode: 0
-  woodCount: 5
 --- !u!114 &1003595990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1087,7 +1097,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1003595989}
+      - m_Target: {fileID: 1292659880}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -1095,7 +1105,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ToggleBuildMode
+          m_StringArgument: SelectWire
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1145,7 +1155,6 @@ GameObject:
   - component: {fileID: 1292659884}
   - component: {fileID: 1292659883}
   - component: {fileID: 1292659882}
-  - component: {fileID: 1292659881}
   - component: {fileID: 1292659880}
   m_Layer: 5
   m_Name: BuildModeButton
@@ -1184,21 +1193,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a240734f4e4fded4d8e8a090a17ea28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1292659881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1292659878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   wallSegment: {fileID: 1814081141760916, guid: ff0ffbc50cbaa7a42ad2c39374977bd3,
     type: 2}
-  inBuildMode: 0
-  woodCount: 5
+  water: {fileID: 1878070863625266, guid: 32bb3d90ad578f84a84a022092e2b30a, type: 2}
+  brush: {fileID: 1944554007921392, guid: dc8f48e2b230f0d4cb24198a208bdf60, type: 2}
+  chasm: {fileID: 1323332675156354, guid: 07b7ac91bda6a33498a4154ba8bf0b08, type: 2}
+  wire: {fileID: 1613677484403518, guid: e0f1572bbb9eeed479498cfc0c259220, type: 2}
+  mapName: Lowland
 --- !u!114 &1292659882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1238,7 +1239,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1292659881}
+      - m_Target: {fileID: 0}
         m_MethodName: SendMessage
         m_Mode: 5
         m_Arguments:
@@ -1285,6 +1286,68 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1292659878}
   m_CullTransparentMesh: 0
+--- !u!1 &1313325991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1313325994}
+  - component: {fileID: 1313325993}
+  - component: {fileID: 1313325992}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1313325992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313325991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1313325993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313325991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1313325994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1313325991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1694056842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,7 +1559,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Bridge
+  m_Text: Save
 --- !u!222 &1857346004
 CanvasRenderer:
   m_ObjectHideFlags: 0

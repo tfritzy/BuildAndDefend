@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4481617304697018}
   - component: {fileID: 212461075545576410}
   - component: {fileID: 61565276233978664}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Chasm
   m_TagString: Wall
   m_Icon: {fileID: 0}

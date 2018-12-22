@@ -8,6 +8,8 @@ TagManager:
   - Projectile
   - Turret
   - Wall
+  - Brush
+  - Spawner
   layers:
   - Default
   - TransparentFX

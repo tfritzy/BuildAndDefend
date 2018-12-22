@@ -89,8 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbea103ba8e426245a63d2835a8139af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombieSpeed: 1
+  zombieSpeed: 0.3
   testRedDot: {fileID: 1096792832994382, guid: c3bfcde3ec68562428fb73e95c02df68, type: 2}
+  health: 5
 --- !u!212 &212371457051429740
 SpriteRenderer:
   m_ObjectHideFlags: 1

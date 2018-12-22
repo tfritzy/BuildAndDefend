@@ -13,6 +13,7 @@ public class Zombie : MonoBehaviour {
 
     public float zombieSpeed = .3f;
     public GameObject testRedDot;
+    public int health = 5;
     
 
 	// Use this for initialization
@@ -112,9 +113,9 @@ public class Zombie : MonoBehaviour {
                 int newY = y + searchDirections[i, 1];
                 //Debug.Log("TestPos: " + newX + " " + newY);
 
-                if (newY >= 0 && newY < grid.GetLength(1) &&
-                    newX >= 0 && newX < grid.GetLength(0) &&
-                    !grid[newX, newY] &&
+                if (newY >= 0 && newY < grid.GetLength(0) &&
+                    newX >= 0 && newX < grid.GetLength(1) &&
+                    !grid[newY, newX] &&
                     !v.Contains(newX + "," + newY))
                 {
                     //Debug.Log("Added: " + newX + " and " + newY);
@@ -125,11 +126,16 @@ public class Zombie : MonoBehaviour {
             }
             //Debug.Log("Removed: " + x + " and " + y);
             v.Add(x + "," + y);
+            if (q.Count == 1)
+            {
+                return ConvertIntArrList(q.First.Value);
+            }
             q.RemoveFirst();
         }
 
         // No Path Found :(
         Debug.Log("No Path Found " + q.Count);
+        
         return new List<Vector2>();
     }
 
@@ -153,6 +159,15 @@ public class Zombie : MonoBehaviour {
                 builder.pathTakers.Add(key, new HashSet<Zombie>());
             }
             builder.pathTakers[key].Add(this);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        this.health -= damage;
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
         }
     }
 

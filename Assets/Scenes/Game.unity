@@ -785,6 +785,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4703995434095206, guid: 00a0bdf6dbba5cf46aa8b1f86babb666,
     type: 2}
   m_PrefabInternal: {fileID: 534574723}
+--- !u!1001 &1001079013
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -7.026
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.884
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.10546875
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 2.8592
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043076569407126, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 2.8892
+      objectReference: {fileID: 0}
+    - target: {fileID: 212371457051429740, guid: e312c5870a3a94e4b97f4e64412ad290,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 0.81960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 212371457051429740, guid: e312c5870a3a94e4b97f4e64412ad290,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 0.31616026
+      objectReference: {fileID: 0}
+    - target: {fileID: 212371457051429740, guid: e312c5870a3a94e4b97f4e64412ad290,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0.21176471
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e312c5870a3a94e4b97f4e64412ad290, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &1008269314
 Prefab:
   m_ObjectHideFlags: 0
@@ -1235,7 +1300,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1635509991}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1998204704}
+        m_MethodName: SendMessage
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ToggleDeleteMode
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1635509991
@@ -1640,6 +1716,7 @@ MonoBehaviour:
     type: 2}
   inBuildMode: 0
   woodCount: 500
+  deleteMode: 0
   water: {fileID: 1878070863625266, guid: 32bb3d90ad578f84a84a022092e2b30a, type: 2}
   brush: {fileID: 1944554007921392, guid: dc8f48e2b230f0d4cb24198a208bdf60, type: 2}
   chasm: {fileID: 1323332675156354, guid: 07b7ac91bda6a33498a4154ba8bf0b08, type: 2}

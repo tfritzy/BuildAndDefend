@@ -75,7 +75,7 @@ public class Zombie : MonoBehaviour {
     }
 
     // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(bool[,] grid, int[] startLoc, int[] endLoc)
+    public List<Vector2> FindPath(byte[,] grid, int[] startLoc, int[] endLoc)
     {
         LinkedList<List<int[]>> q = new LinkedList<List<int[]>>();
         HashSet<string> v = new HashSet<string>();
@@ -115,7 +115,7 @@ public class Zombie : MonoBehaviour {
 
                 if (newY >= 0 && newY < grid.GetLength(0) &&
                     newX >= 0 && newX < grid.GetLength(1) &&
-                    !grid[newY, newX] &&
+                    grid[newY, newX] == 0 &&
                     !v.Contains(newX + "," + newY))
                 {
                     //Debug.Log("Added: " + newX + " and " + newY);

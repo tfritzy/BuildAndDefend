@@ -12,10 +12,12 @@ public class Builder : MonoBehaviour {
     private HashSet<Zombie> needNewPaths;
     private Text woodLabel;
     private int woodWallCost = 100;
+    private LinkedList<Zombie> zombiesThatNeedNewPath;
+    private float lastNewPathQueuePopTime;
 
     // Pulic Fields
     public GameObject wallSegment;
-    public bool[,] grid;
+    public byte[,] grid;
     public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;
     public int woodCount = 500;
@@ -27,7 +29,7 @@ public class Builder : MonoBehaviour {
 
     private void Awake()
     {
-        this.grid = new bool[16, 32];
+        this.grid = new byte[16, 32];
         pathTakers = new Dictionary<string, HashSet<Zombie>>();
         LoadMap("Lowland");
     }
@@ -38,6 +40,7 @@ public class Builder : MonoBehaviour {
         this.needNewPaths = new HashSet<Zombie>();
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
+        zombiesThatNeedNewPath = new LinkedList<Zombie>();
     }
 
     private void ToggleBuildMode()
@@ -54,13 +57,31 @@ public class Builder : MonoBehaviour {
 
     private void ToggleDeleteMode()
     {
+        
         this.deleteMode = !deleteMode;
+        Debug.Log("DELETE MODE ACTIVE: " + deleteMode);
     }
 
 	// Update is called once per frame
 	void Update () {
         BuildBlock();
-	}
+        ProcessUpdateQueue();
+    }
+
+    void ProcessUpdateQueue()
+    {
+        //Debug.Log(zombiesThatNeedNewPath.Count + " still need to be updated.");
+        if (zombiesThatNeedNewPath.Count > 0 && Time.time > lastNewPathQueuePopTime + .05f)
+        {
+            Zombie z = zombiesThatNeedNewPath.First.Value;
+            if (z != null)
+                z.RestartPath();
+
+            zombiesThatNeedNewPath.RemoveFirst();
+            lastNewPathQueuePopTime = Time.time;
+            
+        }
+    }
 
     void BuildBlock()
     {
@@ -75,29 +96,33 @@ public class Builder : MonoBehaviour {
             {
                 return;
             }
-            if (this.woodCount < woodWallCost)
-            {
-                return;
-            }
-            if (grid[gridLoc[1], gridLoc[0]])
-            {
-                return;
-            }
 
             if (!deleteMode)
-            {
-                grid[gridLoc[1], gridLoc[0]] = true;
+            { 
+                if (this.woodCount < woodWallCost)
+                {
+                    return;
+                }
+
+                if (grid[gridLoc[1], gridLoc[0]] > 0)
+                {
+                    return;
+                }
+
+                grid[gridLoc[1], gridLoc[0]] = 5;
                 NotifyZombieSubs(gridLoc);
-                Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
+                GameObject instWall = Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
+                instWall.name = "Block" + gridLoc[0] + "," + gridLoc[1];
                 AddWood(-1 * woodWallCost);
             } else
             {
+                GameObject asdf = GameObject.Find("Block" + gridLoc[0] + "," + gridLoc[1]);
+                Debug.Log("block del: " + asdf);
+                Destroy(asdf);
+                grid[gridLoc[1], gridLoc[0]] = 0;
+                NotifyAllZombies();
 
-                grid[gridLoc[1], gridLoc[0]] = false;
             }
-
-            
-
         }
     }
 
@@ -196,8 +221,8 @@ public class Builder : MonoBehaviour {
         {
             int x = i % 32;
             int y = i / 32;
-            int value = int.Parse(strMap[i]);
-            grid[y , x] = value != 0;
+            byte value = byte.Parse(strMap[i]);
+            grid[y , x] = value;
             PlaceBlock(value, x, y);
         }
     }
@@ -227,6 +252,15 @@ public class Builder : MonoBehaviour {
         Instantiate(selectedBlock, GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
 
 
+    }
+
+    private void NotifyAllZombies()
+    {
+        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
+        for (int i = 0; i < zombies.Length; i++)
+        {
+            this.zombiesThatNeedNewPath.AddLast(zombies[i].GetComponent<Zombie>());
+        }
     }
 
 

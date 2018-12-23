@@ -8,7 +8,6 @@ public class Builder : MonoBehaviour {
 
     // Private fields
     float blockSize;
-    float wallZAxis = 0f;
     private HashSet<Zombie> needNewPaths;
     private Text woodLabel;
     private int woodWallCost = 100;
@@ -79,8 +78,13 @@ public class Builder : MonoBehaviour {
 
             zombiesThatNeedNewPath.RemoveFirst();
             lastNewPathQueuePopTime = Time.time;
-            
         }
+    }
+
+    public void FreeGridLoc(Vector3 pos)
+    {
+        int[] gridLoc = WorldPointToGridPoint((Vector2)pos);
+        grid[gridLoc[1], gridLoc[0]] = 0;
     }
 
     void BuildBlock()
@@ -114,6 +118,7 @@ public class Builder : MonoBehaviour {
                 GameObject instWall = Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
                 instWall.name = "Block" + gridLoc[0] + "," + gridLoc[1];
                 AddWood(-1 * woodWallCost);
+                OnWallBuild();
             } else
             {
                 GameObject asdf = GameObject.Find("Block" + gridLoc[0] + "," + gridLoc[1]);
@@ -158,6 +163,15 @@ public class Builder : MonoBehaviour {
             }
         }
         needNewPaths = new HashSet<Zombie>();
+    }
+
+    private void OnWallBuild()
+    {
+        WallBreaker[] wallBreakers = GameObject.FindObjectsOfType<WallBreaker>();
+        foreach (WallBreaker wallBreaker in wallBreakers)
+        {
+            needNewPaths.Add(wallBreaker);
+        }
     }
 
     private void NotifyZombieSubs(int[] gridLoc)

@@ -67,6 +67,8 @@
     <Compile Include="Assets\MapBuilder.cs" />
     <Compile Include="Assets\Projectile.cs" />
     <Compile Include="Assets\Turret.cs" />
+    <Compile Include="Assets\Wall.cs" />
+    <Compile Include="Assets\WallBreaker.cs" />
     <Compile Include="Assets\Zombie.cs" />
     <Compile Include="Assets\ZombieSpawner.cs" />
     <Reference Include="UnityEditor.StandardEvents">

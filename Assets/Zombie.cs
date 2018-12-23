@@ -4,55 +4,86 @@ using UnityEngine;
 
 public class Zombie : MonoBehaviour {
 
-    private List<Vector2> path;
-    private Builder builder;
-    private int[] locationInGrid;
-    private int[] targetLoc;
-    private int pathProgress = 0;
-    private bool atFinalLoc = false;
+    protected List<Vector2> path;
+    protected Builder builder;
+    protected int[] locationInGrid;
+    protected int[] targetLoc;
+    protected bool atFinalLoc = false;
+    protected int pathProgress = 0;
+    protected int damage;
+    protected float lastAttackTime;
+    protected float attackSpeed;
 
     public float zombieSpeed = .3f;
-    public GameObject testRedDot;
     public int health = 5;
-    
+    public GameObject target;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
         this.path = new List<Vector2>();
         this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
+        lastAttackTime = Time.time;
         RestartPath();
-        //Debug.Log("Path Length: " + path.Count);
-        foreach (Vector2 coord in path)
-        {
-            //Instantiate(testRedDot, coord, new Quaternion());
-        }
+        ChildrenSetup();
     }
 	
 	// Update is called once per frame
 	void Update () {
         FollowPath();
+        Attack();
 	}
 
-    void FollowPath()
+    protected void FollowPath()
     {
         if (atFinalLoc)
         {
+            if (target == null)
+                return;
+            this.transform.position = Vector2.MoveTowards(transform.position, target.transform.position, zombieSpeed * Time.deltaTime);
             return;
         }
         if (path == null || path.Count <= 0)
         {
             return;
         }
-        //Debug.Log("Target: " + path[pathProgress]);
-        
-        this.transform.position = Vector2.MoveTowards(this.transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
-        if ((path[pathProgress] - (Vector2)this.transform.position).magnitude < .2f){
+        this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
+        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .6f){
             pathProgress += 1;
             if (pathProgress >= path.Count)
             {
+                Debug.Log("Reached End");
                 atFinalLoc = true;
             }
         }
+    }
+
+    protected virtual void ChildrenSetup()
+    {
+        return;
+    }
+    void Attack()
+    {
+        if (!atFinalLoc)
+        {
+            return;
+        }
+
+        if (Time.time < lastAttackTime + attackSpeed)
+        {
+            return;
+        }
+
+        if (target != null)
+        {
+            Debug.Log("Path: " + path.Count);
+            target.SendMessage("TakeDamage", this.damage);
+        }
+        else
+        {
+            RestartPath();
+        }
+        lastAttackTime = Time.time;
     }
 
     public void SetPath(List<Vector2> newPath)
@@ -63,10 +94,11 @@ public class Zombie : MonoBehaviour {
         SubscribeToPath();
     }
 
-    public List<Vector2> RestartPath()
+    public virtual List<Vector2> RestartPath()
     {
         pathProgress = 0;
         UnsubscribeToPath();
+        this.target = GameObject.Find("Turret");
         this.locationInGrid = builder.WorldPointToGridPoint(this.transform.position);
         this.targetLoc = new int[] { 16, 8 };
         path = FindPath(builder.grid, locationInGrid, this.targetLoc);
@@ -77,6 +109,7 @@ public class Zombie : MonoBehaviour {
     // Perform BFS to find shortest path to the desired location
     public List<Vector2> FindPath(byte[,] grid, int[] startLoc, int[] endLoc)
     {
+        Debug.Log("X: " + endLoc[0] + " y: " + endLoc[1]);
         LinkedList<List<int[]>> q = new LinkedList<List<int[]>>();
         HashSet<string> v = new HashSet<string>();
 
@@ -88,22 +121,18 @@ public class Zombie : MonoBehaviour {
 
         while (q.Count > 0)
         {
-            //Debug.Log("Queue Length: " + q.Count);
             List<int[]> cur = q.First.Value;
             
             int x = cur[cur.Count - 1][0];
             int y = cur[cur.Count - 1][1];
-            //Debug.Log("Current: " + x + "," + y);
             if (v.Contains(x + "," + y))
             {
-                //Debug.Log("Removed: " + x + " and " + y);
                 q.RemoveFirst();
                 continue;
             }
 
             if (x == endLoc[0] && y == endLoc[1])
             {
-                
                 return ConvertIntArrList(cur);
             }
 
@@ -111,35 +140,34 @@ public class Zombie : MonoBehaviour {
             {
                 int newX = x + searchDirections[i, 0];
                 int newY = y + searchDirections[i, 1];
-                //Debug.Log("TestPos: " + newX + " " + newY);
 
                 if (newY >= 0 && newY < grid.GetLength(0) &&
                     newX >= 0 && newX < grid.GetLength(1) &&
-                    grid[newY, newX] == 0 &&
+                    (grid[newY, newX] == 0 || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
-                    //Debug.Log("Added: " + newX + " and " + newY);
                     List<int[]> newList = new List<int[]>(cur);
                     newList.Add(new int[] { newX, newY });
                     q.AddLast(newList);
                 } 
             }
-            //Debug.Log("Removed: " + x + " and " + y);
+
             v.Add(x + "," + y);
             if (q.Count == 1)
             {
+                this.target = null;
                 return ConvertIntArrList(q.First.Value);
             }
             q.RemoveFirst();
         }
 
-        // No Path Found :(
+
         Debug.Log("No Path Found " + q.Count);
         
         return new List<Vector2>();
     }
 
-    private void UnsubscribeToPath()
+    protected void UnsubscribeToPath()
     {
         foreach (Vector2 point in path)
         {
@@ -149,7 +177,7 @@ public class Zombie : MonoBehaviour {
         }
     }
 
-    private void SubscribeToPath()
+    protected void SubscribeToPath()
     {
         foreach(Vector2 point in path)
         {
@@ -165,6 +193,7 @@ public class Zombie : MonoBehaviour {
     public void TakeDamage(int damage)
     {
         this.health -= damage;
+        //Debug.Log(this.health);
         if (health <= 0)
         {
             Destroy(this.gameObject);

@@ -46,7 +46,6 @@ public class Projectile : MonoBehaviour {
         else if (collision.gameObject.tag == "Zombie")
         {
             collision.gameObject.SendMessage("TakeDamage", damage);
-            Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }
         this.damage = 0;

@@ -7,7 +7,6 @@ public class MapBuilder : MonoBehaviour {
 
     // Private fields
     float blockSize;
-    float wallZAxis = 0f;
     private GameObject selectedBlock;
 
     // Pulic Fields

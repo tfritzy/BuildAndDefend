@@ -62,13 +62,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Builder.cs" />
+    <Compile Include="Assets\Darkness.cs" />
     <Compile Include="Assets\Destory.cs" />
     <Compile Include="Assets\LevelManager.cs" />
+    <Compile Include="Assets\LightSource.cs" />
     <Compile Include="Assets\MapBuilder.cs" />
     <Compile Include="Assets\Projectile.cs" />
+    <Compile Include="Assets\Scripts\Buildings\Building.cs" />
+    <Compile Include="Assets\Scripts\Buildings\Lamp.cs" />
+    <Compile Include="Assets\Scripts\Buildings\WoodWall.cs" />
     <Compile Include="Assets\Turret.cs" />
     <Compile Include="Assets\Wall.cs" />
     <Compile Include="Assets\WallBreaker.cs" />
+    <Compile Include="Assets\WaveTimer.cs" />
     <Compile Include="Assets\Zombie.cs" />
     <Compile Include="Assets\ZombieSpawner.cs" />
     <Reference Include="UnityEditor.StandardEvents">

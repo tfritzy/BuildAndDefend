@@ -10,12 +10,13 @@ public class Builder : MonoBehaviour {
     float blockSize;
     private HashSet<Zombie> needNewPaths;
     private Text woodLabel;
-    private int woodWallCost = 100;
     private LinkedList<Zombie> zombiesThatNeedNewPath;
     private float lastNewPathQueuePopTime;
-
+    private Building woodWall;
+    private Building lamp;
+    private Building selectedBuilding;
     // Pulic Fields
-    public GameObject wallSegment;
+
     public byte[,] grid;
     public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;
@@ -25,6 +26,7 @@ public class Builder : MonoBehaviour {
     public GameObject brush;
     public GameObject chasm;
     public GameObject wire;
+    
 
     private void Awake()
     {
@@ -40,6 +42,12 @@ public class Builder : MonoBehaviour {
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
         zombiesThatNeedNewPath = new LinkedList<Zombie>();
+        // Construct building objects.
+        this.woodWall = new WoodWall();
+        this.lamp = new Lamp();
+        selectedBuilding = woodWall;
+        Debug.Log("SelectedBuliding: " + selectedBuilding.structure);
+
     }
 
     private void ToggleBuildMode()
@@ -103,7 +111,7 @@ public class Builder : MonoBehaviour {
 
             if (!deleteMode)
             { 
-                if (this.woodCount < woodWallCost)
+                if (this.woodCount < selectedBuilding.woodCost)
                 {
                     return;
                 }
@@ -115,9 +123,11 @@ public class Builder : MonoBehaviour {
 
                 grid[gridLoc[1], gridLoc[0]] = 5;
                 NotifyZombieSubs(gridLoc);
-                GameObject instWall = Instantiate(wallSegment, GridPointToWorldPoint(gridLoc), new Quaternion());
-                instWall.name = "Block" + gridLoc[0] + "," + gridLoc[1];
-                AddWood(-1 * woodWallCost);
+                GameObject inst = Instantiate(selectedBuilding.structure, 
+                                              GridPointToWorldPoint(gridLoc), 
+                                              new Quaternion());
+                inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
+                AddWood(-1 * selectedBuilding.woodCost);
                 OnWallBuild();
             } else
             {
@@ -214,14 +224,16 @@ public class Builder : MonoBehaviour {
 
     public Vector2 GridPointToWorldPoint(Vector2 gridLoc)
     {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f, ((float)gridLoc[1] - 6f) / 2f + .5f);
+        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f,
+                                  ((float)gridLoc[1] - 6f) / 2f + .5f);
         
         return loc;
     }
 
     public Vector2 GridPointToWorldPoint(int[] gridLoc)
     {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f, ((float)gridLoc[1] - 6f) / 2f + .5f);
+        Vector2 loc = new Vector2( ((float)gridLoc[0] - 16) / 2f + .5f, 
+                                   ((float)gridLoc[1] - 6f) / 2f + .5f);
 
         return loc;
     }
@@ -266,6 +278,16 @@ public class Builder : MonoBehaviour {
         Instantiate(selectedBlock, GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
 
 
+    }
+
+    void SelectWoodWall()
+    {
+        this.selectedBuilding = woodWall;
+    }
+
+    void SelectLamp()
+    {
+        this.selectedBuilding = lamp;
     }
 
     private void NotifyAllZombies()

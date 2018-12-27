@@ -10,9 +10,9 @@ public class Zombie : MonoBehaviour {
     protected int[] targetLoc;
     protected bool atFinalLoc = false;
     protected int pathProgress = 0;
-    protected int damage;
+    protected int damage = 1;
     protected float lastAttackTime;
-    protected float attackSpeed;
+    protected float attackSpeed = 1;
 
     public float zombieSpeed = .3f;
     public int health = 5;
@@ -52,7 +52,6 @@ public class Zombie : MonoBehaviour {
             pathProgress += 1;
             if (pathProgress >= path.Count)
             {
-                Debug.Log("Reached End");
                 atFinalLoc = true;
             }
         }
@@ -76,7 +75,6 @@ public class Zombie : MonoBehaviour {
 
         if (target != null)
         {
-            Debug.Log("Path: " + path.Count);
             target.SendMessage("TakeDamage", this.damage);
         }
         else
@@ -109,7 +107,6 @@ public class Zombie : MonoBehaviour {
     // Perform BFS to find shortest path to the desired location
     public List<Vector2> FindPath(byte[,] grid, int[] startLoc, int[] endLoc)
     {
-        Debug.Log("X: " + endLoc[0] + " y: " + endLoc[1]);
         LinkedList<List<int[]>> q = new LinkedList<List<int[]>>();
         HashSet<string> v = new HashSet<string>();
 

@@ -31,15 +31,10 @@ public class WallBreaker : Zombie {
                 closestWall = walls[i];
             }
         }
-        Debug.Log(closestWall.transform.position);
         this.target = closestWall;
         this.locationInGrid = builder.WorldPointToGridPoint(this.transform.position);
         this.targetLoc = builder.WorldPointToGridPoint(this.target.transform.position);
         this.path = FindPath(builder.grid, locationInGrid, this.targetLoc);
-
-        Debug.Log(target.name);
-        Debug.Log(path.Count);
-        Debug.Log(path[path.Count - 1]);
         return path;
     }
 }

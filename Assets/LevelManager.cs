@@ -7,12 +7,16 @@ public class LevelManager : MonoBehaviour {
     List<ZombieSpawner> spawners;
     private float prevSpawnRate;
     private float waveStartTime;
-    private bool isDuringWave; 
+    private bool isDuringWave;
+    private int numWaves;
+    private float levelStartTime;
+    private bool duringNight = false;
 
     public float waveDuration;
     public float timeBetweenWaves = 30f;
     public GameObject waveStartBanner;
     public int waveGroupCount = 5;
+    public float levelDuration = 120f;
 
 	// Use this for initialization
 	void Start () {
@@ -22,24 +26,68 @@ public class LevelManager : MonoBehaviour {
         {
             spawners.Add(spawner.GetComponent<ZombieSpawner>());
         }
+        EndNight();
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (isDuringWave)
+        ManageWaves();
+    }
+
+    void ManageWaves()
+    {
+        if (!duringNight)
+        {
+            return;
+        }
+        if (Time.time > levelStartTime + levelDuration)
+        {
+            EndWave();
+            EndNight();
+            return;
+        }
+        if (isDuringWave)
         {
             if (Time.time > waveStartTime + waveDuration)
             {
                 EndWave();
             }
-        } else
+        }
+        else
         {
             if (Time.time > waveStartTime + timeBetweenWaves)
             {
                 StartWave();
             }
         }
-	}
+    }
+
+    // Stops all zombies from being spawned because it is day!
+    void EndNight()
+    {
+        foreach (GameObject zombie in GameObject.FindGameObjectsWithTag("Zombie"))
+        {
+            Destroy(zombie);
+        }
+        foreach (ZombieSpawner spawner in spawners)
+        {
+            spawner.disabled = true;
+        }
+        duringNight = false;
+    }
+
+    void StartNight()
+    {
+        foreach (ZombieSpawner spawner in spawners)
+        {
+            spawner.disabled = false;
+        }
+        numWaves = Random.Range(2, 5);
+        timeBetweenWaves = levelDuration / numWaves;
+        levelStartTime = Time.time;
+        duringNight = true;
+    }
 
     void StartWave()
     {
@@ -51,6 +99,7 @@ public class LevelManager : MonoBehaviour {
             spawners[i].SpawnZombie(waveGroupCount);
             spawners[i].averageBetweenZombies /= 4;
         }
+        
         isDuringWave = true;
     }
 

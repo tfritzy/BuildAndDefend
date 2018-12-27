@@ -6,16 +6,11 @@ public class Wall : MonoBehaviour {
 
     public int health;
 
-	// Use this for initialization
+
 	void Start () {
         this.health = 200;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void TakeDamage(int amount)
     {
         this.health -= amount;

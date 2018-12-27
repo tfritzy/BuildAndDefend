@@ -6,9 +6,11 @@ public class ZombieSpawner : MonoBehaviour {
 
     public float averageBetweenZombies;
     public GameObject zombie;
+    public bool disabled = false;
 
     private float lastZombieSpawnTime;
     private float timeBetweenZombie;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -16,10 +18,9 @@ public class ZombieSpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time > timeBetweenZombie + lastZombieSpawnTime)
+		if (!disabled && Time.time > timeBetweenZombie + lastZombieSpawnTime)
         {
-            Instantiate(zombie, this.transform.position, new Quaternion());
-            
+            SpawnZombie(1);
             timeBetweenZombie = Random.Range(averageBetweenZombies / 2, averageBetweenZombies * 2);
             lastZombieSpawnTime = Time.time;
         }
@@ -29,7 +30,10 @@ public class ZombieSpawner : MonoBehaviour {
     {
         for (int i = 0; i < count; i++)
         {
-            Instantiate(zombie, this.transform.position, new Quaternion());
+            float xShake = Random.Range(-.2f, .2f);
+            float yShake = Random.Range(-.2f, .2f);
+            Vector2 locationShake = new Vector2(xShake, yShake);
+            Instantiate(zombie, (Vector2)this.transform.position + locationShake, new Quaternion());
         }
     }
 }

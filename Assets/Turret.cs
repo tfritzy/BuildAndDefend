@@ -12,15 +12,27 @@ public class Turret : MonoBehaviour {
     public int projectilePierce;
     public float projectileSpeed;
     public int projectileDamage = 5;
+    public int health;
 
 	// Use this for initialization
 	void Start () {
         this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
+        this.health = 100;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         Fire();
+    }
+
+    private void TakeDamage(int damage)
+    {
+        this.health -= damage;
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+            // TODO: take to the title screen
+        }
     }
 
     private void Fire()
@@ -40,7 +52,10 @@ public class Turret : MonoBehaviour {
             Vector2 fireDirection = location - (Vector2)this.transform.position;
             fireDirection = fireDirection / fireDirection.magnitude;
 
-            GameObject instProj = Instantiate(this.projectile, this.transform.position, new Quaternion());
+            Vector3 startLocShake = new Vector3(Random.Range(-.2f, .2f), Random.Range(-.2f, .2f));
+            GameObject instProj = Instantiate(this.projectile, 
+                                              this.transform.position + startLocShake, 
+                                              new Quaternion());
             instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
             instProj.SendMessage("SetDamage", this.projectileDamage);
             instProj.SendMessage("SetPierce", this.projectilePierce);

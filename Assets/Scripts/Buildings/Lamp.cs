@@ -5,12 +5,12 @@ using UnityEngine;
 public class Lamp : Building {
 
     private Darkness darkness;
-
-    public float strength = .4f;
+    public float strength = .8f;
 
 	public Lamp()
     {
         this.woodCost = 150;
+        this.structPath = "Gameobjects/Buildings/Lamp";
     }
 
     protected override void OnDeath()
@@ -25,6 +25,10 @@ public class Lamp : Building {
         this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
         Vector2 curPos = this.transform.position;
         Vector2 gridPos = darkness.WorldPointToGridPoint(curPos.x, curPos.y);
-        darkness.AddLight((int)gridPos.x, (int)gridPos.y, 5, strength);
+        darkness.AddLight((int)gridPos.x, (int)gridPos.y, 10, strength);
     }
+
+
+
+
 }

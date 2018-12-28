@@ -46,7 +46,6 @@ public class Builder : MonoBehaviour {
         this.woodWall = new WoodWall();
         this.lamp = new Lamp();
         selectedBuilding = woodWall;
-        Debug.Log("SelectedBuliding: " + selectedBuilding.structure);
 
     }
 
@@ -123,7 +122,8 @@ public class Builder : MonoBehaviour {
 
                 grid[gridLoc[1], gridLoc[0]] = 5;
                 NotifyZombieSubs(gridLoc);
-                GameObject inst = Instantiate(selectedBuilding.structure, 
+
+                GameObject inst = Instantiate(selectedBuilding.GetStructure(), 
                                               GridPointToWorldPoint(gridLoc), 
                                               new Quaternion());
                 inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
@@ -131,12 +131,13 @@ public class Builder : MonoBehaviour {
                 OnWallBuild();
             } else
             {
-                GameObject asdf = GameObject.Find("Block" + gridLoc[0] + "," + gridLoc[1]);
-                Debug.Log("block del: " + asdf);
-                Destroy(asdf);
-                grid[gridLoc[1], gridLoc[0]] = 0;
-                NotifyAllZombies();
-
+                GameObject building = GameObject.Find("Block" + gridLoc[0] + "," + gridLoc[1]);
+                if (building != null)
+                {
+                    building.SendMessage("Delete");
+                    grid[gridLoc[1], gridLoc[0]] = 0;
+                    NotifyAllZombies();
+                }
             }
         }
     }

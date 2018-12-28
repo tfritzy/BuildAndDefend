@@ -416,7 +416,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &380130109 stripped
 Transform:
@@ -762,7 +762,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &534574723
 Prefab:
@@ -801,7 +801,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4703995434095206, guid: 00a0bdf6dbba5cf46aa8b1f86babb666, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114972235134667842, guid: 00a0bdf6dbba5cf46aa8b1f86babb666,
         type: 2}
@@ -1020,7 +1020,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4144197438827574, guid: 8454da5d4333938438a8e66247c31650, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1171456029717942, guid: 8454da5d4333938438a8e66247c31650, type: 2}
       propertyPath: m_Name
@@ -1088,48 +1088,6 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd22ac3a96bbc0341a6e7082d0b0ddf3, type: 2}
-  m_IsPrefabAsset: 0
---- !u!1001 &1280770828
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -3.8069732
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0.80715406
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4246444972973660, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 589c00c6a6ce04c469f1a057f5c14a51, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1329884956
 GameObject:
@@ -2331,7 +2289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inBuildMode: 0
-  woodCount: 500
+  woodCount: 5000000
   deleteMode: 0
   water: {fileID: 1878070863625266, guid: 32bb3d90ad578f84a84a022092e2b30a, type: 2}
   brush: {fileID: 1944554007921392, guid: dc8f48e2b230f0d4cb24198a208bdf60, type: 2}
@@ -2517,7 +2475,7 @@ RectTransform:
   - {fileID: 8863573}
   - {fileID: 1790310851}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2561,7 +2519,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4329391487093144, guid: bd22ac3a96bbc0341a6e7082d0b0ddf3, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114318923192252526, guid: bd22ac3a96bbc0341a6e7082d0b0ddf3,
         type: 2}

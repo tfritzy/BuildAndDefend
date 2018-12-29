@@ -11,6 +11,7 @@ TagManager:
   - Brush
   - Spawner
   - Terrain
+  - BuildGridLine
   layers:
   - Default
   - TransparentFX

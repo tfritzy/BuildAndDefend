@@ -15,8 +15,9 @@ public class Builder : MonoBehaviour {
     private Building woodWall;
     private Building lamp;
     private Building selectedBuilding;
-    // Pulic Fields
+    private Transform gridParent;
 
+    // Pulic Fields
     public byte[,] grid;
     public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;
@@ -26,8 +27,8 @@ public class Builder : MonoBehaviour {
     public GameObject brush;
     public GameObject chasm;
     public GameObject wire;
+    public GameObject gridLine;
     
-
     private void Awake()
     {
         this.grid = new byte[16, 32];
@@ -46,17 +47,20 @@ public class Builder : MonoBehaviour {
         this.woodWall = new WoodWall();
         this.lamp = new Lamp();
         selectedBuilding = woodWall;
-
+        this.gridParent = GameObject.Find("BuildGrid").transform;
     }
 
     private void ToggleBuildMode()
     {
         inBuildMode = !inBuildMode;
         if (inBuildMode)
+        {
+            SetupBuildGrid();
             Time.timeScale = 0f;
-        else
+        } else
         {
             Time.timeScale = 1f;
+            RemoveBuildGrid();
             ProcessPathsNeeded();
         }
     }
@@ -139,6 +143,23 @@ public class Builder : MonoBehaviour {
                     NotifyAllZombies();
                 }
             }
+        }
+    }
+
+    private void SetupBuildGrid()
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            Instantiate(gridLine, new Vector3(0, i / 2f - 15.25f, 0), Quaternion.Euler(0, 0, 90), gridParent);
+            Instantiate(gridLine, new Vector3(i/2f - 15.25f, 0, 0), new Quaternion(), gridParent);
+        }
+    }
+
+    private void RemoveBuildGrid()
+    {
+        foreach(GameObject line in GameObject.FindGameObjectsWithTag("BuildGridLine"))
+        {
+            Destroy(line);
         }
     }
 

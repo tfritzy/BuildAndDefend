@@ -9,17 +9,23 @@ public class LevelManager : MonoBehaviour {
     private float waveStartTime;
     private bool isDuringWave;
     private int numWaves;
-    private float levelStartTime;
     private bool duringNight = false;
+    private Darkness darkness;
 
+    public float levelStartTime;
     public float waveDuration;
     public float timeBetweenWaves = 30f;
     public GameObject waveStartBanner;
     public int waveGroupCount = 5;
-    public float levelDuration = 120f;
+    public float levelDuration = 240f;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
+    }
+
+    // Use this for initialization
+    void Start () {
         this.spawners = new List<ZombieSpawner>();
         GameObject[] objSpawners = GameObject.FindGameObjectsWithTag("Spawner");
         foreach(GameObject spawner in objSpawners)
@@ -27,7 +33,7 @@ public class LevelManager : MonoBehaviour {
             spawners.Add(spawner.GetComponent<ZombieSpawner>());
         }
         EndNight();
-        
+       
 	}
 	
 	// Update is called once per frame
@@ -75,6 +81,7 @@ public class LevelManager : MonoBehaviour {
             spawner.disabled = true;
         }
         duringNight = false;
+        darkness.EndNight();
     }
 
     void StartNight()
@@ -87,6 +94,7 @@ public class LevelManager : MonoBehaviour {
         timeBetweenWaves = levelDuration / numWaves;
         levelStartTime = Time.time;
         duringNight = true;
+        darkness.StartNight();
     }
 
     void StartWave()

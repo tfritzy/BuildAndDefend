@@ -11,6 +11,11 @@ public class Darkness : MonoBehaviour {
     private float xStart = -20f;
     private float yStart = -12f;
     private Dictionary<string, LightSource> sources = new Dictionary<string, LightSource>();
+    private LevelManager levelManager;
+    private float lastNightSegmentTime;
+    private float nightSegmentLength;
+    private bool isDuringNight = false;
+    private float amountOfLightChange;
 
     public GameObject darknessImage;
 
@@ -18,28 +23,105 @@ public class Darkness : MonoBehaviour {
     {
         this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
         this.night = GameObject.Find("Night").GetComponent<Transform>();
-
     }
 
     void Start() {
         this.darknessGrid = new GridLight[builder.grid.GetLength(0) + 10, builder.grid.GetLength(1) + 10];
         InitiateNight();
-        //AddLight(46, 16, 8, .8f);
-        //AddLight(15, 15, 8, .8f);
-        
+        this.levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        nightSegmentLength = levelManager.levelDuration / 120f;
+        amountOfLightChange = .5f / 60f;
+        EndNight();
+    }
+
+    private void Update()
+    {
+        ProgressThroughNight();
+    }
+
+    public void StartNight()
+    {
+        this.isDuringNight = true;
+        SetSunlight(.5f);
+    }
+
+    public void EndNight()
+    {
+        this.isDuringNight = false;
+        SetSunlight(1f);
+    }
+
+
+    private void ProgressThroughNight()
+    {
+        if (!isDuringNight)
+        {
+            return;
+        }
+        if (Time.time < levelManager.levelStartTime + levelManager.levelDuration / 2f)
+        {
+            if (Time.time > lastNightSegmentTime + nightSegmentLength)
+            {
+                DecreaseSunlight(amountOfLightChange);
+                lastNightSegmentTime = Time.time;
+            }
+        } else
+        {
+            if (Time.time > lastNightSegmentTime + nightSegmentLength)
+            {
+                IncreaseSunlight(amountOfLightChange*2);
+                lastNightSegmentTime = Time.time;
+            }
+        }
+    }
+
+    public void SetSunlight(float strength)
+    {
+        if (sources.ContainsKey("sun"))
+        {
+            LightSource sun = sources["sun"];
+            DecreaseSunlight(sun.strength);
+            sources.Remove("sun");
+        }
+        sources.Add("sun", new LightSource(-1, -1, 1000, 0));
+        IncreaseSunlight(strength);
+    }
+
+    public void IncreaseSunlight(float amount)
+    {
+        LightSource sun = sources["sun"];
+        sun.strength += amount;
+        foreach (GridLight light in darknessGrid)
+        {
+            light.colorOfSpot -= amount;
+            light.SetColor();
+        }
+    }
+
+    public void DecreaseSunlight(float amount)
+    {
+        LightSource sunlight = sources["sun"];
+        sunlight.strength -= amount;
+        foreach (GridLight light in darknessGrid)
+        {
+            light.colorOfSpot += amount;
+            light.SetColor();
+        }
+
     }
 
     public void RemoveLight(int x, int y)
     {
-        Debug.Log("Removed Light at: (" + x + "," + y + ")");
+        
         if (!sources.ContainsKey(x + "," + y))
         {
             Debug.Log("Light not in lights :(");
             return;
         }
         LightSource currentLight = sources[x + "," + y];
-        ModifyCircle(x, y, currentLight.radius, -1 * currentLight.strength);
+        ModifyCircle(x, y, currentLight.radius, currentLight.strength, true);
         sources.Remove(x + "," + y);
+        Debug.Log("Removed Light at: (" + x + "," + y + ")");
     }
 
     public void AddLight(int x, int y, int r, float strength)
@@ -47,12 +129,11 @@ public class Darkness : MonoBehaviour {
         Debug.Log("Light added at: (" + x + "," + y + ")");
         LightSource newLight = new LightSource(x, y, r, strength);
         sources.Add(x + "," + y, newLight);
-        ModifyCircle(x, y, r, strength);
+        ModifyCircle(x, y, r, strength, false);
     }
 
-    private void ModifyCircle(int x, int y, int r, float strength)
+    private void ModifyCircle(int x, int y, int r, float strength, bool removing)
     {
-
         for (int i = x-r; i <= x+r; i++)
         {
             for (int j = y-r; j <= y+r; j++)
@@ -63,9 +144,12 @@ public class Darkness : MonoBehaviour {
                 {
                     if (!CheckBounds(i, j))
                         continue;
-                    dist = dist / 15f;
+                    dist = dist / 30f;
                     Color currentColor = darknessGrid[j, i].imageOnSpot.GetComponent<Image>().color;
-                    darknessGrid[j, i].colorOfSpot -= Mathf.Max(0, (strength - dist));
+                    if (removing)
+                        darknessGrid[j, i].colorOfSpot += (strength - (float)Mathf.Min(strength, dist));
+                    else
+                        darknessGrid[j, i].colorOfSpot -= (strength - (float)Mathf.Min(strength, dist));
                     darknessGrid[j, i].SetColor();
                 }
             }

@@ -7,21 +7,33 @@ public class Projectile : MonoBehaviour {
     public int damage;
     public int pierce;
 
+    // TODO: Fix this garbage
     public Builder builder;
+    public float lifespan;
 
-	// Use this for initialization
-	void Start () {
+    protected float creationTime;
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Update(){
+        CheckLifespan();
+    }
+
+    void Start(){
+        this.creationTime = Time.time;
+    }
+
+    protected void CheckLifespan(){
+        if (Time.time > creationTime + lifespan){
+            Destroy(this.gameObject);
+        }
+    }
 
     public void SetBuilder(Builder builder)
     {
         this.builder = builder;
+    }
+
+    public void SetLifespan(float lifespan){
+        this.lifespan = lifespan;
     }
 
     private void SetDamage(int amount)
@@ -33,6 +45,8 @@ public class Projectile : MonoBehaviour {
     {
         this.pierce = count;
     }
+
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

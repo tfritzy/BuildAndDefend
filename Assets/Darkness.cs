@@ -189,7 +189,6 @@ public class Darkness : MonoBehaviour {
         {
             for (int j = 0; j < darknessGrid.GetLength(0); j++)
             {
-                Debug.Log(ShadowGridLocToWorldSpace(i, j));
                 GameObject darkInst = Instantiate(darknessImage,
                            ShadowGridLocToWorldSpace(i,j),
                            new Quaternion(), 

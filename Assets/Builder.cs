@@ -17,7 +17,7 @@ public class Builder : MonoBehaviour {
     private Building selectedBuilding;
     private Transform gridParent;
 
-    // Pulic Fields
+    // Public Fields
     public byte[,] grid;
     public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;

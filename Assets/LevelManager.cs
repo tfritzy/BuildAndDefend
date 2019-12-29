@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour {
     private bool isDuringWave;
     private int numWaves;
     private bool duringNight = false;
-    private Darkness darkness;
+    // private Darkness darkness;
 
     public float levelStartTime;
     public float waveDuration;
@@ -21,7 +21,8 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
+        //  Disabling Darkness for now
+        //this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
     }
 
     // Use this for initialization
@@ -81,7 +82,7 @@ public class LevelManager : MonoBehaviour {
             spawner.disabled = true;
         }
         duringNight = false;
-        darkness.EndNight();
+        // darkness.EndNight();
     }
 
     void StartNight()
@@ -94,7 +95,7 @@ public class LevelManager : MonoBehaviour {
         timeBetweenWaves = levelDuration / numWaves;
         levelStartTime = Time.time;
         duringNight = true;
-        darkness.StartNight();
+        // darkness.StartNight();
     }
 
     void StartWave()

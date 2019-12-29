@@ -8,8 +8,10 @@ public class Darkness : MonoBehaviour {
     private Builder builder;
     private Transform night;
     private GridLight[,] darknessGrid;
-    private float xStart = -20f;
-    private float yStart = -12f;
+    private float xStart;
+    private float yStart;
+    private float gridPlotWidth;
+    private float gridPlotHeight;
     private Dictionary<string, LightSource> sources = new Dictionary<string, LightSource>();
     private LevelManager levelManager;
     private float lastNightSegmentTime;
@@ -26,11 +28,21 @@ public class Darkness : MonoBehaviour {
     }
 
     void Start() {
-        this.darknessGrid = new GridLight[builder.grid.GetLength(0) + 10, builder.grid.GetLength(1) + 10];
-        InitiateNight();
+        this.darknessGrid = new GridLight[builder.grid.GetLength(0), builder.grid.GetLength(1)];
+        Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        this.xStart = canvas.pixelRect.width / 2 * -1;
+        this.yStart = canvas.pixelRect.height / 2 * -1;
+        this.gridPlotWidth = canvas.pixelRect.width / darknessGrid.GetLength(1);
+        this.gridPlotHeight = canvas.pixelRect.height / darknessGrid.GetLength(0);
+        darknessImage.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 25);
+        darknessImage.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 25);
+
+        Debug.Log(darknessGrid.GetLength(0) + " by " + darknessGrid.GetLength(1));
+        Debug.Log("XstartandYStart: " + "(" + xStart + "," + yStart + ")" + " " + "(" + gridPlotWidth + "," + gridPlotHeight + ")");
         this.levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         nightSegmentLength = levelManager.levelDuration / 120f;
         amountOfLightChange = .5f / 60f;
+        InitiateNight();
         EndNight();
     }
 
@@ -177,6 +189,7 @@ public class Darkness : MonoBehaviour {
         {
             for (int j = 0; j < darknessGrid.GetLength(0); j++)
             {
+                Debug.Log(ShadowGridLocToWorldSpace(i, j));
                 GameObject darkInst = Instantiate(darknessImage,
                            ShadowGridLocToWorldSpace(i,j),
                            new Quaternion(), 
@@ -188,8 +201,9 @@ public class Darkness : MonoBehaviour {
 
     public Vector2 ShadowGridLocToWorldSpace(int x, int y)
     {
-        return new Vector2(((float)x + xStart) / 2f + .5f,
-                           ((float)y + yStart) / 2f + .5f);
+        Vector2 pixelCoords = new Vector2(((float)x) * this.gridPlotWidth + xStart,
+                                          ((float)y) * this.gridPlotHeight + yStart);
+        return Camera.main.ScreenToWorldPoint(pixelCoords);
     }
 
     public Vector2 WorldPointToGridPoint(float x, float y)

@@ -22,7 +22,7 @@ public class Zombie : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.path = new List<Vector2>();
-        this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
+        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
         lastAttackTime = Time.time;
         RestartPath();
         ChildrenSetup();

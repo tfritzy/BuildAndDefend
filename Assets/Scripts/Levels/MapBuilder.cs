@@ -39,6 +39,7 @@ public class MapBuilder : MonoBehaviour {
     {
         string path = "Assets/Maps/" + this.mapName;
         StreamWriter writer = new StreamWriter(path, false);
+        
         foreach (int block in grid)
         {
             writer.Write(block + " ");

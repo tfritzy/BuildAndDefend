@@ -33,7 +33,7 @@ public class Builder : MonoBehaviour {
     {
         this.grid = new byte[16, 32];
         pathTakers = new Dictionary<string, HashSet<Zombie>>();
-        LoadMap("Lowland");
+        LoadMap(GameState.currentLevel);
     }
 
     // Use this for initialization
@@ -50,7 +50,7 @@ public class Builder : MonoBehaviour {
         this.gridParent = GameObject.Find("BuildGrid").transform;
     }
 
-    private void ToggleBuildMode()
+    public void ToggleBuildMode()
     {
         inBuildMode = !inBuildMode;
         if (inBuildMode)

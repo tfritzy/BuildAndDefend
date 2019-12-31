@@ -23,7 +23,7 @@ public class Darkness : MonoBehaviour {
 
     private void Awake()
     {
-        this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
+        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
         this.night = GameObject.Find("Night").GetComponent<Transform>();
     }
 

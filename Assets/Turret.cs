@@ -22,7 +22,7 @@ public class Turret : MonoBehaviour
     void Start()
     {
         // TODO: Fix this garbage
-        this.builder = GameObject.Find("BuildModeButton").GetComponent<Builder>();
+        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
         SetParameters();
     }
 

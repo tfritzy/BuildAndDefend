@@ -12,6 +12,7 @@ TagManager:
   - Spawner
   - Terrain
   - BuildGridLine
+  - UIWindow
   layers:
   - Default
   - TransparentFX

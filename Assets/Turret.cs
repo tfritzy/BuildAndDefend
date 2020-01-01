@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
+    public float fireCooldown;
+    public GameObject projectile;
+    public int projectilePierce;
+    public virtual float projectileSpeed { get; set; }
+    public virtual int projectileDamage { get; set; }
+    public virtual float projectileLifespan { get; set; }
+    public int health;
+    public virtual BuildingType Type { get; }
 
     protected float inaccuracy;
     protected Builder builder;
 
     private float lastFireTime;
-
-    public float fireCooldown;
-    public GameObject projectile;
-    public int projectilePierce;
-    public virtual float projectileSpeed { get; set; }
-    public virtual int projectileDamage {get; set; }
-    public virtual float projectileLifespan { get; set; }
-    public int health;
 
     // Use this for initialization
     void Start()
@@ -76,8 +76,8 @@ public class Turret : MonoBehaviour
         if (Input.GetMouseButton(0) || Input.touchCount > 0)
         {
             // TODO: Check what will happen if click on 0,0,0
-            Vector2 location = Input.mousePosition != Vector3.zero 
-                ? (Vector2)Input.mousePosition 
+            Vector2 location = Input.mousePosition != Vector3.zero
+                ? (Vector2)Input.mousePosition
                 : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
             return location;

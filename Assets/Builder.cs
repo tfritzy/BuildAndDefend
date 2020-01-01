@@ -33,7 +33,7 @@ public class Builder : MonoBehaviour {
     {
         this.grid = new byte[16, 32];
         pathTakers = new Dictionary<string, HashSet<Zombie>>();
-        LoadMap(GameState.currentLevel);
+        LoadMap(Player.data.vals.currentLevel);
     }
 
     // Use this for initialization

@@ -31,7 +31,7 @@ public class MapNode : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     public void ShowLevelDetails()
     {
-        GameState.currentLevel = this.mapName;
+        Player.data.vals.currentLevel = this.mapName;
         Instantiate(
             this.mapDetailsPane,
             this.transform.position + new Vector3(1, 0),

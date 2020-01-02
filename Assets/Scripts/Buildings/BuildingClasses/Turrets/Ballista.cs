@@ -15,7 +15,7 @@ public class Ballista : Turret
     protected override void SetParameters()
     {
         this.fireCooldown = 4;
-        this.health = 100 * Level;
+        this.Health = 100 * Level;
         this.chargeTime = 4f;
         this.maxProjectileSpeed = 20f;
         this.maxProjectileDamage = 10;

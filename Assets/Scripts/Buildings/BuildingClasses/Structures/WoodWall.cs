@@ -6,8 +6,8 @@ public class WoodWall : Building {
 
     public WoodWall()
     {
-        this.woodCost = 100;
-        this.structPath = "Gameobjects/Buildings/WallSegment";
+        this.WoodCost = 100;
+        this.StructPath = "Gameobjects/Buildings/WallSegment";
     }
 
     protected override void OnDeath()

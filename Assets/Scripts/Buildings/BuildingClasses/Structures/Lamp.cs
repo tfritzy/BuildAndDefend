@@ -9,8 +9,8 @@ public class Lamp : Building {
 
 	public Lamp()
     {
-        this.woodCost = 150;
-        this.structPath = "Gameobjects/Buildings/Lamp";
+        this.WoodCost = 150;
+        this.StructPath = "Gameobjects/Buildings/Lamp";
     }
 
     protected override void OnDeath()

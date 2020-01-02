@@ -114,7 +114,7 @@ public class Builder : MonoBehaviour {
 
             if (!deleteMode)
             { 
-                if (this.woodCount < selectedBuilding.woodCost)
+                if (this.woodCount < selectedBuilding.WoodCost)
                 {
                     return;
                 }
@@ -131,7 +131,7 @@ public class Builder : MonoBehaviour {
                                               GridPointToWorldPoint(gridLoc), 
                                               new Quaternion());
                 inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
-                AddWood(-1 * selectedBuilding.woodCost);
+                AddWood(-1 * selectedBuilding.WoodCost);
                 OnWallBuild();
             } else
             {

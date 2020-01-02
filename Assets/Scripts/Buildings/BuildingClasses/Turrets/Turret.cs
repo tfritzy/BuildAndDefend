@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turret : MonoBehaviour
+public class Turret : Building
 {
     public float fireCooldown;
     public GameObject projectile;
@@ -10,7 +10,7 @@ public class Turret : MonoBehaviour
     public virtual float projectileSpeed { get; set; }
     public virtual int projectileDamage { get; set; }
     public virtual float projectileLifespan { get; set; }
-    public int health;
+
     public virtual BuildingType Type { get; }
 
     protected float inaccuracy;
@@ -18,22 +18,21 @@ public class Turret : MonoBehaviour
 
     private float lastFireTime;
 
-    // Use this for initialization
-    void Start()
-    {
-        // TODO: Fix this garbage
-        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
-        SetParameters();
-    }
-
     protected virtual void SetParameters()
     {
-        this.health = 100;
+        this.Health = 100;
         this.projectileDamage = 5;
         this.inaccuracy = .05f;
         this.projectileSpeed = 10;
         this.fireCooldown = 0.1f;
         this.projectileLifespan = 1f;
+    }
+
+    protected override void Setup()
+    {
+        // TODO: Fix this garbage
+        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
+        SetParameters();
     }
 
     // Update is called once per frame
@@ -42,16 +41,6 @@ public class Turret : MonoBehaviour
         if (builder.inBuildMode)
             return;
         Fire();
-    }
-
-    private void TakeDamage(int damage)
-    {
-        this.health -= damage;
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-            // TODO: take to the title screen
-        }
     }
 
     protected virtual void Fire()
@@ -112,5 +101,10 @@ public class Turret : MonoBehaviour
         instProj.SendMessage("SetPierce", this.projectilePierce);
         instProj.SendMessage("SetBuilder", this.builder);
         instProj.SendMessage("SetLifespan", this.projectileLifespan);
+    }
+
+    protected override void OnDeath()
+    {
+        throw new System.NotImplementedException();
     }
 }

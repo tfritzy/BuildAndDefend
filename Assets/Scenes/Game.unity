@@ -150,7 +150,7 @@ RectTransform:
   - {fileID: 1915754590}
   - {fileID: 886030424}
   m_Father: {fileID: 764972967}
-  m_RootOrder: 10
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -625,15 +625,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 295050886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 219ca26c5cec29b4a97aac1e099d5fd6, type: 3}
+  m_Script: {fileID: 11500000, guid: f08b9984d1aa72745aa559a43afc0924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WoodCost: 0
+  Health: 0
+  StructPath: 
   fireCooldown: 0
   projectile: {fileID: 1533643202895272, guid: 14def18f045d1b548b3392547493fcf2, type: 3}
   projectilePierce: 0
-  health: 0
   startChargeTime: 0
   isCharging: 0
+  Level: 0
 --- !u!1 &298743829
 GameObject:
   m_ObjectHideFlags: 0
@@ -2877,6 +2880,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114383861072621990, guid: b2714fd163c49ea41ba1f20da7a343e5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1870606443}
+    - target: {fileID: 114383861072621990, guid: b2714fd163c49ea41ba1f20da7a343e5,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114157320267375602, guid: b2714fd163c49ea41ba1f20da7a343e5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b2714fd163c49ea41ba1f20da7a343e5, type: 3}
@@ -3151,7 +3164,7 @@ RectTransform:
   m_Children:
   - {fileID: 267043983}
   m_Father: {fileID: 764972967}
-  m_RootOrder: 9
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3817,7 +3830,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1870606443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebb00aff6079ba488a800730cbf6ddb, type: 3}
+  m_Script: {fileID: 11500000, guid: a547533eee1822542bc0eb64c9ee499a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inBuildMode: 0

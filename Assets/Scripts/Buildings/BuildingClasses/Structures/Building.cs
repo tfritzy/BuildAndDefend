@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Building : MonoBehaviour{
-
-    private GameObject structure;
-    public int woodCost;
-    public int health;
-    public string structPath;
+public abstract class Building : MonoBehaviour
+{
+    private GameObject Structure;
+    public int WoodCost;
+    public int Health;
+    public string StructPath;
 
     void Start()
     {
-        this.health = 200;
+        this.Health = 200;
         Setup();
     }
 
     public void TakeDamage(int amount)
     {
-        this.health -= amount;
-        if (this.health <= 0)
-        { 
-            this.health = 0;
+        this.Health -= amount;
+        if (this.Health <= 0)
+        {
+            this.Health = 0;
             GameObject.Find("BuildModeButton").SendMessage("FreeGridLoc", this.transform.position);
             OnDeath();
             Delete();
@@ -38,10 +38,10 @@ public abstract class Building : MonoBehaviour{
 
     public GameObject GetStructure()
     {
-        if (this.structure == null)
+        if (this.Structure == null)
         {
-            this.structure = Resources.Load<GameObject>(this.structPath);
+            this.Structure = Resources.Load<GameObject>(this.StructPath);
         }
-        return this.structure;
+        return this.Structure;
     }
 }

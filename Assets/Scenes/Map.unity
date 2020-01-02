@@ -708,7 +708,7 @@ GameObject:
   - component: {fileID: 584257551}
   - component: {fileID: 584257554}
   m_Layer: 5
-  m_Name: BallistaUpgradeButton
+  m_Name: OpenUpgradeMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -731,7 +731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 750, y: -474}
+  m_AnchoredPosition: {x: 558, y: -440}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &584257551
@@ -778,7 +778,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 584257554}
-        m_MethodName: Upgrade
+        m_MethodName: OpenUpgradeMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -833,10 +833,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 584257549}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 838de99ab30533b4ab44f2bcdb77a357, type: 3}
+  m_Script: {fileID: 11500000, guid: 75795f116f1bdce4fbe4bdf4497a128b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingType: 0
 --- !u!1 &653107080
 GameObject:
   m_ObjectHideFlags: 0

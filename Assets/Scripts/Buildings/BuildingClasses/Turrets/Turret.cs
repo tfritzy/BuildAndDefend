@@ -18,6 +18,9 @@ public class Turret : Building
 
     private float lastFireTime;
 
+    public override string StructPath { get => ""; }
+    public override int WoodCost { get => 200; }
+
     protected virtual void SetParameters()
     {
         this.Health = 100;

@@ -5,11 +5,12 @@ public class Ballista : Turret
     public float startChargeTime;
     public bool isCharging;
     public override BuildingType Type { get => BuildingType.Ballista; }
-
     public int Level;
+    public override string StructPath { get => ""; }
+    public override int WoodCost { get => 250; }
+
     private Vector2 lastTouchLocation;
     protected float chargeTime;
-
     protected float maxProjectileSpeed;
 
     protected override void SetParameters()

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour {
-
+public class Zombie : MonoBehaviour
+{
     protected List<Vector2> path;
-    protected Builder builder;
     protected int[] locationInGrid;
     protected int[] targetLoc;
     protected bool atFinalLoc = false;
@@ -13,6 +12,8 @@ public class Zombie : MonoBehaviour {
     protected int damage = 1;
     protected float lastAttackTime;
     protected float attackSpeed = 1;
+    protected bool needsNewPath;
+    protected float calculateNewPathTime;
 
     public float zombieSpeed = .3f;
     public int health = 5;
@@ -20,22 +21,37 @@ public class Zombie : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         this.path = new List<Vector2>();
-        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
         lastAttackTime = Time.time;
         RestartPath();
         ChildrenSetup();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         FollowPath();
         Attack();
-	}
+    }
+
+    /// <summary>
+    /// Let this zombie know that its path was broken and it needs to recalculate.
+    /// </summary>
+    public void NotifyOfPathBreak()
+    {
+        this.needsNewPath = true;
+        this.calculateNewPathTime = Time.time + Random.Range(.1f, 1f);
+    }
 
     protected void FollowPath()
     {
+        if (this.needsNewPath && Time.time > this.calculateNewPathTime)
+        {
+            RestartPath();
+            this.needsNewPath = false;
+        }
         if (atFinalLoc)
         {
             if (target == null)
@@ -48,7 +64,8 @@ public class Zombie : MonoBehaviour {
             return;
         }
         this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
-        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .6f){
+        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .6f)
+        {
             pathProgress += 1;
             if (pathProgress >= path.Count)
             {
@@ -89,6 +106,7 @@ public class Zombie : MonoBehaviour {
         pathProgress = 0;
         UnsubscribeToPath();
         this.path = newPath;
+        this.needsNewPath = false;
         SubscribeToPath();
     }
 
@@ -97,9 +115,23 @@ public class Zombie : MonoBehaviour {
         pathProgress = 0;
         UnsubscribeToPath();
         this.target = GameObject.Find("Turret");
-        this.locationInGrid = builder.WorldPointToGridPoint(this.transform.position);
+        this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
         this.targetLoc = new int[] { 16, 8 };
-        path = FindPath(builder.grid, locationInGrid, this.targetLoc);
+        this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
+
+        Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
+        foreach (Collider2D col in nearbyZombs)
+        {
+            if (col.tag != "Zombie" || col.gameObject == this.gameObject)
+                continue;
+            if (col == null)
+            {
+                continue;
+            }
+            Zombie colZomb = col.GetComponent<Zombie>();
+            colZomb.SetPath(this.path);
+        }
+
         SubscribeToPath();
         return path;
     }
@@ -119,7 +151,7 @@ public class Zombie : MonoBehaviour {
         while (q.Count > 0)
         {
             List<int[]> cur = q.First.Value;
-            
+
             int x = cur[cur.Count - 1][0];
             int y = cur[cur.Count - 1][1];
             if (v.Contains(x + "," + y))
@@ -146,7 +178,7 @@ public class Zombie : MonoBehaviour {
                     List<int[]> newList = new List<int[]>(cur);
                     newList.Add(new int[] { newX, newY });
                     q.AddLast(newList);
-                } 
+                }
             }
 
             v.Add(x + "," + y);
@@ -160,30 +192,37 @@ public class Zombie : MonoBehaviour {
 
 
         Debug.Log("No Path Found " + q.Count);
-        
+
         return new List<Vector2>();
     }
 
     protected void UnsubscribeToPath()
     {
+        if (path == null)
+        {
+            return;
+        }
+        Debug.Log(path);
         foreach (Vector2 point in path)
         {
-            int[] gridLoc = builder.WorldPointToGridPoint(point);
+            int[] gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
-            builder.pathTakers[key].Remove(this);
+            Map.PathTakers[key].Remove(this);
+            
         }
     }
 
     protected void SubscribeToPath()
     {
-        foreach(Vector2 point in path)
+        foreach (Vector2 point in path)
         {
-            int[] gridLoc = builder.WorldPointToGridPoint(point);
+            int[] gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
-            if (!builder.pathTakers.ContainsKey(key)){
-                builder.pathTakers.Add(key, new HashSet<Zombie>());
+            if (!Map.PathTakers.ContainsKey(key))
+            {
+                Map.PathTakers.Add(key, new HashSet<Zombie>());
             }
-            builder.pathTakers[key].Add(this);
+            Map.PathTakers[key].Add(this);
         }
     }
 
@@ -202,7 +241,7 @@ public class Zombie : MonoBehaviour {
         List<Vector2> output = new List<Vector2>();
         for (int i = 0; i < input.Count; i++)
         {
-            output.Add(builder.GridPointToWorldPoint(input[i]));
+            output.Add(Map.GridPointToWorldPoint(input[i]));
         }
         return output;
     }

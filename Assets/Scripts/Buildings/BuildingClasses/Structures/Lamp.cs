@@ -7,11 +7,8 @@ public class Lamp : Building {
     private Darkness darkness;
     public float strength = .8f;
 
-	public Lamp()
-    {
-        this.WoodCost = 150;
-        this.StructPath = "Gameobjects/Buildings/Lamp";
-    }
+    public override string StructPath { get => "Gameobjects/Buildings/Lamp"; }
+    public override int WoodCost { get => 150; }
 
     protected override void OnDeath()
     {

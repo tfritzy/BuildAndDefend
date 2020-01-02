@@ -8,9 +8,7 @@ public class Builder : MonoBehaviour {
 
     // Private fields
     float blockSize;
-    private HashSet<Zombie> needNewPaths;
     private Text woodLabel;
-    private LinkedList<Zombie> zombiesThatNeedNewPath;
     private float lastNewPathQueuePopTime;
     private Building woodWall;
     private Building lamp;
@@ -18,8 +16,6 @@ public class Builder : MonoBehaviour {
     private Transform gridParent;
 
     // Public Fields
-    public byte[,] grid;
-    public Dictionary<string, HashSet<Zombie>> pathTakers;
     public bool inBuildMode = false;
     public int woodCount = 500;
     public bool deleteMode = false;
@@ -31,21 +27,17 @@ public class Builder : MonoBehaviour {
     
     private void Awake()
     {
-        this.grid = new byte[16, 32];
-        pathTakers = new Dictionary<string, HashSet<Zombie>>();
+        Map.Grid = new byte[16, 32];
         LoadMap(Player.data.vals.CurrentLevel);
     }
 
     // Use this for initialization
     void Start()
     { 
-        this.needNewPaths = new HashSet<Zombie>();
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
-        zombiesThatNeedNewPath = new LinkedList<Zombie>();
-        // Construct building objects.
-        this.woodWall = new WoodWall();
-        this.lamp = new Lamp();
+        this.woodWall = Resources.Load<GameObject>("Gameobjects/Buildings/WallSegment").GetComponent<WoodWall>();
+        this.lamp = Resources.Load<GameObject>("Gameobjects/Buildings/Lamp").GetComponent<Lamp>();
         selectedBuilding = woodWall;
         this.gridParent = GameObject.Find("BuildGrid").transform;
     }
@@ -61,7 +53,7 @@ public class Builder : MonoBehaviour {
         {
             Time.timeScale = 1f;
             RemoveBuildGrid();
-            ProcessPathsNeeded();
+            Map.TellAllZombiesToGetNewPath();
         }
     }
 
@@ -75,27 +67,6 @@ public class Builder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         BuildBlock();
-        ProcessUpdateQueue();
-    }
-
-    void ProcessUpdateQueue()
-    {
-        //Debug.Log(zombiesThatNeedNewPath.Count + " still need to be updated.");
-        if (zombiesThatNeedNewPath.Count > 0 && Time.time > lastNewPathQueuePopTime + .05f)
-        {
-            Zombie z = zombiesThatNeedNewPath.First.Value;
-            if (z != null)
-                z.RestartPath();
-
-            zombiesThatNeedNewPath.RemoveFirst();
-            lastNewPathQueuePopTime = Time.time;
-        }
-    }
-
-    public void FreeGridLoc(Vector3 pos)
-    {
-        int[] gridLoc = WorldPointToGridPoint((Vector2)pos);
-        grid[gridLoc[1], gridLoc[0]] = 0;
     }
 
     void BuildBlock()
@@ -106,7 +77,7 @@ public class Builder : MonoBehaviour {
         {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
-            int[] gridLoc = WorldPointToGridPoint(location);
+            int[] gridLoc = Map.WorldPointToGridPoint(location);
             if (gridLoc[1] < 1 || gridLoc[1] > 14 || gridLoc[0] < 1 || gridLoc[0] > 30)
             {
                 return;
@@ -119,16 +90,16 @@ public class Builder : MonoBehaviour {
                     return;
                 }
 
-                if (grid[gridLoc[1], gridLoc[0]] > 0)
+                if (Map.Grid[gridLoc[1], gridLoc[0]] > 0)
                 {
                     return;
                 }
 
-                grid[gridLoc[1], gridLoc[0]] = 5;
-                NotifyZombieSubs(gridLoc);
+                Map.Grid[gridLoc[1], gridLoc[0]] = 5;
+                NotifyPathTakersOfWallChange(gridLoc[1], gridLoc[0]);
 
                 GameObject inst = Instantiate(selectedBuilding.GetStructure(), 
-                                              GridPointToWorldPoint(gridLoc), 
+                                              Map.GridPointToWorldPoint(gridLoc), 
                                               new Quaternion());
                 inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
                 AddWood(-1 * selectedBuilding.WoodCost);
@@ -139,8 +110,8 @@ public class Builder : MonoBehaviour {
                 if (building != null)
                 {
                     building.SendMessage("Delete");
-                    grid[gridLoc[1], gridLoc[0]] = 0;
-                    NotifyAllZombies();
+                    Map.Grid[gridLoc[1], gridLoc[0]] = 0;
+                    Map.TellAllZombiesToGetNewPath();
                 }
             }
         }
@@ -163,101 +134,24 @@ public class Builder : MonoBehaviour {
         }
     }
 
-    private void ProcessPathsNeeded()
-    {
-        HashSet<Zombie> finished = new HashSet<Zombie>();
-        foreach (Zombie zombie in needNewPaths)
-        {
-            if (finished.Contains(zombie))
-            {
-                continue;
-            }
-            if (zombie == null)
-            {
-                continue;
-            }
-            List<Vector2> newPath = zombie.RestartPath();
-            finished.Add(zombie);
-            Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(zombie.transform.position, 1f);
-            foreach (Collider2D col in nearbyZombs)
-            {
-                if (col.tag != "Zombie")
-                    continue;
-                if (col == null)
-                {
-                    continue;
-                }
-                Zombie colZomb = col.GetComponent<Zombie>();
-                if (finished.Contains(colZomb))
-                    continue;
-                colZomb.SetPath(newPath);
-                finished.Add(colZomb);
-            }
-        }
-        needNewPaths = new HashSet<Zombie>();
-    }
-
     private void OnWallBuild()
     {
         WallBreaker[] wallBreakers = GameObject.FindObjectsOfType<WallBreaker>();
         foreach (WallBreaker wallBreaker in wallBreakers)
         {
-            needNewPaths.Add(wallBreaker);
+            wallBreaker.NotifyOfPathBreak();
         }
     }
 
-    private void NotifyZombieSubs(int[] gridLoc)
+    private void NotifyPathTakersOfWallChange(int x, int y)
     {
-        string key = gridLoc[0] + "," + gridLoc[1];
-        if (!pathTakers.ContainsKey(key))
+        if (!Map.PathTakers.ContainsKey(x + "," + y)){
+            return;
+        }
+        foreach (Zombie z in Map.PathTakers[x + "," + y])
         {
-            pathTakers.Add(key, new HashSet<Zombie>());
+            z.NotifyOfPathBreak();
         }
-        HashSet<Zombie> subs = new HashSet<Zombie>(pathTakers[key]);
-        foreach(Zombie zombie in subs)
-        {
-            needNewPaths.Add(zombie);
-        }
-    }
-
-    private void NotifyPathTakersOfNewWall(int x, int y)
-    {
-        HashSet<Zombie> subs = new HashSet<Zombie>();
-        pathTakers.TryGetValue(x + "," + y, out subs);
-        foreach (Zombie z in subs)
-        {
-            z.RestartPath();
-        }
-    }
-
-    public int[] WorldPointToGridPoint(Vector2 worldPoint)
-    {
-        int[] loc = new int[2] { (int)((worldPoint.x + 8 - .25f) * 2), (int)((worldPoint.y + 3 - .25f) * 2) };
-        if (loc[0] < 0)
-            loc[0] = 0;
-        if (loc[0] > grid.GetLength(1) - 1)
-            loc[0] = grid.GetLength(1) - 1;
-        if (loc[1] < 0)
-            loc[1] = 0;
-        if (loc[1] > grid.GetLength(0) - 1)
-            loc[1] = grid.GetLength(0) - 1;
-        return loc;
-    }
-
-    public Vector2 GridPointToWorldPoint(Vector2 gridLoc)
-    {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f,
-                                  ((float)gridLoc[1] - 6f) / 2f + .5f);
-        
-        return loc;
-    }
-
-    public Vector2 GridPointToWorldPoint(int[] gridLoc)
-    {
-        Vector2 loc = new Vector2( ((float)gridLoc[0] - 16) / 2f + .5f, 
-                                   ((float)gridLoc[1] - 6f) / 2f + .5f);
-
-        return loc;
     }
 
     public void LoadMap(string mapName)
@@ -270,7 +164,7 @@ public class Builder : MonoBehaviour {
             int x = i % 32;
             int y = i / 32;
             byte value = byte.Parse(strMap[i]);
-            grid[y , x] = value;
+            Map.Grid[y , x] = value;
             PlaceBlock(value, x, y);
         }
     }
@@ -297,9 +191,7 @@ public class Builder : MonoBehaviour {
             selectedBlock = chasm;
         }
 
-        Instantiate(selectedBlock, GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
-
-
+        Instantiate(selectedBlock, Map.GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
     }
 
     void SelectWoodWall()
@@ -311,15 +203,4 @@ public class Builder : MonoBehaviour {
     {
         this.selectedBuilding = lamp;
     }
-
-    private void NotifyAllZombies()
-    {
-        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
-        for (int i = 0; i < zombies.Length; i++)
-        {
-            this.zombiesThatNeedNewPath.AddLast(zombies[i].GetComponent<Zombie>());
-        }
-    }
-
-
 }

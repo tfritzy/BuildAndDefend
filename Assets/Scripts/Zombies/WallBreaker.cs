@@ -13,7 +13,6 @@ public class WallBreaker : Zombie {
         this.attackSpeed = 3f;
     }
 
-
     public override List<Vector2> RestartPath()
     {
         pathProgress = 0;
@@ -32,9 +31,10 @@ public class WallBreaker : Zombie {
             }
         }
         this.target = closestWall;
-        this.locationInGrid = builder.WorldPointToGridPoint(this.transform.position);
-        this.targetLoc = builder.WorldPointToGridPoint(this.target.transform.position);
-        this.path = FindPath(builder.grid, locationInGrid, this.targetLoc);
+        this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
+        this.targetLoc = Map.WorldPointToGridPoint(this.target.transform.position);
+        this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
+        SubscribeToPath();
         return path;
     }
 }

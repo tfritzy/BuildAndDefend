@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class Building : MonoBehaviour
 {
     private GameObject Structure;
-    public int WoodCost;
+    public abstract int WoodCost { get; }
     public int Health;
-    public string StructPath;
+    public abstract string StructPath { get; }
 
     void Start()
     {
@@ -21,14 +21,14 @@ public abstract class Building : MonoBehaviour
         if (this.Health <= 0)
         {
             this.Health = 0;
-            GameObject.Find("BuildModeButton").SendMessage("FreeGridLoc", this.transform.position);
+            Map.FreeGridLoc(this.transform.position);
             OnDeath();
             Delete();
         }
     }
 
-    protected abstract void OnDeath();
-    protected abstract void Setup();
+    protected virtual void OnDeath() { }
+    protected virtual void Setup() { }
 
     public void Delete()
     {

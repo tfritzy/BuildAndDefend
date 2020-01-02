@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Darkness : MonoBehaviour {
 
-    private Builder builder;
     private Transform night;
     private GridLight[,] darknessGrid;
     private float xStart;
@@ -23,12 +22,11 @@ public class Darkness : MonoBehaviour {
 
     private void Awake()
     {
-        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
         this.night = GameObject.Find("Night").GetComponent<Transform>();
     }
 
     void Start() {
-        this.darknessGrid = new GridLight[builder.grid.GetLength(0), builder.grid.GetLength(1)];
+        this.darknessGrid = new GridLight[Map.Grid.GetLength(0), Map.Grid.GetLength(1)];
         Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         this.xStart = canvas.pixelRect.width / 2 * -1;
         this.yStart = canvas.pixelRect.height / 2 * -1;

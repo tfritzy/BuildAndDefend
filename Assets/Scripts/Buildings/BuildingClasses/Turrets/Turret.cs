@@ -108,6 +108,6 @@ public class Turret : Building
 
     protected override void OnDeath()
     {
-        throw new System.NotImplementedException();
+        LevelManager.ShowLoseScreen();
     }
 }

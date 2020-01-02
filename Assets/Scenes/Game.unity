@@ -628,9 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08b9984d1aa72745aa559a43afc0924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WoodCost: 0
   Health: 0
-  StructPath: 
   fireCooldown: 0
   projectile: {fileID: 1533643202895272, guid: 14def18f045d1b548b3392547493fcf2, type: 3}
   projectilePierce: 0

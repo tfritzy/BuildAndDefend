@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
@@ -19,10 +20,13 @@ public class LevelManager : MonoBehaviour {
     public int waveGroupCount = 5;
     public float levelDuration = 240f;
 
+    private const string UIPrefabsPath = "Gameobjects/UI";
+
     private void Awake()
     {
         //  Disabling Darkness for now
         //this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
+
     }
 
     // Use this for initialization
@@ -34,12 +38,25 @@ public class LevelManager : MonoBehaviour {
             spawners.Add(spawner.GetComponent<ZombieSpawner>());
         }
         EndNight();
-       
 	}
 	
 	// Update is called once per frame
 	void Update () {
         ManageWaves();
+    }
+
+    public static void ReturnToMap(){
+        SceneManager.LoadScene("Map");
+    }
+
+    public static void ShowWinScreen(){
+        GameObject winWindow = Resources.Load<GameObject>(UIPrefabsPath + "/WinWindow");
+        Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
+    }
+
+    public static void ShowLoseScreen(){
+        GameObject winWindow = Resources.Load<GameObject>(UIPrefabsPath + "/LoseWindow");
+        Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
     }
 
     void ManageWaves()
@@ -59,6 +76,7 @@ public class LevelManager : MonoBehaviour {
             if (Time.time > waveStartTime + waveDuration)
             {
                 EndWave();
+                ShowWinScreen();
             }
         }
         else
@@ -83,6 +101,7 @@ public class LevelManager : MonoBehaviour {
         }
         duringNight = false;
         // darkness.EndNight();
+        
     }
 
     void StartNight()

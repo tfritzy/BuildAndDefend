@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -33,12 +34,23 @@ public class Player : MonoBehaviour
             string jsonPlayerData = reader.ReadToEndAsync().Result;
             reader.Close();
             data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
+            LoadBuildingUpgradesWithInheritance();
         }
         else
         {
             Player.data.vals = new PlayerDataDAO();
             save();
         }
+    }
+
+    private void LoadBuildingUpgradesWithInheritance()
+    {
+        var buildingUpgradesWithInheritance = new Dictionary<BuildingType, BuildingUpgrade>();
+        foreach (BuildingType type in data.vals.BuildingUpgrades.Keys)
+        {
+            buildingUpgradesWithInheritance[type] = data.vals.BuildingUpgrades[type].GetInstance();
+        }
+        data.vals.BuildingUpgrades = buildingUpgradesWithInheritance;
     }
 
     public async void save()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Newtonsoft.Json;
 
 public class Builder : MonoBehaviour {
 
@@ -156,14 +157,15 @@ public class Builder : MonoBehaviour {
 
     public void LoadMap(string mapName)
     {
-        string path = "Assets/Maps/" + mapName;
+        string path = "Assets/Maps/" + mapName + ".json";
         StreamReader reader = new StreamReader(path);
-        string[] strMap = reader.ReadLine().Split(' ');
-        for (int i = 0; i < strMap.Length-1; i++)
+        string jsonMap = reader.ReadToEnd();
+        MapDAO map = JsonConvert.DeserializeObject<MapDAO>(jsonMap);
+        for (int i = 0; i < map.grid.Length-1; i++)
         {
             int x = i % 32;
             int y = i / 32;
-            byte value = byte.Parse(strMap[i]);
+            byte value = map.grid[i];
             Map.Grid[y , x] = value;
             PlaceBlock(value, x, y);
         }

@@ -22,7 +22,7 @@ public class MapNode : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
 
     public void Load()
     {
-        string path = mapRootPath + this.name;
+        string path = $"{mapRootPath}/{this.name}.json";
         StreamReader reader = new StreamReader(path);
         string jsonMap = reader.ReadToEnd();
         MapDAO map = JsonConvert.DeserializeObject<MapDAO>(jsonMap);

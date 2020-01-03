@@ -15,7 +15,7 @@ public class CloseUIWindows : MonoBehaviour, IPointerDownHandler, IBeginDragHand
         CloseAllUIWindows();
     }
 
-    private void CloseAllUIWindows()
+    public void CloseAllUIWindows()
     {
         GameObject[] windows = GameObject.FindGameObjectsWithTag("UIWindow");
         foreach (GameObject window in windows){

@@ -6,9 +6,17 @@ public static class Map
     public static TileType[,] Grid;
     public static Dictionary<string, HashSet<Zombie>> PathTakers = new Dictionary<string, HashSet<Zombie>>();
 
+    /// <summary>
+    /// A dictionary containing all the player's towers.
+    /// </summary>
+    /// <typeparam name="string">The position of the tower in form 'x,y'</typeparam>
+    /// <typeparam name="GameObject">The tower object.</typeparam>
+    /// <returns></returns>
+    public static Dictionary<string, GameObject> Towers = new Dictionary<string, GameObject>();
+
     public static void FreeGridLoc(Vector3 pos)
     {
-        int[] gridLoc = Map.WorldPointToGridPoint((Vector2)pos);
+        Vector2Int gridLoc = Map.WorldPointToGridPoint((Vector2)pos);
         Map.Grid[gridLoc[1], gridLoc[0]] = 0;
         TellAllZombiesToGetNewPath();
     }
@@ -22,20 +30,20 @@ public static class Map
         }
     }
 
-    public static int[] WorldPointToGridPoint(Vector2 worldPoint)
+    public static Vector2Int WorldPointToGridPoint(Vector2 worldPoint)
     {
-        int[] loc = new int[2] {
+        Vector2Int loc = new Vector2Int(
             (int)(((worldPoint.x - .25f) * 2) + Map.Grid.GetLength(1) / 2),
-            (int)(((worldPoint.y - .25f) * 2) + Map.Grid.GetLength(0) / 2),
-        };
-        if (loc[0] < 0)
-            loc[0] = 0;
-        if (loc[0] > Map.Grid.GetLength(1) - 1)
-            loc[0] = Map.Grid.GetLength(1) - 1;
-        if (loc[1] < 0)
-            loc[1] = 0;
-        if (loc[1] > Map.Grid.GetLength(0) - 1)
-            loc[1] = Map.Grid.GetLength(0) - 1;
+            (int)(((worldPoint.y - .25f) * 2) + Map.Grid.GetLength(0) / 2)
+        );
+        if (loc.x < 0)
+            loc.x = 0;
+        if (loc.x > Map.Grid.GetLength(1) - 1)
+            loc.x = Map.Grid.GetLength(1) - 1;
+        if (loc.y < 0)
+            loc.y = 0;
+        if (loc.y > Map.Grid.GetLength(0) - 1)
+            loc.y = Map.Grid.GetLength(0) - 1;
         return loc;
     }
 

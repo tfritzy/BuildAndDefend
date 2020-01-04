@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour
+{
 
     List<ZombieSpawner> spawners;
     private float prevSpawnRate;
@@ -11,7 +12,6 @@ public class LevelManager : MonoBehaviour {
     private bool isDuringWave;
     private int numWaves;
     private bool duringNight = false;
-    // private Darkness darkness;
 
     public float levelStartTime;
     public float waveDuration;
@@ -22,37 +22,40 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
-        //  Disabling Darkness for now
-        //this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
 
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         this.spawners = new List<ZombieSpawner>();
         GameObject[] objSpawners = GameObject.FindGameObjectsWithTag("Spawner");
-        foreach(GameObject spawner in objSpawners)
+        foreach (GameObject spawner in objSpawners)
         {
             spawners.Add(spawner.GetComponent<ZombieSpawner>());
         }
         EndNight();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         ManageWaves();
     }
 
-    public static void ReturnToMap(){
+    public static void ReturnToMap()
+    {
         SceneManager.LoadScene("Map");
     }
 
-    public static void ShowWinScreen(){
+    public static void ShowWinScreen()
+    {
         GameObject winWindow = Resources.Load<GameObject>(FilePaths.UI + "/WinWindow");
         Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
     }
 
-    public static void ShowLoseScreen(){
+    public static void ShowLoseScreen()
+    {
         GameObject winWindow = Resources.Load<GameObject>(FilePaths.UI + "/LoseWindow");
         Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
     }
@@ -99,7 +102,7 @@ public class LevelManager : MonoBehaviour {
         }
         duringNight = false;
         // darkness.EndNight();
-        
+
     }
 
     void StartNight()
@@ -125,7 +128,7 @@ public class LevelManager : MonoBehaviour {
             spawners[i].SpawnZombie(waveGroupCount);
             spawners[i].SpawnRate /= 4;
         }
-        
+
         isDuringWave = true;
     }
 

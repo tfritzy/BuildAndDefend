@@ -34,6 +34,8 @@ public class Builder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        BuildTower(new Vector2Int(20, 20), BuildingType.Ballista);
+        BuildTower(new Vector2Int(10, 20), BuildingType.Ballista);
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
         this.woodWall = Resources.Load<GameObject>($"{FilePaths.Buildings}/WallSegment").GetComponent<WoodWall>();
@@ -71,6 +73,14 @@ public class Builder : MonoBehaviour
         BuildBlock();
     }
 
+
+    private void BuildTower(Vector2Int gridLoc, BuildingType buildingType)
+    {
+        GameObject building = Resources.Load<GameObject>($"{FilePaths.Towers}/{buildingType}");
+        Instantiate(building, Map.GridPointToWorldPoint(gridLoc), new Quaternion(), null);
+        Map.Towers.Add(gridLoc.ToStr(), building);
+    }
+
     void BuildBlock()
     {
         if (!inBuildMode)
@@ -79,7 +89,7 @@ public class Builder : MonoBehaviour
         {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
-            int[] gridLoc = Map.WorldPointToGridPoint(location);
+            Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
             if (gridLoc[1] < 0 || gridLoc[1] > (xGridSize - 1) || gridLoc[0] < 0 || gridLoc[0] > (yGridSize - 1))
             {
                 return;

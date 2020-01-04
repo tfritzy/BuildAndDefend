@@ -27,15 +27,17 @@ public class MapBuilder : MonoBehaviour
         int buttonsPerRow = 11;
         float distBetweenButtons = 1f;
         Vector2 selectionBoxWorldPos = Camera.main.ScreenToWorldPoint(selectionBox.transform.position);
-        float xPos = selectionBoxWorldPos.x + 10; 
+        float xPos = selectionBoxWorldPos.x + 10;
         float yPos = selectionBoxWorldPos.y + .6f;
         TileType[] tileTypes = (TileType[])Enum.GetValues(typeof(TileType));
-        for (int i = 0; i < tileTypes.Length; i++){
+        for (int i = 0; i < tileTypes.Length; i++)
+        {
             TileType tile = tileTypes[i];
             GameObject tileSelectButton = Instantiate(TileSelectButton, new Vector3(xPos, yPos, 0), new Quaternion(), selectionBox.transform);
             tileSelectButton.GetComponent<BlockSelector>().Type = tile;
             xPos += distBetweenButtons;
-            if (i % buttonsPerRow == 0){
+            if (i % buttonsPerRow == 0)
+            {
                 xPos = distBetweenButtons / 2;
                 yPos += distBetweenButtons;
             }
@@ -57,7 +59,7 @@ public class MapBuilder : MonoBehaviour
             tiles.Add(block);
         }
         mapSave.grid = tiles.ToArray();
-     
+
         string path = $"{FilePaths.Maps}/{this.mapName}";
         StreamWriter writer = new StreamWriter(path, false);
         writer.Write(JsonConvert.SerializeObject(mapSave));
@@ -70,13 +72,13 @@ public class MapBuilder : MonoBehaviour
         {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
-            int[] gridLoc = Map.WorldPointToGridPoint(location);
+            Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
 
-            if (Map.Grid[gridLoc[1], gridLoc[0]] > 0)
+            if (Map.Grid[gridLoc.y, gridLoc.x] > 0)
             {
                 return;
             }
-            Map.Grid[gridLoc[1], gridLoc[0]] = SelectedTileType;
+            Map.Grid[gridLoc.y, gridLoc.x] = SelectedTileType;
 
             Instantiate(SelectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
         }

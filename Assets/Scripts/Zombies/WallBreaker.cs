@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallBreaker : Zombie {
+public class WallBreaker : Zombie
+{
 
     public override ResourceDAO KillReward { get => new ResourceDAO(gold: 30); }
 

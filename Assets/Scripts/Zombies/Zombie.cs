@@ -5,8 +5,8 @@ using UnityEngine;
 public class Zombie : MonoBehaviour
 {
     protected List<Vector2> path;
-    protected int[] locationInGrid;
-    protected int[] targetLoc;
+    protected Vector2Int locationInGrid;
+    public Vector2Int targetLoc;
     protected bool atFinalLoc = false;
     protected int pathProgress = 0;
     protected int damage = 1;
@@ -115,9 +115,8 @@ public class Zombie : MonoBehaviour
     {
         pathProgress = 0;
         UnsubscribeToPath();
-        this.target = GameObject.Find("Turret");
+        (this.targetLoc, this.target) = findClosestTower();
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.targetLoc = Map.WorldPointToGridPoint(GameObject.Find("Turret").transform.position);
         this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
@@ -137,13 +136,31 @@ public class Zombie : MonoBehaviour
         return path;
     }
 
-    // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(TileType[,] grid, int[] startLoc, int[] endLoc)
+    private (Vector2Int, GameObject) findClosestTower()
     {
-        LinkedList<List<int[]>> q = new LinkedList<List<int[]>>();
+        int closestDist = int.MaxValue;
+        Vector2Int closestPos = Vector2Int.zero;
+        GameObject closestTarget = null;
+        foreach (string towerPos in Map.Towers.Keys)
+        {
+            int distance = Mathf.Abs((towerPos.ToVector2Int().x - this.locationInGrid.x)) + Mathf.Abs((towerPos.ToVector2Int().y - this.locationInGrid.y));
+            if (distance < closestDist)
+            {
+                closestDist = distance;
+                closestTarget = Map.Towers[towerPos];
+                closestPos = towerPos.ToVector2Int();
+            }
+        }
+        return (closestPos, closestTarget);
+    }
+
+    // Perform BFS to find shortest path to the desired location
+    public List<Vector2> FindPath(TileType[,] grid, Vector2Int startLoc, Vector2Int endLoc)
+    {
+        LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();
         HashSet<string> v = new HashSet<string>();
 
-        List<int[]> firstElement = new List<int[]>();
+        List<Vector2Int> firstElement = new List<Vector2Int>();
         firstElement.Add(startLoc);
         q.AddFirst(firstElement);
 
@@ -151,7 +168,7 @@ public class Zombie : MonoBehaviour
 
         while (q.Count > 0)
         {
-            List<int[]> cur = q.First.Value;
+            List<Vector2Int> cur = q.First.Value;
 
             int x = cur[cur.Count - 1][0];
             int y = cur[cur.Count - 1][1];
@@ -163,7 +180,7 @@ public class Zombie : MonoBehaviour
 
             if (x == endLoc[0] && y == endLoc[1])
             {
-                return ConvertIntArrList(cur);
+                return ConvertGridPointListToWorldPoint(cur);
             }
 
             for (int i = 0; i < searchDirections.GetLength(0); i++)
@@ -176,8 +193,8 @@ public class Zombie : MonoBehaviour
                     (grid[newY, newX] == 0 || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
-                    List<int[]> newList = new List<int[]>(cur);
-                    newList.Add(new int[] { newX, newY });
+                    List<Vector2Int> newList = new List<Vector2Int>(cur);
+                    newList.Add(new Vector2Int(newX, newY));
                     q.AddLast(newList);
                 }
             }
@@ -186,7 +203,7 @@ public class Zombie : MonoBehaviour
             if (q.Count == 1)
             {
                 this.target = null;
-                return ConvertIntArrList(q.First.Value);
+                return ConvertGridPointListToWorldPoint(q.First.Value);
             }
             q.RemoveFirst();
         }
@@ -205,7 +222,7 @@ public class Zombie : MonoBehaviour
         }
         foreach (Vector2 point in path)
         {
-            int[] gridLoc = Map.WorldPointToGridPoint(point);
+            Vector2Int gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
             Map.PathTakers[key].Remove(this);
 
@@ -216,7 +233,7 @@ public class Zombie : MonoBehaviour
     {
         foreach (Vector2 point in path)
         {
-            int[] gridLoc = Map.WorldPointToGridPoint(point);
+            Vector2Int gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
             if (!Map.PathTakers.ContainsKey(key))
             {
@@ -238,20 +255,29 @@ public class Zombie : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The logic to perform when this zombie dies.
+    /// </summary>
     protected virtual void OnDeath()
     {
         Purchaser.Give(this.KillReward);
         Destroy(this.gameObject);
     }
 
-    private List<Vector2> ConvertIntArrList(List<int[]> input)
+    /// <summary>
+    /// Takes a list of grid points, and turns it into a list of world points.static
+    /// Is used to turn a zombie's grid path into a world point path.
+    /// </summary>
+    /// <param name="gridPointList"></param>
+    /// <returns></returns>
+    private List<Vector2> ConvertGridPointListToWorldPoint(List<Vector2Int> gridPointList)
     {
-        List<Vector2> output = new List<Vector2>();
-        for (int i = 0; i < input.Count; i++)
+        List<Vector2> worldPointList = new List<Vector2>();
+        foreach (Vector2Int gridPoint in gridPointList)
         {
-            output.Add(Map.GridPointToWorldPoint(input[i]));
+            worldPointList.Add(Map.GridPointToWorldPoint(gridPoint));
         }
-        return output;
+        return worldPointList;
     }
 }
 

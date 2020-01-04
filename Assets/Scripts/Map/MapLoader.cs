@@ -7,7 +7,7 @@ using UnityEngine;
 public class MapLoader : MonoBehaviour
 {
     private Dictionary<TileType, GameObject> tileMap;
-    
+
     private GameObject zombieSpawner;
 
     void Start()
@@ -29,11 +29,12 @@ public class MapLoader : MonoBehaviour
 
     }
 
-    private MapDAO ReadMapFile(String mapName){
+    private MapDAO ReadMapFile(String mapName)
+    {
         string path = $"{FilePaths.Maps}/{mapName}.json";
         StreamReader reader = new StreamReader(path);
         string jsonMap = reader.ReadToEnd();
-        return JsonConvert.DeserializeObject<MapDAO>(jsonMap);;
+        return JsonConvert.DeserializeObject<MapDAO>(jsonMap); ;
     }
 
     private void LoadGrid(MapDAO map)
@@ -48,10 +49,12 @@ public class MapLoader : MonoBehaviour
         }
     }
 
-    private void LoadSpawners(MapDAO map){
+    private void LoadSpawners(MapDAO map)
+    {
         GameObject spawnerParent = new GameObject();
         Instantiate(spawnerParent, Vector3.zero, new Quaternion(), null);
-        foreach (ZombieSpawnerDAO spawner in map.zombieSpawners){
+        foreach (ZombieSpawnerDAO spawner in map.zombieSpawners)
+        {
             Vector3 spawnerPos = Map.GridPointToWorldPoint(spawner.Pos);
             GameObject spawnerInst = Instantiate(this.zombieSpawner, spawnerPos, new Quaternion(), spawnerParent.transform);
             spawnerInst.GetComponent<ZombieSpawner>().SpawnRate = spawner.SpawnRate;

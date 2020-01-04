@@ -202,7 +202,6 @@ public class Zombie : MonoBehaviour
         {
             return;
         }
-        Debug.Log(path);
         foreach (Vector2 point in path)
         {
             int[] gridLoc = Map.WorldPointToGridPoint(point);

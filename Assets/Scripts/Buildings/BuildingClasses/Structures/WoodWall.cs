@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class WoodWall : Building {
 
-    public override string StructPath { get => "Gameobjects/Buildings/WallSegment"; }
+    public override string StructPath { get => $"{FilePaths.Buildings}/WallSegment"; }
     public override int WoodCost { get => 100; }
 }

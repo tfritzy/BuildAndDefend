@@ -32,8 +32,8 @@ public class Builder : MonoBehaviour {
     { 
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
-        this.woodWall = Resources.Load<GameObject>("Gameobjects/Buildings/WallSegment").GetComponent<WoodWall>();
-        this.lamp = Resources.Load<GameObject>("Gameobjects/Buildings/Lamp").GetComponent<Lamp>();
+        this.woodWall = Resources.Load<GameObject>($"{FilePaths.Buildings}/WallSegment").GetComponent<WoodWall>();
+        this.lamp = Resources.Load<GameObject>($"{FilePaths.Buildings}/Lamp").GetComponent<Lamp>();
         selectedBuilding = woodWall;
         this.gridParent = GameObject.Find("BuildGrid").transform;
     }

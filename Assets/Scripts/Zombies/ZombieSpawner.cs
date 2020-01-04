@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class ZombieSpawner : MonoBehaviour {
 
-    public float averageBetweenZombies;
+    /// <summary>
+    /// This spawner's spawn rate in zombies per second.
+    /// </summary>
+    public float SpawnRate;
+
+    /// <summary>
+    /// The zombie to spawn.
+    /// </summary>
     public GameObject zombie;
+
+    /// <summary>
+    /// Whether or not this spawner is spawning.
+    /// </summary>
     public bool disabled = false;
 
     private float lastZombieSpawnTime;
@@ -21,7 +32,7 @@ public class ZombieSpawner : MonoBehaviour {
 		if (!disabled && Time.time > timeBetweenZombie + lastZombieSpawnTime)
         {
             SpawnZombie(1);
-            timeBetweenZombie = Random.Range(averageBetweenZombies / 2, averageBetweenZombies * 2);
+            timeBetweenZombie = Random.Range(SpawnRate / 2, SpawnRate * 2);
             lastZombieSpawnTime = Time.time;
         }
 	}

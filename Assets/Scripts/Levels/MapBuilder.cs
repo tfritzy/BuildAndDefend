@@ -16,7 +16,7 @@ public class MapBuilder : MonoBehaviour
 
     private void Awake()
     {
-
+        Map.Grid = new TileType[16, 32];
     }
 
     // Use this for initialization
@@ -24,19 +24,20 @@ public class MapBuilder : MonoBehaviour
     {
         GameObject selectionBox = GameObject.Find("SelectionBox");
         float width = selectionBox.GetComponent<RectTransform>().rect.width;
-        int buttonsPerRow = 10;
-        float distBetweenButtons = width / (buttonsPerRow + 1);
-        float xPos = width / 2; 
-        float yPos = width / 2;
+        int buttonsPerRow = 11;
+        float distBetweenButtons = 1f;
+        Vector2 selectionBoxWorldPos = Camera.main.ScreenToWorldPoint(selectionBox.transform.position);
+        float xPos = selectionBoxWorldPos.x + 10; 
+        float yPos = selectionBoxWorldPos.y + .6f;
         TileType[] tileTypes = (TileType[])Enum.GetValues(typeof(TileType));
         for (int i = 0; i < tileTypes.Length; i++){
             TileType tile = tileTypes[i];
             GameObject tileSelectButton = Instantiate(TileSelectButton, new Vector3(xPos, yPos, 0), new Quaternion(), selectionBox.transform);
             tileSelectButton.GetComponent<BlockSelector>().Type = tile;
-            xPos += width;
+            xPos += distBetweenButtons;
             if (i % buttonsPerRow == 0){
-                xPos = width / 2;
-                yPos += width;
+                xPos = distBetweenButtons / 2;
+                yPos += distBetweenButtons;
             }
         }
     }
@@ -57,7 +58,7 @@ public class MapBuilder : MonoBehaviour
         }
         mapSave.grid = tiles.ToArray();
      
-        string path = "Assets/Maps/" + this.mapName;
+        string path = $"{FilePaths.Maps}/{this.mapName}";
         StreamWriter writer = new StreamWriter(path, false);
         writer.Write(JsonConvert.SerializeObject(mapSave));
         writer.Close();
@@ -77,7 +78,7 @@ public class MapBuilder : MonoBehaviour
             }
             Map.Grid[gridLoc[1], gridLoc[0]] = SelectedTileType;
 
-            Instantiate(selectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
+            Instantiate(SelectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
         }
     }
 }

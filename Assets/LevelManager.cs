@@ -20,8 +20,6 @@ public class LevelManager : MonoBehaviour {
     public int waveGroupCount = 5;
     public float levelDuration = 240f;
 
-    private const string UIPrefabsPath = "Gameobjects/UI";
-
     private void Awake()
     {
         //  Disabling Darkness for now
@@ -50,12 +48,12 @@ public class LevelManager : MonoBehaviour {
     }
 
     public static void ShowWinScreen(){
-        GameObject winWindow = Resources.Load<GameObject>(UIPrefabsPath + "/WinWindow");
+        GameObject winWindow = Resources.Load<GameObject>(FilePaths.UI + "/WinWindow");
         Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
     }
 
     public static void ShowLoseScreen(){
-        GameObject winWindow = Resources.Load<GameObject>(UIPrefabsPath + "/LoseWindow");
+        GameObject winWindow = Resources.Load<GameObject>(FilePaths.UI + "/LoseWindow");
         Instantiate(winWindow, Vector3.zero, new Quaternion(), GameObject.Find("Canvas").transform);
     }
 
@@ -121,11 +119,11 @@ public class LevelManager : MonoBehaviour {
     {
         Instantiate(waveStartBanner, GameObject.Find("Canvas").transform);
         waveStartTime = Time.time;
-        prevSpawnRate = spawners[0].averageBetweenZombies;
+        prevSpawnRate = spawners[0].SpawnRate;
         for (int i = 0; i < spawners.Count; i++)
         {
             spawners[i].SpawnZombie(waveGroupCount);
-            spawners[i].averageBetweenZombies /= 4;
+            spawners[i].SpawnRate /= 4;
         }
         
         isDuringWave = true;
@@ -135,7 +133,7 @@ public class LevelManager : MonoBehaviour {
     {
         for (int i = 0; i < spawners.Count; i++)
         {
-            spawners[i].averageBetweenZombies = prevSpawnRate;
+            spawners[i].SpawnRate = prevSpawnRate;
         }
         isDuringWave = false;
     }

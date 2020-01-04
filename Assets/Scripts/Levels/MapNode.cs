@@ -6,23 +6,22 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MapNode : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
+public class MapNode : MonoBehaviour
 {
     public static bool isMenuOpen;
     public string mapName;
     public MapRewardsDAO rewards;
     private GameObject mapDetailsPane;
-    private const string mapDetailsPanePath = "Gameobjects/UI/MapDetailsPane";
-    private static string mapRootPath = "Assets/Maps/";
+
     void Start()
     {
-        this.mapDetailsPane = Resources.Load<GameObject>(mapDetailsPanePath);
+        this.mapDetailsPane = Resources.Load<GameObject>($"{FilePaths.UI}/MapDetailsPane");
         Load();
     }
 
     public void Load()
     {
-        string path = $"{mapRootPath}/{this.name}.json";
+        string path = $"{FilePaths.Maps}/{this.name}.json";
         StreamReader reader = new StreamReader(path);
         string jsonMap = reader.ReadToEnd();
         MapDAO map = JsonConvert.DeserializeObject<MapDAO>(jsonMap);
@@ -38,15 +37,5 @@ public class MapNode : MonoBehaviour, IPointerDownHandler, IBeginDragHandler
             new Quaternion(),
             this.transform);
         isMenuOpen = true;
-    }
-
-    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log(eventData);
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        Debug.Log(eventData);
     }
 }

@@ -2,48 +2,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Newtonsoft.Json;
+using System;
 
-public class MapBuilder : MonoBehaviour {
-
-    // Private fields
-    float blockSize;
-    private GameObject selectedBlock;
-
-    // Pulic Fields
-    public GameObject wallSegment;
-    public int[,] grid;
-    public GameObject water;
-    public GameObject brush;
-    public GameObject chasm;
-    public GameObject wire;
+public class MapBuilder : MonoBehaviour
+{
     public string mapName;
+    public GameObject TileSelectButton;
 
-    private int blockNum = 0;
+    private float blockSize;
+    public static GameObject SelectedBlock;
+    public static TileType SelectedTileType = TileType.Water;
 
     private void Awake()
     {
-        this.grid = new int[16, 32];
+
     }
 
     // Use this for initialization
-    void Start () {
-        SelectBrush();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        GameObject selectionBox = GameObject.Find("SelectionBox");
+        float width = selectionBox.GetComponent<RectTransform>().rect.width;
+        int buttonsPerRow = 10;
+        float distBetweenButtons = width / (buttonsPerRow + 1);
+        float xPos = width / 2; 
+        float yPos = width / 2;
+        TileType[] tileTypes = (TileType[])Enum.GetValues(typeof(TileType));
+        for (int i = 0; i < tileTypes.Length; i++){
+            TileType tile = tileTypes[i];
+            GameObject tileSelectButton = Instantiate(TileSelectButton, new Vector3(xPos, yPos, 0), new Quaternion(), selectionBox.transform);
+            tileSelectButton.GetComponent<BlockSelector>().Type = tile;
+            xPos += width;
+            if (i % buttonsPerRow == 0){
+                xPos = width / 2;
+                yPos += width;
+            }
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         BuildBlock();
     }
 
     void Save()
     {
+        MapDAO mapSave = new MapDAO();
+        List<TileType> tiles = new List<TileType>();
+        foreach (TileType block in Map.Grid)
+        {
+            tiles.Add(block);
+        }
+        mapSave.grid = tiles.ToArray();
+     
         string path = "Assets/Maps/" + this.mapName;
         StreamWriter writer = new StreamWriter(path, false);
-        
-        foreach (int block in grid)
-        {
-            writer.Write(block + " ");
-        }
+        writer.Write(JsonConvert.SerializeObject(mapSave));
         writer.Close();
     }
 
@@ -53,62 +69,15 @@ public class MapBuilder : MonoBehaviour {
         {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
-            int[] gridLoc = WorldPointToGridPoint(location);
+            int[] gridLoc = Map.WorldPointToGridPoint(location);
 
-            if (grid[gridLoc[1], gridLoc[0]] > 0)
+            if (Map.Grid[gridLoc[1], gridLoc[0]] > 0)
             {
                 return;
             }
-            grid[gridLoc[1], gridLoc[0]] = blockNum;
+            Map.Grid[gridLoc[1], gridLoc[0]] = SelectedTileType;
 
-            Instantiate(selectedBlock, GridPointToWorldPoint(gridLoc), new Quaternion());
+            Instantiate(selectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
         }
     }
-
-    public int[] WorldPointToGridPoint(Vector2 worldPoint)
-    {
-        int[] loc = new int[2] { (int)((worldPoint.x + 8 - .25f) * 2), (int)((worldPoint.y + 3 - .25f) * 2) };
-
-        return loc;
-    }
-
-    public Vector2 GridPointToWorldPoint(Vector2 gridLoc)
-    {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f, ((float)gridLoc[1] - 6f) / 2f + .5f);
-        return loc;
-    }
-
-    public Vector2 GridPointToWorldPoint(int[] gridLoc)
-    {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f, ((float)gridLoc[1] - 6f) / 2f + .5f);
-
-        return loc;
-    }
-
-    public void SelectChasm()
-    {
-        this.selectedBlock = chasm;
-        this.blockNum = 4;
-    }
-
-    public void SelectWater()
-    {
-        this.selectedBlock = water;
-        this.blockNum = 1;
-    }
-
-    public void SelectBrush()
-    {
-        this.selectedBlock = brush;
-        this.blockNum = 2;
-    }
-    
-    public void SelectWire()
-    {
-        this.selectedBlock = wire;
-        this.blockNum = 3;
-    }
-
-
-    
 }

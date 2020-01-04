@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class Map
 {
-    public static byte[,] Grid;
+    public static TileType[,] Grid;
     public static Dictionary<string, HashSet<Zombie>> PathTakers = new Dictionary<string, HashSet<Zombie>>();
 
     public static void FreeGridLoc(Vector3 pos)
@@ -38,16 +38,18 @@ public static class Map
 
     public static Vector2 GridPointToWorldPoint(Vector2 gridLoc)
     {
-        Vector3 loc = new Vector3(((float)gridLoc[0] - 16) / 2f + .5f,
-                                  ((float)gridLoc[1] - 6f) / 2f + .5f);
+        Vector3 loc = new Vector3(
+            ((float)gridLoc[0] - 16) / 2f + .5f,
+            ((float)gridLoc[1] - 6f) / 2f + .5f);
 
         return loc;
     }
 
     public static Vector2 GridPointToWorldPoint(int[] gridLoc)
     {
-        Vector2 loc = new Vector2(((float)gridLoc[0] - 16) / 2f + .5f,
-                                   ((float)gridLoc[1] - 6f) / 2f + .5f);
+        Vector2 loc = new Vector2(
+            ((float)gridLoc[0] - 16) / 2f + .5f,
+            ((float)gridLoc[1] - 6f) / 2f + .5f);
 
         return loc;
     }

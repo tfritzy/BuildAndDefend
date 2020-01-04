@@ -20,16 +20,11 @@ public class Builder : MonoBehaviour {
     public bool inBuildMode = false;
     public int woodCount = 500;
     public bool deleteMode = false;
-    public GameObject water;
-    public GameObject brush;
-    public GameObject chasm;
-    public GameObject wire;
     public GameObject gridLine;
     
     private void Awake()
     {
-        Map.Grid = new byte[16, 32];
-        LoadMap(Player.data.vals.CurrentLevel);
+        Map.Grid = new TileType[16, 32];
     }
 
     // Use this for initialization
@@ -96,7 +91,7 @@ public class Builder : MonoBehaviour {
                     return;
                 }
 
-                Map.Grid[gridLoc[1], gridLoc[0]] = 5;
+                Map.Grid[gridLoc[1], gridLoc[0]] = TileType.Wall;
                 NotifyPathTakersOfWallChange(gridLoc[1], gridLoc[0]);
 
                 GameObject inst = Instantiate(selectedBuilding.GetStructure(), 
@@ -155,45 +150,10 @@ public class Builder : MonoBehaviour {
         }
     }
 
-    public void LoadMap(string mapName)
-    {
-        string path = "Assets/Maps/" + mapName + ".json";
-        StreamReader reader = new StreamReader(path);
-        string jsonMap = reader.ReadToEnd();
-        MapDAO map = JsonConvert.DeserializeObject<MapDAO>(jsonMap);
-        for (int i = 0; i < map.grid.Length-1; i++)
-        {
-            int x = i % 32;
-            int y = i / 32;
-            byte value = map.grid[i];
-            Map.Grid[y , x] = value;
-            PlaceBlock(value, x, y);
-        }
-    }
-
     public void AddWood(int amount)
     {
         this.woodCount += amount;
         woodLabel.text = woodCount.ToString();
-    }
-
-    private void PlaceBlock(int type, int x, int y)
-    {
-        if (type == 0)
-            return;
-        GameObject selectedBlock = water;
-        if (type == 2)
-        {
-            selectedBlock = brush;
-        } else if (type == 3)
-        {
-            selectedBlock = wire;
-        }else if (type == 4)
-        {
-            selectedBlock = chasm;
-        }
-
-        Instantiate(selectedBlock, Map.GridPointToWorldPoint(new int[] { x, y }), new Quaternion());
     }
 
     void SelectWoodWall()

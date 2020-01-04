@@ -137,7 +137,7 @@ public class Zombie : MonoBehaviour
     }
 
     // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(byte[,] grid, int[] startLoc, int[] endLoc)
+    public List<Vector2> FindPath(TileType[,] grid, int[] startLoc, int[] endLoc)
     {
         LinkedList<List<int[]>> q = new LinkedList<List<int[]>>();
         HashSet<string> v = new HashSet<string>();

@@ -18,6 +18,7 @@ public class Zombie : MonoBehaviour
     public float zombieSpeed = .3f;
     public int health = 5;
     public GameObject target;
+    public virtual ResourceDAO KillReward { get => new ResourceDAO(gold: 10); }
 
 
     // Use this for initialization
@@ -64,7 +65,7 @@ public class Zombie : MonoBehaviour
             return;
         }
         this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
-        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .6f)
+        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .3f)
         {
             pathProgress += 1;
             if (pathProgress >= path.Count)
@@ -116,7 +117,7 @@ public class Zombie : MonoBehaviour
         UnsubscribeToPath();
         this.target = GameObject.Find("Turret");
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.targetLoc = new int[] { 16, 8 };
+        this.targetLoc = Map.WorldPointToGridPoint(GameObject.Find("Turret").transform.position);
         this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
@@ -207,7 +208,7 @@ public class Zombie : MonoBehaviour
             int[] gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
             Map.PathTakers[key].Remove(this);
-            
+
         }
     }
 
@@ -225,14 +226,22 @@ public class Zombie : MonoBehaviour
         }
     }
 
+
+    private bool hasAlreadyDied = false;
     public void TakeDamage(int damage)
     {
         this.health -= damage;
-        //Debug.Log(this.health);
-        if (health <= 0)
+        if (health <= 0 && !hasAlreadyDied)
         {
-            Destroy(this.gameObject);
+            hasAlreadyDied = true;
+            OnDeath();
         }
+    }
+
+    protected virtual void OnDeath()
+    {
+        Purchaser.Give(this.KillReward);
+        Destroy(this.gameObject);
     }
 
     private List<Vector2> ConvertIntArrList(List<int[]> input)

@@ -1,8 +1,9 @@
 public class BallistaUpgrade : BuildingUpgrade
 {
-    public override CostDAO Cost { get => new CostDAO(gold: 100); }
+    public override ResourceDAO Cost { get => new ResourceDAO(gold: 100); }
 
-    public BallistaUpgrade(){
+    public BallistaUpgrade()
+    {
         this.Type = BuildingType.Ballista;
     }
 

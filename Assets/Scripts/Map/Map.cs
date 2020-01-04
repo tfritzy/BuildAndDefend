@@ -24,7 +24,10 @@ public static class Map
 
     public static int[] WorldPointToGridPoint(Vector2 worldPoint)
     {
-        int[] loc = new int[2] { (int)((worldPoint.x + 8 - .25f) * 2), (int)((worldPoint.y + 3 - .25f) * 2) };
+        int[] loc = new int[2] {
+            (int)(((worldPoint.x - .25f) * 2) + Map.Grid.GetLength(1) / 2),
+            (int)(((worldPoint.y - .25f) * 2) + Map.Grid.GetLength(0) / 2),
+        };
         if (loc[0] < 0)
             loc[0] = 0;
         if (loc[0] > Map.Grid.GetLength(1) - 1)
@@ -39,8 +42,8 @@ public static class Map
     public static Vector2 GridPointToWorldPoint(Vector2 gridLoc)
     {
         Vector3 loc = new Vector3(
-            ((float)gridLoc[0] - 16) / 2f + .5f,
-            ((float)gridLoc[1] - 6f) / 2f + .5f);
+            ((float)gridLoc[0] - Map.Grid.GetLength(1) / 2) / 2f + .5f,
+            ((float)gridLoc[1] - Map.Grid.GetLength(0) / 2) / 2f + .5f);
 
         return loc;
     }
@@ -48,8 +51,8 @@ public static class Map
     public static Vector2 GridPointToWorldPoint(int[] gridLoc)
     {
         Vector2 loc = new Vector2(
-            ((float)gridLoc[0] - 16) / 2f + .5f,
-            ((float)gridLoc[1] - 6f) / 2f + .5f);
+            ((float)gridLoc[0] - Map.Grid.GetLength(1) / 2) / 2f + .5f,
+            ((float)gridLoc[1] - Map.Grid.GetLength(0) / 2) / 2f + .5f);
 
         return loc;
     }

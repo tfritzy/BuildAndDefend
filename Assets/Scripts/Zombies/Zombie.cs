@@ -117,7 +117,7 @@ public class Zombie : MonoBehaviour
         UnsubscribeToPath();
         (this.targetLoc, this.target) = findClosestTower();
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
+        this.path = FindPath(Map.PathingGrid, locationInGrid, this.targetLoc);
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
         foreach (Collider2D col in nearbyZombs)
@@ -155,7 +155,7 @@ public class Zombie : MonoBehaviour
     }
 
     // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(TileType[,] grid, Vector2Int startLoc, Vector2Int endLoc)
+    public List<Vector2> FindPath(PathableType[,] grid, Vector2Int startLoc, Vector2Int endLoc)
     {
         LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();
         HashSet<string> v = new HashSet<string>();
@@ -190,7 +190,7 @@ public class Zombie : MonoBehaviour
 
                 if (newY >= 0 && newY < grid.GetLength(0) &&
                     newX >= 0 && newX < grid.GetLength(1) &&
-                    (grid[newY, newX] == 0 || (newX == endLoc[0] && newY == endLoc[1])) &&
+                    (grid[newY, newX] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
                     List<Vector2Int> newList = new List<Vector2Int>(cur);

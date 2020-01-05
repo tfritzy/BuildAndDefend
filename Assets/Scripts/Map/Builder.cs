@@ -20,14 +20,12 @@ public class Builder : MonoBehaviour
     public int woodCount = 6000;
     public bool deleteMode = false;
     public GameObject gridLine;
-    public const int xGridSize = 40;
-    public const int yGridSize = 40;
-    public static Dictionary<BuildingType, GameObject> Buildings = new Dictionary<BuildingType, GameObject>();    
+    public static Dictionary<BuildingType, GameObject> Buildings = new Dictionary<BuildingType, GameObject>();
     public static GameObject SelectedBuilding;
 
     private void Awake()
     {
-        Map.Grid = new TileType[xGridSize, yGridSize];
+
     }
 
     // Use this for initialization
@@ -55,7 +53,8 @@ public class Builder : MonoBehaviour
         }
     }
 
-    private void LoadBuildings(){
+    private void LoadBuildings()
+    {
         foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
         {
             Buildings.Add(type, Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}"));
@@ -75,11 +74,11 @@ public class Builder : MonoBehaviour
     }
 
 
-    private void BuildTower(Vector2Int gridLoc, BuildingType buildingType)
+    private void BuildTower(Vector2Int gridLoc, Building building)
     {
-        GameObject building = Resources.Load<GameObject>($"{FilePaths.Towers}/{buildingType}");
+        GameObject buildingObj = Resources.Load<GameObject>($"{FilePaths.Towers}/{building.Type}");
         Instantiate(building, Map.GridPointToWorldPoint(gridLoc), new Quaternion(), null);
-        Map.Towers.Add(gridLoc.ToStr(), building);
+        Map.Towers.Add(gridLoc.ToStr(), buildingObj);
     }
 
     void BuildBlock()
@@ -91,7 +90,7 @@ public class Builder : MonoBehaviour
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
-            if (gridLoc[1] < 0 || gridLoc[1] > (xGridSize - 1) || gridLoc[0] < 0 || gridLoc[0] > (yGridSize - 1))
+            if (gridLoc[1] < 0 || gridLoc[1] > (Map.Buildings.GetLength(1) - 1) || gridLoc[0] < 0 || gridLoc[0] > (Map.Buildings.GetLength(0) - 1))
             {
                 return;
             }
@@ -103,32 +102,42 @@ public class Builder : MonoBehaviour
                     return;
                 }
 
-                if (Map.Grid[gridLoc[1], gridLoc[0]] > 0)
+                SelectedBuilding.GetComponent<Building>().Position = gridLoc;
+                if (!Map.CanPlaceBuildingHere(SelectedBuilding.GetComponent<Building>()))
                 {
+                    Console.WriteLine("Invalid place to put building");
                     return;
                 }
 
-                Map.Grid[gridLoc[1], gridLoc[0]] = TileType.Wall;
-                NotifyPathTakersOfWallChange(gridLoc[1], gridLoc[0]);
+                Map.AddBuildingToMap(SelectedBuilding.GetComponent<Building>(), gridLoc);
 
-                GameObject inst = Instantiate(SelectedBuilding,
-                                              Map.GridPointToWorldPoint(gridLoc),
-                                              new Quaternion());
-                inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
-                AddWood(-1 * SelectedBuilding.GetComponent<Building>().WoodCost);
-                OnWallBuild();
+                InstantiateBuilding(gridLoc);
             }
             else
             {
-                GameObject building = GameObject.Find("Block" + gridLoc[0] + "," + gridLoc[1]);
+                Building building = Map.Buildings[gridLoc[1], gridLoc[0]].GetComponent<Building>();
                 if (building != null)
                 {
-                    building.SendMessage("Delete");
-                    Map.Grid[gridLoc[1], gridLoc[0]] = 0;
+                    building.Delete();
                     Map.TellAllZombiesToGetNewPath();
                 }
             }
         }
+    }
+
+    private void InstantiateBuilding(Vector2Int gridLoc)
+    {
+        Building building = SelectedBuilding.GetComponent<Building>();
+        Vector2Int topRight = building.Position + building.Size;
+        Vector2 deltaVector = Map.GridPointToWorldPoint(topRight) - Map.GridPointToWorldPoint(building.Position);
+        deltaVector = deltaVector / 2;
+        Vector2 buildingPos = Map.GridPointToWorldPoint(building.Position) + deltaVector;
+        GameObject inst = Instantiate(SelectedBuilding,
+                                      buildingPos,
+                                      new Quaternion());
+        inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
+        inst.GetComponent<Building>().Position = gridLoc;
+        AddWood(-1 * SelectedBuilding.GetComponent<Building>().WoodCost);
     }
 
     private void SetupBuildGrid()
@@ -145,27 +154,6 @@ public class Builder : MonoBehaviour
         foreach (GameObject line in GameObject.FindGameObjectsWithTag("BuildGridLine"))
         {
             Destroy(line);
-        }
-    }
-
-    private void OnWallBuild()
-    {
-        WallBreaker[] wallBreakers = GameObject.FindObjectsOfType<WallBreaker>();
-        foreach (WallBreaker wallBreaker in wallBreakers)
-        {
-            wallBreaker.NotifyOfPathBreak();
-        }
-    }
-
-    private void NotifyPathTakersOfWallChange(int x, int y)
-    {
-        if (!Map.PathTakers.ContainsKey(x + "," + y))
-        {
-            return;
-        }
-        foreach (Zombie z in Map.PathTakers[x + "," + y])
-        {
-            z.NotifyOfPathBreak();
         }
     }
 

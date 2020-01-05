@@ -35,7 +35,7 @@ public class WallBreaker : Zombie
         this.target = closestWall;
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
         this.targetLoc = Map.WorldPointToGridPoint(this.target.transform.position);
-        this.path = FindPath(Map.Grid, locationInGrid, this.targetLoc);
+        this.path = FindPath(Map.PathingGrid, locationInGrid, this.targetLoc);
         SubscribeToPath();
         return path;
     }

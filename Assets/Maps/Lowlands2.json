@@ -17,7 +17,7 @@
             "spawnRate": 6
         }
     ],
-    "grid": [
+    "environment": [
         1,
         1,
         1,

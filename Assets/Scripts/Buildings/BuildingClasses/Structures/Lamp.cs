@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,9 @@ public class Lamp : Building
     private Darkness darkness;
     public float strength = .8f;
     public override int WoodCost { get => 150; }
-    public override Vector2Int Size => new Vector2Int(1, 1);
+    public override Vector2Int Size => new Vector2Int(0, 0);
+    public override BuildingType Type => BuildingType.Lamp;
+    public override PathableType PathableType => PathableType.UnPathable;
 
     protected override void OnDeath()
     {

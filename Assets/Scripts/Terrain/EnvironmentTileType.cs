@@ -1,4 +1,5 @@
-public enum TileType {
+public enum EnvironmentTileType
+{
     Nothing,
     Water,
     Brush,

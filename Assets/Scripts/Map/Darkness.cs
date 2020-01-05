@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Darkness : MonoBehaviour {
+public class Darkness : MonoBehaviour
+{
 
     private Transform night;
     private GridLight[,] darknessGrid;
@@ -25,8 +26,9 @@ public class Darkness : MonoBehaviour {
         this.night = GameObject.Find("Night").GetComponent<Transform>();
     }
 
-    void Start() {
-        this.darknessGrid = new GridLight[Map.Grid.GetLength(0), Map.Grid.GetLength(1)];
+    void Start()
+    {
+        this.darknessGrid = new GridLight[Map.Environment.GetLength(0), Map.Environment.GetLength(1)];
         Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         this.xStart = canvas.pixelRect.width / 2 * -1;
         this.yStart = canvas.pixelRect.height / 2 * -1;
@@ -75,11 +77,12 @@ public class Darkness : MonoBehaviour {
                 DecreaseSunlight(amountOfLightChange);
                 lastNightSegmentTime = Time.time;
             }
-        } else
+        }
+        else
         {
             if (Time.time > lastNightSegmentTime + nightSegmentLength)
             {
-                IncreaseSunlight(amountOfLightChange*2);
+                IncreaseSunlight(amountOfLightChange * 2);
                 lastNightSegmentTime = Time.time;
             }
         }
@@ -122,7 +125,7 @@ public class Darkness : MonoBehaviour {
 
     public void RemoveLight(int x, int y)
     {
-        
+
         if (!sources.ContainsKey(x + "," + y))
         {
             Debug.Log("Light not in lights :(");
@@ -144,9 +147,9 @@ public class Darkness : MonoBehaviour {
 
     private void ModifyCircle(int x, int y, int r, float strength, bool removing)
     {
-        for (int i = x-r; i <= x+r; i++)
+        for (int i = x - r; i <= x + r; i++)
         {
-            for (int j = y-r; j <= y+r; j++)
+            for (int j = y - r; j <= y + r; j++)
             {
                 float dist = (new Vector2(i, j) - new Vector2(x, y)).magnitude;
 
@@ -169,7 +172,7 @@ public class Darkness : MonoBehaviour {
 
     private bool CheckBounds(int x, int y)
     {
-        
+
         if (x < 0 || x >= darknessGrid.GetLength(1))
         {
             return false;
@@ -188,8 +191,8 @@ public class Darkness : MonoBehaviour {
             for (int j = 0; j < darknessGrid.GetLength(0); j++)
             {
                 GameObject darkInst = Instantiate(darknessImage,
-                           ShadowGridLocToWorldSpace(i,j),
-                           new Quaternion(), 
+                           ShadowGridLocToWorldSpace(i, j),
+                           new Quaternion(),
                            night);
                 darknessGrid[j, i] = new GridLight(darkInst);
             }

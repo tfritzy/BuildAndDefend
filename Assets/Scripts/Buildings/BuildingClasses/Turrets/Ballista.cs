@@ -1,17 +1,19 @@
+using System;
 using UnityEngine;
 
 public class Ballista : Turret
 {
     public float startChargeTime;
     public bool isCharging;
-    public override BuildingType Type { get => BuildingType.Ballista; }
+    public override BuildingType Type => BuildingType.Ballista;
     public int Level;
     public override int WoodCost { get => 250; }
 
     private Vector2 lastTouchLocation;
     protected float chargeTime;
     protected float maxProjectileSpeed;
-    public override Vector2Int Size => new Vector2Int(2, 2);
+    public override Vector2Int Size => new Vector2Int(1, 1);
+    public override PathableType PathableType => PathableType.UnPathable;
 
     protected override void SetParameters()
     {

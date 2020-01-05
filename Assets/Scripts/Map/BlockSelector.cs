@@ -5,14 +5,14 @@ using UnityEngine;
 public class BlockSelector : MonoBehaviour
 {
 
-    public TileType Type;
+    public EnvironmentTileType Type;
 
-    private Dictionary<TileType, GameObject> tileMap;
+    private Dictionary<EnvironmentTileType, GameObject> tileMap;
 
     void Start()
     {
-        tileMap = new Dictionary<TileType, GameObject>();
-        foreach (TileType type in Enum.GetValues(typeof(TileType)))
+        tileMap = new Dictionary<EnvironmentTileType, GameObject>();
+        foreach (EnvironmentTileType type in Enum.GetValues(typeof(EnvironmentTileType)))
         {
             Debug.Log($"{FilePaths.Terrain}/{type}");
             tileMap.Add(type, Resources.Load<GameObject>($"{FilePaths.Terrain}/{type}"));

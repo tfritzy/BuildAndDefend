@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class Turret : Building
     public virtual int projectileDamage { get; set; }
     public virtual float projectileLifespan { get; set; }
 
-    public virtual BuildingType Type { get; }
+    public override BuildingType Type => BuildingType.Turret;
 
     protected float inaccuracy;
     protected Builder builder;
@@ -19,8 +20,8 @@ public class Turret : Building
     private float lastFireTime;
 
     public override int WoodCost { get => 200; }
-    public override Vector2Int Size => new Vector2Int(2, 2);
-
+    public override Vector2Int Size => new Vector2Int(1, 1);
+    public override PathableType PathableType => PathableType.UnPathable;
 
     protected virtual void SetParameters()
     {
@@ -87,8 +88,8 @@ public class Turret : Building
         fireDirection = fireDirection / fireDirection.magnitude;
 
         Vector2 shakeAmount = new Vector3(
-            Random.Range(-1 * inaccuracy, 1 * inaccuracy),
-            Random.Range(-1 * inaccuracy, 1 * inaccuracy));
+            UnityEngine.Random.Range(-1 * inaccuracy, 1 * inaccuracy),
+            UnityEngine.Random.Range(-1 * inaccuracy, 1 * inaccuracy));
         fireDirection += shakeAmount;
 
         return fireDirection;

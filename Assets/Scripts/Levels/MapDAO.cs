@@ -4,6 +4,6 @@ public class MapDAO
 {
     public string name;
     public MapRewardsDAO rewards;
-    public TileType[] grid;
+    public EnvironmentTileType[] environment;
     public List<ZombieSpawnerDAO> zombieSpawners;
 }

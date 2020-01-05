@@ -12,11 +12,11 @@ public class MapBuilder : MonoBehaviour
 
     private float blockSize;
     public static GameObject SelectedBlock;
-    public static TileType SelectedTileType = TileType.Water;
+    public static EnvironmentTileType SelectedTileType = EnvironmentTileType.Water;
 
     private void Awake()
     {
-        Map.Grid = new TileType[16, 32];
+        Map.Environment = new EnvironmentTile[16, 32];
     }
 
     // Use this for initialization
@@ -29,10 +29,10 @@ public class MapBuilder : MonoBehaviour
         Vector2 selectionBoxWorldPos = Camera.main.ScreenToWorldPoint(selectionBox.transform.position);
         float xPos = selectionBoxWorldPos.x + 10;
         float yPos = selectionBoxWorldPos.y + .6f;
-        TileType[] tileTypes = (TileType[])Enum.GetValues(typeof(TileType));
+        EnvironmentTileType[] tileTypes = (EnvironmentTileType[])Enum.GetValues(typeof(EnvironmentTileType));
         for (int i = 0; i < tileTypes.Length; i++)
         {
-            TileType tile = tileTypes[i];
+            EnvironmentTileType tile = tileTypes[i];
             GameObject tileSelectButton = Instantiate(TileSelectButton, new Vector3(xPos, yPos, 0), new Quaternion(), selectionBox.transform);
             tileSelectButton.GetComponent<BlockSelector>().Type = tile;
             xPos += distBetweenButtons;
@@ -53,12 +53,12 @@ public class MapBuilder : MonoBehaviour
     void Save()
     {
         MapDAO mapSave = new MapDAO();
-        List<TileType> tiles = new List<TileType>();
-        foreach (TileType block in Map.Grid)
+        List<EnvironmentTileType> tiles = new List<EnvironmentTileType>();
+        foreach (EnvironmentTile block in Map.Environment)
         {
-            tiles.Add(block);
+            tiles.Add(block.Type);
         }
-        mapSave.grid = tiles.ToArray();
+        mapSave.environment = tiles.ToArray();
 
         string path = $"{FilePaths.Maps}/{this.mapName}";
         StreamWriter writer = new StreamWriter(path, false);
@@ -74,11 +74,11 @@ public class MapBuilder : MonoBehaviour
             location = Camera.main.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
 
-            if (Map.Grid[gridLoc.y, gridLoc.x] > 0)
+            if (Map.Environment[gridLoc.y, gridLoc.x].Type != EnvironmentTileType.Nothing)
             {
                 return;
             }
-            Map.Grid[gridLoc.y, gridLoc.x] = SelectedTileType;
+            Map.Environment[gridLoc.y, gridLoc.x] = SelectedBlock.GetComponent<EnvironmentTile>();
 
             Instantiate(SelectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
         }

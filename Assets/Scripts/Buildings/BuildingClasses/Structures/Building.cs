@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +10,18 @@ public abstract class Building : MonoBehaviour
     public int Health;
 
     /// <summary>
-    /// The Size of the building where x=Lenth, y=Height
+    /// The Size of the building where x=Lenth, y=Height. Zero indexed.
     /// </summary>
     /// <value>The size of the building in <Length, Height> </value>
     public abstract Vector2Int Size { get; }
 
+    public abstract BuildingType Type { get; }
+    public abstract PathableType PathableType { get; }
+
+    /// <summary>
+    /// The (0,0) position of this building. It may occupy more spots as determined by Building.Size
+    /// </summary>
+    public Vector2Int Position;
     void Start()
     {
         this.Health = 200;
@@ -26,7 +34,7 @@ public abstract class Building : MonoBehaviour
         if (this.Health <= 0)
         {
             this.Health = 0;
-            Map.FreeGridLoc(this.transform.position);
+            Map.RemoveBuildingFromMap(this);
             OnDeath();
             Delete();
         }
@@ -38,6 +46,7 @@ public abstract class Building : MonoBehaviour
     public void Delete()
     {
         OnDeath();
+        Map.RemoveBuildingFromMap(this);
         Destroy(this.gameObject);
     }
 }

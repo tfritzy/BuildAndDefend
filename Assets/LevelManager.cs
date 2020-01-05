@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-
-    List<ZombieSpawner> spawners;
     private float prevSpawnRate;
     private float waveStartTime;
     private bool isDuringWave;
@@ -28,12 +27,6 @@ public class LevelManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        this.spawners = new List<ZombieSpawner>();
-        GameObject[] objSpawners = GameObject.FindGameObjectsWithTag("Spawner");
-        foreach (GameObject spawner in objSpawners)
-        {
-            spawners.Add(spawner.GetComponent<ZombieSpawner>());
-        }
         EndNight();
     }
 
@@ -96,20 +89,24 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(zombie);
         }
-        foreach (ZombieSpawner spawner in spawners)
+
+        foreach (GameObject spawner in Map.Spawners.Values)
         {
-            spawner.disabled = true;
+            spawner.GetComponent<ZombieSpawner>().disabled = true;
         }
         duringNight = false;
-        // darkness.EndNight();
-
     }
 
     void StartNight()
     {
-        foreach (ZombieSpawner spawner in spawners)
+        if (Map.Towers.Count == 0)
         {
-            spawner.disabled = false;
+            Debug.Log(" you can't start a level with no towers!");
+            return;
+        }
+        foreach (GameObject spawner in Map.Spawners.Values)
+        {
+            spawner.GetComponent<ZombieSpawner>().disabled = false;
         }
         numWaves = Random.Range(2, 5);
         timeBetweenWaves = levelDuration / numWaves;
@@ -122,11 +119,12 @@ public class LevelManager : MonoBehaviour
     {
         Instantiate(waveStartBanner, GameObject.Find("Canvas").transform);
         waveStartTime = Time.time;
-        prevSpawnRate = spawners[0].SpawnRate;
+        List<GameObject> spawners = Map.Spawners.Values.ToList();
+        prevSpawnRate = spawners[0].GetComponent<ZombieSpawner>().SpawnRate;
         for (int i = 0; i < spawners.Count; i++)
         {
-            spawners[i].SpawnZombie(waveGroupCount);
-            spawners[i].SpawnRate /= 4;
+            spawners[i].GetComponent<ZombieSpawner>().SpawnZombie(waveGroupCount);
+            spawners[i].GetComponent<ZombieSpawner>().SpawnRate /= 4;
         }
 
         isDuringWave = true;
@@ -134,9 +132,10 @@ public class LevelManager : MonoBehaviour
 
     void EndWave()
     {
+        List<GameObject> spawners = Map.Spawners.Values.ToList();
         for (int i = 0; i < spawners.Count; i++)
         {
-            spawners[i].SpawnRate = prevSpawnRate;
+            spawners[i].GetComponent<ZombieSpawner>().SpawnRate = prevSpawnRate;
         }
         isDuringWave = false;
     }

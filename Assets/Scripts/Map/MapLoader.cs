@@ -58,6 +58,7 @@ public class MapLoader : MonoBehaviour
             Vector3 spawnerPos = Map.GridPointToWorldPoint(spawner.Pos);
             GameObject spawnerInst = Instantiate(this.zombieSpawner, spawnerPos, new Quaternion(), spawnerParent.transform);
             spawnerInst.GetComponent<ZombieSpawner>().SpawnRate = spawner.SpawnRate;
+            Map.Spawners.Add(spawner.Pos.ToStr(), spawnerInst);
         }
     }
 

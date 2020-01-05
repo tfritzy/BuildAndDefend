@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lamp : Building {
+public class Lamp : Building
+{
 
     private Darkness darkness;
     public float strength = .8f;
-
-    public override string StructPath { get => $"{FilePaths.Buildings}/Lamp"; }
     public override int WoodCost { get => 150; }
+    public override Vector2Int Size => new Vector2Int(1, 1);
 
     protected override void OnDeath()
     {

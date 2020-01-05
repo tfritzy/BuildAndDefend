@@ -18,8 +18,9 @@ public class Turret : Building
 
     private float lastFireTime;
 
-    public override string StructPath { get => ""; }
     public override int WoodCost { get => 200; }
+    public override Vector2Int Size => new Vector2Int(2, 2);
+
 
     protected virtual void SetParameters()
     {
@@ -33,8 +34,8 @@ public class Turret : Building
 
     protected override void Setup()
     {
-        // TODO: Fix this garbage
         this.builder = GameObject.Find("Builder").GetComponent<Builder>();
+        Map.Towers.Add(Map.WorldPointToGridPoint(this.transform.position).ToStr(), this.gameObject);
         SetParameters();
     }
 
@@ -108,6 +109,7 @@ public class Turret : Building
 
     protected override void OnDeath()
     {
+        Map.Towers.Remove(Map.WorldPointToGridPoint(this.transform.position).ToStr());
         LevelManager.ShowLoseScreen();
     }
 }

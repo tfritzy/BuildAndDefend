@@ -4,17 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json;
+using System;
 
 public class Builder : MonoBehaviour
 {
 
     // Private fields
-    float blockSize;
+    private float blockSize;
     private Text woodLabel;
     private float lastNewPathQueuePopTime;
-    private Building woodWall;
-    private Building lamp;
-    private Building selectedBuilding;
     private Transform gridParent;
 
     // Public Fields
@@ -24,7 +22,8 @@ public class Builder : MonoBehaviour
     public GameObject gridLine;
     public const int xGridSize = 40;
     public const int yGridSize = 40;
-
+    public static Dictionary<BuildingType, GameObject> Buildings = new Dictionary<BuildingType, GameObject>();    
+    public static GameObject SelectedBuilding;
 
     private void Awake()
     {
@@ -34,13 +33,9 @@ public class Builder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        BuildTower(new Vector2Int(20, 20), BuildingType.Ballista);
-        BuildTower(new Vector2Int(10, 20), BuildingType.Ballista);
+        LoadBuildings();
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
-        this.woodWall = Resources.Load<GameObject>($"{FilePaths.Buildings}/WallSegment").GetComponent<WoodWall>();
-        this.lamp = Resources.Load<GameObject>($"{FilePaths.Buildings}/Lamp").GetComponent<Lamp>();
-        selectedBuilding = woodWall;
         this.gridParent = GameObject.Find("BuildGrid").transform;
     }
 
@@ -60,9 +55,15 @@ public class Builder : MonoBehaviour
         }
     }
 
+    private void LoadBuildings(){
+        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
+        {
+            Buildings.Add(type, Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}"));
+        }
+    }
+
     private void ToggleDeleteMode()
     {
-
         this.deleteMode = !deleteMode;
         Debug.Log("DELETE MODE ACTIVE: " + deleteMode);
     }
@@ -97,7 +98,7 @@ public class Builder : MonoBehaviour
 
             if (!deleteMode)
             {
-                if (this.woodCount < selectedBuilding.WoodCost)
+                if (this.woodCount < SelectedBuilding.GetComponent<Building>().WoodCost)
                 {
                     return;
                 }
@@ -110,11 +111,11 @@ public class Builder : MonoBehaviour
                 Map.Grid[gridLoc[1], gridLoc[0]] = TileType.Wall;
                 NotifyPathTakersOfWallChange(gridLoc[1], gridLoc[0]);
 
-                GameObject inst = Instantiate(selectedBuilding.GetStructure(),
+                GameObject inst = Instantiate(SelectedBuilding,
                                               Map.GridPointToWorldPoint(gridLoc),
                                               new Quaternion());
                 inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
-                AddWood(-1 * selectedBuilding.WoodCost);
+                AddWood(-1 * SelectedBuilding.GetComponent<Building>().WoodCost);
                 OnWallBuild();
             }
             else
@@ -172,15 +173,5 @@ public class Builder : MonoBehaviour
     {
         this.woodCount += amount;
         woodLabel.text = woodCount.ToString();
-    }
-
-    void SelectWoodWall()
-    {
-        this.selectedBuilding = woodWall;
-    }
-
-    void SelectLamp()
-    {
-        this.selectedBuilding = lamp;
     }
 }

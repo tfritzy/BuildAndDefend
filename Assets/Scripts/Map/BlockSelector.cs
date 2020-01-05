@@ -12,7 +12,8 @@ public class BlockSelector : MonoBehaviour
     void Start()
     {
         tileMap = new Dictionary<TileType, GameObject>();
-        foreach (TileType type in Enum.GetValues(typeof(TileType))){
+        foreach (TileType type in Enum.GetValues(typeof(TileType)))
+        {
             Debug.Log($"{FilePaths.Terrain}/{type}");
             tileMap.Add(type, Resources.Load<GameObject>($"{FilePaths.Terrain}/{type}"));
         }

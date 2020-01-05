@@ -7,7 +7,12 @@ public abstract class Building : MonoBehaviour
     private GameObject Structure;
     public abstract int WoodCost { get; }
     public int Health;
-    public abstract string StructPath { get; }
+
+    /// <summary>
+    /// The Size of the building where x=Lenth, y=Height
+    /// </summary>
+    /// <value>The size of the building in <Length, Height> </value>
+    public abstract Vector2Int Size { get; }
 
     void Start()
     {
@@ -34,14 +39,5 @@ public abstract class Building : MonoBehaviour
     {
         OnDeath();
         Destroy(this.gameObject);
-    }
-
-    public GameObject GetStructure()
-    {
-        if (this.Structure == null)
-        {
-            this.Structure = Resources.Load<GameObject>(this.StructPath);
-        }
-        return this.Structure;
     }
 }

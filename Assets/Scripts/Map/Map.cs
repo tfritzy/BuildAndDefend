@@ -13,6 +13,7 @@ public static class Map
     /// <typeparam name="GameObject">The tower object.</typeparam>
     /// <returns></returns>
     public static Dictionary<string, GameObject> Towers = new Dictionary<string, GameObject>();
+    public static Dictionary<string, GameObject> Spawners = new Dictionary<string, GameObject>();
 
     public static void FreeGridLoc(Vector3 pos)
     {

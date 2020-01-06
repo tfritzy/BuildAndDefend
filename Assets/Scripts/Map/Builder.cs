@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json;
 using System;
+using UnityEngine.EventSystems;
 
 public class Builder : MonoBehaviour
 {
@@ -87,6 +88,11 @@ public class Builder : MonoBehaviour
             return;
         if (Input.GetMouseButton(0) || Input.touchCount > 0)
         {
+            if (IsPointerOverUIObject())
+            {
+                return;
+            }
+
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = Camera.main.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
@@ -123,6 +129,15 @@ public class Builder : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 
     private void InstantiateBuilding(Vector2Int gridLoc)

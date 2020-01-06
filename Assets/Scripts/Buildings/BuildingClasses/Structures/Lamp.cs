@@ -8,7 +8,7 @@ public class Lamp : Building
 
     private Darkness darkness;
     public float strength = .8f;
-    public override int WoodCost { get => 150; }
+    public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 100, gold: 10); }
     public override Vector2Int Size => new Vector2Int(0, 0);
     public override BuildingType Type => BuildingType.Lamp;
     public override PathableType PathableType => PathableType.UnPathable;

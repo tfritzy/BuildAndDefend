@@ -103,7 +103,7 @@ public class Builder : MonoBehaviour
 
             if (!deleteMode)
             {
-                if (this.woodCount < SelectedBuilding.GetComponent<Building>().WoodCost)
+                if (!Purchaser.CanBuy(SelectedBuilding.GetComponent<Building>().BuildCost))
                 {
                     return;
                 }
@@ -115,8 +115,8 @@ public class Builder : MonoBehaviour
                     return;
                 }
 
+                Purchaser.Buy(SelectedBuilding.GetComponent<Building>().BuildCost);
                 Map.AddBuildingToMap(SelectedBuilding.GetComponent<Building>(), gridLoc);
-
                 InstantiateBuilding(gridLoc);
             }
             else
@@ -152,7 +152,6 @@ public class Builder : MonoBehaviour
                                       new Quaternion());
         inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
         inst.GetComponent<Building>().Position = gridLoc;
-        AddWood(-1 * SelectedBuilding.GetComponent<Building>().WoodCost);
     }
 
     private void SetupBuildGrid()

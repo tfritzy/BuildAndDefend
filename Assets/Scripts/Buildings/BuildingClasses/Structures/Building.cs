@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Building : MonoBehaviour
 {
     private GameObject Structure;
-    public abstract int WoodCost { get; }
+    public abstract ResourceDAO BuildCost { get; }
     public int Health;
 
     /// <summary>

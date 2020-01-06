@@ -7,7 +7,7 @@ public class Ballista : Turret
     public bool isCharging;
     public override BuildingType Type => BuildingType.Ballista;
     public int Level;
-    public override int WoodCost { get => 250; }
+    public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 250, gold: 25, stone: 10); }
 
     private Vector2 lastTouchLocation;
     protected float chargeTime;

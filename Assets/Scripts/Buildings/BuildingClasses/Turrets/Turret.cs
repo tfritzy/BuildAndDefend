@@ -19,7 +19,7 @@ public class Turret : Building
 
     private float lastFireTime;
 
-    public override int WoodCost { get => 200; }
+    public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
 

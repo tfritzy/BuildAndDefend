@@ -99,9 +99,9 @@ public class LevelManager : MonoBehaviour
 
     void StartNight()
     {
-        if (Map.Towers.Count == 0)
+        if (Map.BuildingsDict.Count == 0)
         {
-            Debug.Log(" you can't start a level with no towers!");
+            Debug.Log("You can't start a level with no towers!");
             return;
         }
         foreach (GameObject spawner in Map.Spawners.Values)

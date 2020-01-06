@@ -8,6 +8,7 @@ public abstract class Building : MonoBehaviour
     private GameObject Structure;
     public abstract ResourceDAO BuildCost { get; }
     public int Health;
+    public abstract bool IsTower { get; }
 
     /// <summary>
     /// The Size of the building where x=Lenth, y=Height. Zero indexed.

@@ -15,28 +15,8 @@ public class WallBreaker : Zombie
         this.attackSpeed = 3f;
     }
 
-    public override List<Vector2> RestartPath()
+    public override List<Vector2> RestartPath(bool attackClosestBuilding = false)
     {
-        pathProgress = 0;
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
-        if (walls.Length == 0)
-            return new List<Vector2>();
-        GameObject closestWall = walls[0];
-        float closestDist = (closestWall.transform.position - this.transform.position).magnitude;
-        for (int i = 1; i < walls.Length; i++)
-        {
-            float testDist = (walls[i].transform.position - this.transform.position).magnitude;
-            if (testDist < closestDist)
-            {
-                closestDist = testDist;
-                closestWall = walls[i];
-            }
-        }
-        this.target = closestWall;
-        this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.targetLoc = Map.WorldPointToGridPoint(this.target.transform.position);
-        this.path = FindPath(Map.PathingGrid, locationInGrid, this.targetLoc);
-        SubscribeToPath();
-        return path;
+        return base.RestartPath(attackClosestBuilding: true);
     }
 }

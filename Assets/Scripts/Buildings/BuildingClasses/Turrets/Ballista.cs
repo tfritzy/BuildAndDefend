@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Ballista : Turret
+public class Ballista : Tower
 {
     public float startChargeTime;
     public bool isCharging;

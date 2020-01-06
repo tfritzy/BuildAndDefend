@@ -74,14 +74,6 @@ public class Builder : MonoBehaviour
         BuildBlock();
     }
 
-
-    private void BuildTower(Vector2Int gridLoc, Building building)
-    {
-        GameObject buildingObj = Resources.Load<GameObject>($"{FilePaths.Towers}/{building.Type}");
-        Instantiate(building, Map.GridPointToWorldPoint(gridLoc), new Quaternion(), null);
-        Map.Towers.Add(gridLoc.ToStr(), buildingObj);
-    }
-
     void BuildBlock()
     {
         if (!inBuildMode)

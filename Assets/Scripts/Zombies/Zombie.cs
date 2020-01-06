@@ -60,8 +60,9 @@ public class Zombie : MonoBehaviour
             this.transform.position = Vector2.MoveTowards(transform.position, target.transform.position, zombieSpeed * Time.deltaTime);
             return;
         }
-        if (path == null || path.Count <= 0)
+        if (path == null || path.Count == 0)
         {
+            RestartPath(attackClosestBuilding: true);
             return;
         }
         this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
@@ -111,13 +112,13 @@ public class Zombie : MonoBehaviour
         SubscribeToPath();
     }
 
-    public virtual List<Vector2> RestartPath()
+    public virtual List<Vector2> RestartPath(bool attackClosestBuilding = false)
     {
         pathProgress = 0;
         UnsubscribeToPath();
-        (this.targetLoc, this.target) = findClosestTower();
+        (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: !attackClosestBuilding);
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.path = FindPath(Map.PathingGrid, locationInGrid, this.targetLoc);
+        this.path = FindPath(locationInGrid, this.targetLoc);
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
         foreach (Collider2D col in nearbyZombs)
@@ -136,18 +137,31 @@ public class Zombie : MonoBehaviour
         return path;
     }
 
-    private (Vector2Int, GameObject) findClosestTower()
+    private void SetWallBlockingPathAsTarget()
+    {
+        foreach (Building building in Map.Buildings)
+        {
+
+        }
+    }
+
+    private (Vector2Int, GameObject) findClosestBuilding(bool findOnlyTowers = false)
     {
         int closestDist = int.MaxValue;
         Vector2Int closestPos = Vector2Int.zero;
         GameObject closestTarget = null;
-        foreach (string towerPos in Map.Towers.Keys)
+        foreach (string towerPos in Map.BuildingsDict.Keys)
         {
+            if (findOnlyTowers && Map.BuildingsDict[towerPos].GetComponent<Tower>() == null)
+            {
+                continue;
+            }
+
             int distance = Mathf.Abs((towerPos.ToVector2Int().x - this.locationInGrid.x)) + Mathf.Abs((towerPos.ToVector2Int().y - this.locationInGrid.y));
             if (distance < closestDist)
             {
                 closestDist = distance;
-                closestTarget = Map.Towers[towerPos];
+                closestTarget = Map.BuildingsDict[towerPos];
                 closestPos = towerPos.ToVector2Int();
             }
         }
@@ -155,7 +169,7 @@ public class Zombie : MonoBehaviour
     }
 
     // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(PathableType[,] grid, Vector2Int startLoc, Vector2Int endLoc)
+    public List<Vector2> FindPath(Vector2Int startLoc, Vector2Int endLoc, bool ignoreBuildings = false)
     {
         LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();
         HashSet<string> v = new HashSet<string>();
@@ -187,10 +201,13 @@ public class Zombie : MonoBehaviour
             {
                 int newX = x + searchDirections[i, 0];
                 int newY = y + searchDirections[i, 1];
+                if (!IsWithinBounds(newX, newY))
+                {
+                    continue;
+                }
 
-                if (newY >= 0 && newY < grid.GetLength(0) &&
-                    newX >= 0 && newX < grid.GetLength(1) &&
-                    (grid[newY, newX] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
+                if (IsWithinBounds(newX, newY) &&
+                    (Map.PathingGrid[newY, newX] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
                     List<Vector2Int> newList = new List<Vector2Int>(cur);
@@ -208,10 +225,23 @@ public class Zombie : MonoBehaviour
             q.RemoveFirst();
         }
 
-
         Debug.Log("No Path Found " + q.Count);
 
         return new List<Vector2>();
+    }
+
+    private bool IsPathable(int x, int y)
+    {
+        return Map.PathingGrid[y, x] == PathableType.Pathable;
+    }
+
+    private bool IsWithinBounds(int x, int y)
+    {
+        if (y >= 0 && y < Map.PathingGrid.GetLength(0) && x >= 0 && x < Map.PathingGrid.GetLength(1))
+        {
+            return true;
+        }
+        return false;
     }
 
     protected void UnsubscribeToPath()
@@ -225,7 +255,6 @@ public class Zombie : MonoBehaviour
             Vector2Int gridLoc = Map.WorldPointToGridPoint(point);
             string key = gridLoc[0] + "," + gridLoc[1];
             Map.PathTakers[key].Remove(this);
-
         }
     }
 

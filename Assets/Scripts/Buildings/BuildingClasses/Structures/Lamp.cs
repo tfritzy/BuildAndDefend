@@ -12,6 +12,7 @@ public class Lamp : Building
     public override Vector2Int Size => new Vector2Int(0, 0);
     public override BuildingType Type => BuildingType.Lamp;
     public override PathableType PathableType => PathableType.UnPathable;
+    public override bool IsTower => false;
 
     protected override void OnDeath()
     {
@@ -27,8 +28,4 @@ public class Lamp : Building
         Vector2 gridPos = darkness.WorldPointToGridPoint(curPos.x, curPos.y);
         darkness.AddLight((int)gridPos.x, (int)gridPos.y, 10, strength);
     }
-
-
-
-
 }

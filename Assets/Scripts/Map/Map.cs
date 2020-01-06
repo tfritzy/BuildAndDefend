@@ -10,27 +10,14 @@ public static class Map
     public static Dictionary<string, HashSet<Zombie>> PathTakers = new Dictionary<string, HashSet<Zombie>>();
 
     /// <summary>
-    /// A dictionary containing all the player's towers.
+    /// A dictionary containing all the player's buildings.
     /// </summary>
     /// <typeparam name="string">The position of the tower in form 'x,y'</typeparam>
     /// <typeparam name="GameObject">The tower object.</typeparam>
     /// <returns></returns>
-    public static Dictionary<string, GameObject> Towers = new Dictionary<string, GameObject>();
+    public static Dictionary<string, GameObject> BuildingsDict = new Dictionary<string, GameObject>();
+
     public static Dictionary<string, GameObject> Spawners = new Dictionary<string, GameObject>();
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="pos"></param>
-    public static void RemoveBuilding(List<Vector2Int> locations)
-    {
-        foreach (Vector2Int loc in locations)
-        {
-            Map.Buildings[loc.y, loc.x] = null;
-        }
-
-        TellAllZombiesToGetNewPath();
-    }
 
     public static void ReprocessPathingLoc(Vector2Int location)
     {
@@ -40,7 +27,6 @@ public static class Map
             PathableType.Pathable : PathableType.UnPathable;
         PathingGrid[location.y, location.x] = pathingType;
     }
-
 
     /// <summary>
     /// Returns true if the given building can be placed on the given starting position.
@@ -88,6 +74,7 @@ public static class Map
                 Buildings[y, x] = building;
                 ReprocessPathingLoc(new Vector2Int(x, y));
                 NotifyPathTakersOfBuildingChange(x, y);
+                BuildingsDict.Add($"{x},{y}", building.gameObject);
             }
         }
     }
@@ -105,6 +92,7 @@ public static class Map
                 }
                 Buildings[y, x] = null;
                 ReprocessPathingLoc(new Vector2Int(x, y));
+                BuildingsDict.Remove($"{x},{y}");
             }
         }
 

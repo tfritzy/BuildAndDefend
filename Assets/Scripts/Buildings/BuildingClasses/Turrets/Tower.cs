@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turret : Building
+public class Tower : Building
 {
     public float fireCooldown;
     public GameObject projectile;
@@ -11,17 +11,14 @@ public class Turret : Building
     public virtual float projectileSpeed { get; set; }
     public virtual int projectileDamage { get; set; }
     public virtual float projectileLifespan { get; set; }
-
     public override BuildingType Type => BuildingType.Turret;
-
-    protected float inaccuracy;
-    protected Builder builder;
-
-    private float lastFireTime;
-
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
+    public override bool IsTower => true;
+
+    protected float inaccuracy;
+    private float lastFireTime;
 
     protected virtual void SetParameters()
     {
@@ -35,16 +32,12 @@ public class Turret : Building
 
     protected override void Setup()
     {
-        this.builder = GameObject.Find("Builder").GetComponent<Builder>();
-        Map.Towers.Add(Map.WorldPointToGridPoint(this.transform.position).ToStr(), this.gameObject);
         SetParameters();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (builder.inBuildMode)
-            return;
         Fire();
     }
 
@@ -104,13 +97,11 @@ public class Turret : Building
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
         instProj.SendMessage("SetDamage", this.projectileDamage);
         instProj.SendMessage("SetPierce", this.projectilePierce);
-        instProj.SendMessage("SetBuilder", this.builder);
         instProj.SendMessage("SetLifespan", this.projectileLifespan);
     }
 
     protected override void OnDeath()
     {
-        Map.Towers.Remove(Map.WorldPointToGridPoint(this.transform.position).ToStr());
         LevelManager.ShowLoseScreen();
     }
 }

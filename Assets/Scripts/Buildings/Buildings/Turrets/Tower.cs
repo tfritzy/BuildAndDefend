@@ -96,10 +96,7 @@ public abstract class Tower : Building
             new Quaternion());
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
         Projectile p = instProj.GetComponent<Projectile>();
-        p.SetDamage(this.projectileDamage);
-        p.SetPierce(this.projectilePierce);
-        p.SetLifespan(this.projectileLifespan);
-        p.SetAttacker(this);
+        p.SetValues(this.projectileDamage, this.projectileLifespan, this.projectilePierce, this);
     }
 
     protected override void OnDeath()

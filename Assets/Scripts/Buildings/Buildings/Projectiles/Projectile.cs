@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour
 {
-
-    public int damage;
-    public int pierce;
-
-    // TODO: Fix this garbage
-    public Builder builder;
-    public float lifespan;
-    public Tower Attacker;
-
-    protected float creationTime;
+    public int Damage;
+    public int PierceCount;
+    public float Lifespan;
+    public Tower Owner;
+    public int NumHits;
+    protected float CreationTime;
 
     void Update()
     {
@@ -22,62 +18,74 @@ public class Projectile : MonoBehaviour
 
     void Start()
     {
-        this.creationTime = Time.time;
+        this.CreationTime = Time.time;
+    }
+
+    public virtual void SetValues(int damage, float lifespan, int pierceCount, Tower owner){
+        this.Damage = damage;
+        this.Lifespan = lifespan;
+        this.PierceCount = pierceCount;
+        this.Owner = owner;
     }
 
     protected void CheckLifespan()
     {
-        if (Time.time > creationTime + lifespan)
+        if (Time.time > CreationTime + Lifespan)
         {
             Destroy(this.gameObject);
         }
     }
 
-    public void SetBuilder(Builder builder)
+    protected virtual bool IsTargetCollision(Collision2D collision)
     {
-        this.builder = builder;
+        if (NumHits > PierceCount){
+            return false;
+        }
+        return (collision.gameObject.CompareTag("Zombie"));
     }
 
-    public void SetLifespan(float lifespan)
+    protected virtual void OnFindTargetCollision(GameObject target)
     {
-        this.lifespan = lifespan;
+        NumHits += 1;
+        List<GameObject> damageTakers = GetDamageTakers(target);
+        DealDamage(damageTakers);
+        OnHalt(target);
     }
 
-    public void SetDamage(int amount)
-    {
-        this.damage = amount;
+    protected virtual List<GameObject> GetDamageTakers(GameObject initialCollision){
+        return new List<GameObject> { initialCollision };
     }
 
-    public void SetPierce(int count)
-    {
-        this.pierce = count;
+    protected virtual void DealDamage(List<GameObject> damageTakers){
+        foreach (GameObject damageTaker in damageTakers){
+            damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
+            NumHits += 1;
+        }
     }
 
-    public void SetAttacker(Tower attacker)
+    protected virtual void DestroyThis(){
+        Destroy(this.gameObject);
+    }
+
+    protected virtual bool IsHaltingObject(Collision2D collision)
     {
-        this.Attacker = attacker;
+        return (collision.gameObject.CompareTag("Brush"));
+    }
+
+    protected virtual void OnHalt(GameObject haltingObject)
+    {
+        Destroy(this.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Brush"))
+        if (IsHaltingObject(collision))
         {
-            Destroy(this.gameObject);
+            OnHalt(collision.gameObject);
         }
-        else if (collision.gameObject.CompareTag("Zombie"))
+        else if (IsTargetCollision(collision))
         {
-            Zombie zombieScript = collision.gameObject.GetComponent<Zombie>();
-            if (zombieScript == null)
-            {
-                throw new System.Exception("Gameobject tagged zombie should have a zombie script.");
-            }
-            if (Attacker == null)
-            {
-                throw new System.Exception("Attacker not set for this projectile.");
-            }
-            zombieScript.TakeDamage(damage, Attacker);
-            Destroy(this.gameObject);
+            OnFindTargetCollision(collision.gameObject);
         }
-        this.damage = 0;
     }
 }

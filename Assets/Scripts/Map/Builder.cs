@@ -56,6 +56,10 @@ public class Builder : MonoBehaviour
 
     private void LoadBuildings()
     {
+        if (Buildings.Count > 0)
+        {
+            return;
+        }
         foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
         {
             Buildings.Add(type, Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}"));

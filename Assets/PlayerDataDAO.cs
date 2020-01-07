@@ -14,6 +14,7 @@ public class PlayerDataDAO
     public string CurrentLevel;
 
     private Dictionary<BuildingType, BuildingUpgrade> _buildingUpgrades;
+
     public Dictionary<BuildingType, BuildingUpgrade> BuildingUpgrades
     {
         get

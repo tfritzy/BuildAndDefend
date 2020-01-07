@@ -7,35 +7,35 @@ public static class Purchaser
         {
             throw new System.Exception("Not enough resources to buy this!");
         }
-        Player.data.vals.Iron -= cost.Iron;
-        Player.data.vals.Gold -= cost.Gold;
-        Player.data.vals.Wood -= cost.Wood;
-        Player.data.vals.Stone -= cost.Stone;
+        Player.Data.vals.Iron -= cost.Iron;
+        Player.Data.vals.Gold -= cost.Gold;
+        Player.Data.vals.Wood -= cost.Wood;
+        Player.Data.vals.Stone -= cost.Stone;
     }
 
     public static void Give(ResourceDAO amount)
     {
-        Player.data.vals.Iron += amount.Iron;
-        Player.data.vals.Gold += amount.Gold;
-        Player.data.vals.Wood += amount.Wood;
-        Player.data.vals.Stone += amount.Stone;
+        Player.Data.vals.Iron += amount.Iron;
+        Player.Data.vals.Gold += amount.Gold;
+        Player.Data.vals.Wood += amount.Wood;
+        Player.Data.vals.Stone += amount.Stone;
     }
 
     public static bool CanBuy(ResourceDAO cost)
     {
-        if (Player.data.vals.Iron < cost.Iron)
+        if (Player.Data.vals.Iron < cost.Iron)
         {
             return false;
         }
-        if (Player.data.vals.Gold < cost.Gold)
+        if (Player.Data.vals.Gold < cost.Gold)
         {
             return false;
         }
-        if (Player.data.vals.Wood < cost.Wood)
+        if (Player.Data.vals.Wood < cost.Wood)
         {
             return false;
         }
-        if (Player.data.vals.Stone < cost.Stone)
+        if (Player.Data.vals.Stone < cost.Stone)
         {
             return false;
         }

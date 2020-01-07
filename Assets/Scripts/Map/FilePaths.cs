@@ -6,4 +6,5 @@ public static class FilePaths
     public const string UI = "Gameobjects/UI";
     public const string Buildings = "Gameobjects/Buildings";
     public const string Towers = "Gameobjects/Towers";
+    public const string Projectiles = "Gameobjects/Towers/Projectiles";
 }

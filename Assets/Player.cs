@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -5,18 +6,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static Player data;
+    public static Player Data;
 
     public PlayerDataDAO vals;
 
     void Awake()
     {
-        if (data == null)
+        if (Data == null)
         {
-            data = this;
+            Data = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else if (data != this)
+        else if (Data != this)
         {
             Destroy(this.gameObject);
         }
@@ -32,31 +33,44 @@ public class Player : MonoBehaviour
             StreamReader reader = new StreamReader(fullPath, true);
             string jsonPlayerData = reader.ReadToEndAsync().Result;
             reader.Close();
-            data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
+            Data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
             LoadBuildingUpgradesWithInheritance();
         }
         else
         {
-            Player.data.vals = new PlayerDataDAO();
-            save();
+            Player.Data.vals = new PlayerDataDAO();
+            Save();
         }
     }
 
     private void LoadBuildingUpgradesWithInheritance()
     {
         var buildingUpgradesWithInheritance = new Dictionary<BuildingType, BuildingUpgrade>();
-        foreach (BuildingType type in data.vals.BuildingUpgrades.Keys)
+
+        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
         {
-            buildingUpgradesWithInheritance[type] = data.vals.BuildingUpgrades[type].GetInstance();
+            if (Data.vals.BuildingUpgrades.ContainsKey(type))
+            {
+                buildingUpgradesWithInheritance[type] = Data.vals.BuildingUpgrades[type].GetInstance();
+            }
+            else
+            {
+                buildingUpgradesWithInheritance[type] = new BuildingUpgrade(type).GetInstance();
+            }
         }
-        data.vals.BuildingUpgrades = buildingUpgradesWithInheritance;
+
+        foreach (BuildingType type in Data.vals.BuildingUpgrades.Keys)
+        {
+
+        }
+        Data.vals.BuildingUpgrades = buildingUpgradesWithInheritance;
     }
 
-    public async void save()
+    public void Save()
     {
         string fullPath = $"{Application.persistentDataPath}/{fileName}";
         StreamWriter writer = new StreamWriter(fullPath, false);
-        await writer.WriteAsync(JsonConvert.SerializeObject(data.vals).ToString());
+        writer.Write(JsonConvert.SerializeObject(Player.Data.vals).ToString());
         writer.Close();
     }
 

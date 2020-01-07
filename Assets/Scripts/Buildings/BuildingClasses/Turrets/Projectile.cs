@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour {
+public class Projectile : MonoBehaviour
+{
 
     public int damage;
     public int pierce;
@@ -10,19 +11,24 @@ public class Projectile : MonoBehaviour {
     // TODO: Fix this garbage
     public Builder builder;
     public float lifespan;
+    public Tower Attacker;
 
     protected float creationTime;
 
-    void Update(){
+    void Update()
+    {
         CheckLifespan();
     }
 
-    void Start(){
+    void Start()
+    {
         this.creationTime = Time.time;
     }
 
-    protected void CheckLifespan(){
-        if (Time.time > creationTime + lifespan){
+    protected void CheckLifespan()
+    {
+        if (Time.time > creationTime + lifespan)
+        {
             Destroy(this.gameObject);
         }
     }
@@ -32,34 +38,44 @@ public class Projectile : MonoBehaviour {
         this.builder = builder;
     }
 
-    public void SetLifespan(float lifespan){
+    public void SetLifespan(float lifespan)
+    {
         this.lifespan = lifespan;
     }
 
-    private void SetDamage(int amount)
+    public void SetDamage(int amount)
     {
         this.damage = amount;
     }
 
-    private void SetPierce(int count)
+    public void SetPierce(int count)
     {
         this.pierce = count;
     }
 
-
+    public void SetAttacker(Tower attacker)
+    {
+        this.Attacker = attacker;
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Brush")
+        if (collision.gameObject.CompareTag("Brush"))
         {
-            builder.AddWood(damage);
             Destroy(this.gameObject);
         }
-        else if (collision.gameObject.tag == "Wall")
-            Destroy(this.gameObject);
-        else if (collision.gameObject.tag == "Zombie")
+        else if (collision.gameObject.CompareTag("Zombie"))
         {
-            collision.gameObject.SendMessage("TakeDamage", damage);
+            Zombie zombieScript = collision.gameObject.GetComponent<Zombie>();
+            if (zombieScript == null)
+            {
+                throw new System.Exception("Gameobject tagged zombie should have a zombie script.");
+            }
+            if (Attacker == null)
+            {
+                throw new System.Exception("Attacker not set for this projectile.");
+            }
+            zombieScript.TakeDamage(damage, Attacker);
             Destroy(this.gameObject);
         }
         this.damage = 0;

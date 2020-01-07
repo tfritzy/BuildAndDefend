@@ -14,10 +14,10 @@ public class LevelManager : MonoBehaviour
 
     public float levelStartTime;
     public float waveDuration;
-    public float timeBetweenWaves = 30f;
+    public float timeBetweenWaves = 5f;
     public GameObject waveStartBanner;
-    public int waveGroupCount = 5;
-    public float levelDuration = 240f;
+    public int waveGroupCount = 2;
+    public float levelDuration = 3f;
 
     private void Awake()
     {
@@ -63,6 +63,8 @@ public class LevelManager : MonoBehaviour
         {
             EndWave();
             EndNight();
+            Player.Data.Save();
+            ShowWinScreen();
             return;
         }
         if (isDuringWave)
@@ -70,7 +72,6 @@ public class LevelManager : MonoBehaviour
             if (Time.time > waveStartTime + waveDuration)
             {
                 EndWave();
-                ShowWinScreen();
             }
         }
         else
@@ -112,12 +113,10 @@ public class LevelManager : MonoBehaviour
         timeBetweenWaves = levelDuration / numWaves;
         levelStartTime = Time.time;
         duringNight = true;
-        // darkness.StartNight();
     }
 
     void StartWave()
     {
-        Instantiate(waveStartBanner, GameObject.Find("Canvas").transform);
         waveStartTime = Time.time;
         List<GameObject> spawners = Map.Spawners.Values.ToList();
         prevSpawnRate = spawners[0].GetComponent<ZombieSpawner>().SpawnRate;

@@ -1,9 +1,19 @@
+using Newtonsoft.Json;
+
 [System.Serializable]
 public class BuildingUpgrade
 {
     public BuildingType Type;
     public int Level;
     public virtual ResourceDAO Cost { get; }
+    public int XP;
+    public int Kills;
+    public double DamageDealt;
+
+    public BuildingUpgrade(BuildingType type)
+    {
+        this.Type = type;
+    }
 
     public void BuyUpgrade()
     {
@@ -21,12 +31,13 @@ public class BuildingUpgrade
 
     public BuildingUpgrade GetInstance()
     {
+        var serializedUpgrade = JsonConvert.SerializeObject(this);
         switch (this.Type)
         {
             case (BuildingType.Ballista):
-                return new BallistaUpgrade();
+                return JsonConvert.DeserializeObject<BallistaUpgrade>(serializedUpgrade);
             default:
-                return new BuildingUpgrade();
+                return this;
         }
     }
 }

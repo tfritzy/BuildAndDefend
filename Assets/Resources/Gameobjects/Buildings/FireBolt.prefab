@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 61992858598433284}
   - component: {fileID: 114972235134667842}
   m_Layer: 10
-  m_Name: Turret
+  m_Name: FireBolt
   m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8018868, g: 0.13238695, b: 0.13238695, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -117,10 +117,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1461632778472360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceaf78725e5980348b61810727769f47, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e0e0ceebb451e542ad5747e83f6c006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 0
+  Position: {x: 9, y: 26}
   fireCooldown: 0
-  projectile: {fileID: 0}
   projectilePierce: 0

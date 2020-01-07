@@ -3,18 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : Building
+public abstract class Tower : Building
 {
     public float fireCooldown;
-    public GameObject projectile;
     public int projectilePierce;
     public virtual float projectileSpeed { get; set; }
     public virtual int projectileDamage { get; set; }
     public virtual float projectileLifespan { get; set; }
-    public override BuildingType Type => BuildingType.Turret;
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
+    protected abstract string projectilePrefabName { get; }
     public override bool IsTower => true;
 
     protected float inaccuracy;
@@ -90,14 +89,17 @@ public class Tower : Building
 
     protected void CreateProjectile(Vector2 fireDirection)
     {
+        // TODO: Have towers pool projectiles
         GameObject instProj = Instantiate(
-            this.projectile,
+            Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}"),
             this.transform.position,
             new Quaternion());
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
-        instProj.SendMessage("SetDamage", this.projectileDamage);
-        instProj.SendMessage("SetPierce", this.projectilePierce);
-        instProj.SendMessage("SetLifespan", this.projectileLifespan);
+        Projectile p = instProj.GetComponent<Projectile>();
+        p.SetDamage(this.projectileDamage);
+        p.SetPierce(this.projectilePierce);
+        p.SetLifespan(this.projectileLifespan);
+        p.SetAttacker(this);
     }
 
     protected override void OnDeath()

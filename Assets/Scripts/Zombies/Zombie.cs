@@ -19,7 +19,7 @@ public class Zombie : MonoBehaviour
     public int health = 5;
     public GameObject target;
     public virtual ResourceDAO KillReward { get => new ResourceDAO(gold: 10); }
-
+    public virtual int XP => 1;
 
     // Use this for initialization
     void Start()
@@ -225,8 +225,6 @@ public class Zombie : MonoBehaviour
             q.RemoveFirst();
         }
 
-        Debug.Log("No Path Found " + q.Count);
-
         return new List<Vector2>();
     }
 
@@ -274,22 +272,26 @@ public class Zombie : MonoBehaviour
 
 
     private bool hasAlreadyDied = false;
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Tower attacker)
     {
         this.health -= damage;
+        Player.Data.vals.BuildingUpgrades[attacker.Type].DamageDealt += damage;
+        Player.Data.vals.BuildingUpgrades[attacker.Type].XP += this.XP;
+
         if (health <= 0 && !hasAlreadyDied)
         {
             hasAlreadyDied = true;
-            OnDeath();
+            OnDeath(attacker);
         }
     }
 
     /// <summary>
     /// The logic to perform when this zombie dies.
     /// </summary>
-    protected virtual void OnDeath()
+    protected virtual void OnDeath(Tower attacker)
     {
         Purchaser.Give(this.KillReward);
+        Player.Data.vals.BuildingUpgrades[attacker.Type].Kills += 1;
         Destroy(this.gameObject);
     }
 

@@ -30,7 +30,7 @@ public class MapNode : MonoBehaviour
 
     public void ShowLevelDetails()
     {
-        Player.data.vals.CurrentLevel = this.mapName;
+        Player.Data.vals.CurrentLevel = this.mapName;
         Instantiate(
             this.mapDetailsPane,
             this.transform.position + new Vector3(1, 0),

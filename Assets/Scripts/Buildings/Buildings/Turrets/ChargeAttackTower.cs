@@ -1,20 +1,13 @@
 using System;
 using UnityEngine;
 
-public class Ballista : Tower
+public abstract class ChargeAttack : Tower
 {
-    public float startChargeTime;
-    public bool isCharging;
-    public override BuildingType Type => BuildingType.Ballista;
-    public int Level;
-    public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 250, gold: 25, stone: 10); }
-
     private Vector2 lastTouchLocation;
     protected float chargeTime;
     protected float maxProjectileSpeed;
-    public override Vector2Int Size => new Vector2Int(1, 1);
-    public override PathableType PathableType => PathableType.UnPathable;
-    protected override string projectilePrefabName => "BallistaBolt";
+    public float startChargeTime;
+    public bool isCharging;
 
     public override float projectileSpeed
     {
@@ -50,17 +43,6 @@ public class Ballista : Tower
             );
         }
     }
-
-    protected override void SetParameters()
-    {
-        this.fireCooldown = 4;
-        this.Health = 100 * Level;
-        this.chargeTime = 4f;
-        this.maxProjectileSpeed = 20f;
-        this.maxProjectileDamage = 10;
-        this.maxProjectileLifespan = 1.5f;
-    }
-
 
     private float getChargePercentage()
     {

@@ -21,9 +21,9 @@ public abstract class DragSelectTower : Tower
             else
             {
                 dragEndPos = lastInputLocation;
+                isDragging = false;
+                this.CreateProjectile();
             }
-            isDragging = false;
-            this.CreateProjectile();
         }
         else if (inputLocation.HasValue)
         {

@@ -9,7 +9,7 @@ public class Ballista : ChargeAttack
     public override Vector2Int Size => new Vector2Int(1, 1);
     protected override string projectilePrefabName => "BallistaBolt";
 
-    protected override void SetParameters()
+    public override void SetTowerParameters()
     {
         this.fireCooldown = 4;
         this.Health = 100 * Level;

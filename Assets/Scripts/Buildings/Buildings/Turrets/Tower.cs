@@ -14,9 +14,9 @@ public abstract class Tower : Building
     public override bool IsTower => true;
 
     protected float inaccuracy;
-    private float lastFireTime;
+    protected float lastFireTime;
 
-    protected virtual void SetParameters()
+    public virtual void SetTowerParameters()
     {
         this.Health = 100;
         this.projectileDamage = 5;
@@ -28,7 +28,7 @@ public abstract class Tower : Building
 
     protected override void Setup()
     {
-        SetParameters();
+        SetTowerParameters();
     }
 
     // Update is called once per frame
@@ -54,7 +54,7 @@ public abstract class Tower : Building
 
     protected bool CanFire()
     {
-        return (Time.time < fireCooldown + lastFireTime);
+        return (Time.time > fireCooldown + lastFireTime);
     }
 
     protected Vector2? GetInputLocation()
@@ -101,7 +101,7 @@ public abstract class Tower : Building
 
     protected virtual void SetProjectileValues(Projectile p)
     {
-        p.SetValues(this.projectileDamage, this.projectileLifespan, this.projectilePierce, this);
+        p.SetParameters(this.projectileDamage, this.projectileLifespan, this.projectilePierce, this);
     }
 
     protected override void OnDeath()

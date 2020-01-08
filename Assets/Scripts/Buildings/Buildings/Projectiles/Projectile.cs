@@ -13,7 +13,7 @@ public abstract class Projectile : MonoBehaviour
 
     void Update()
     {
-        CheckLifespan();
+        UpdateLoop();
     }
 
     void Start()
@@ -21,7 +21,11 @@ public abstract class Projectile : MonoBehaviour
         this.CreationTime = Time.time;
     }
 
-    public virtual void SetValues(int damage, float lifespan, int pierceCount, Tower owner){
+    protected virtual void UpdateLoop(){
+        CheckLifespan();
+    }
+
+    public virtual void SetParameters(int damage, float lifespan, int pierceCount, Tower owner){
         this.Damage = damage;
         this.Lifespan = lifespan;
         this.PierceCount = pierceCount;
@@ -44,23 +48,32 @@ public abstract class Projectile : MonoBehaviour
         return (collision.gameObject.CompareTag("Zombie"));
     }
 
-    protected virtual void OnFindTargetCollision(GameObject target)
-    {
+    protected virtual void OnTargetCollisionEnter(GameObject target){
+        if (NumHits > PierceCount){
+            return;
+        }
         NumHits += 1;
         List<GameObject> damageTakers = GetDamageTakers(target);
         DealDamage(damageTakers);
         OnHalt(target);
     }
 
+    protected virtual void OnTargetCollisionExit(GameObject target) {
+
+    }
+
     protected virtual List<GameObject> GetDamageTakers(GameObject initialCollision){
         return new List<GameObject> { initialCollision };
     }
 
-    protected virtual void DealDamage(List<GameObject> damageTakers){
+    protected void DealDamage(List<GameObject> damageTakers){
         foreach (GameObject damageTaker in damageTakers){
-            damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
-            NumHits += 1;
+            DealDamage(damageTaker);
         }
+    }
+
+    protected virtual void DealDamage(GameObject damageTaker){
+        damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
     }
 
     protected virtual void DestroyThis(){
@@ -85,7 +98,13 @@ public abstract class Projectile : MonoBehaviour
         }
         else if (IsTargetCollision(collision))
         {
-            OnFindTargetCollision(collision.gameObject);
+            OnTargetCollisionEnter(collision.gameObject);
+        }
+    }
+
+    private void OnCollisinExit2D(Collision2D collision){
+        if (IsTargetCollision(collision)){
+            OnTargetCollisionExit(collision.gameObject);
         }
     }
 }

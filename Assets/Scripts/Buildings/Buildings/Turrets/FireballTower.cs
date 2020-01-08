@@ -4,7 +4,7 @@ public class FireballTower : Tower
 
     protected override string projectilePrefabName => "Fireball";
 
-    protected override void SetParameters()
+    public override void SetTowerParameters()
     {
         this.Health = 100;
         this.projectileDamage = 10;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Tower : Building
 {
@@ -37,16 +34,14 @@ public abstract class Tower : Building
     // Update is called once per frame
     void Update()
     {
-        Fire();
+        if (CanFire())
+        {
+            Fire();
+        }
     }
 
     protected virtual void Fire()
     {
-        if (Time.time < fireCooldown + lastFireTime)
-        {
-            return;
-        }
-
         Vector2? inputLocation = GetInputLocation();
         if (inputLocation.HasValue)
         {
@@ -55,6 +50,11 @@ public abstract class Tower : Building
 
             lastFireTime = Time.time;
         }
+    }
+
+    protected bool CanFire()
+    {
+        return (Time.time < fireCooldown + lastFireTime);
     }
 
     protected Vector2? GetInputLocation()
@@ -87,7 +87,7 @@ public abstract class Tower : Building
         return fireDirection;
     }
 
-    protected void CreateProjectile(Vector2 fireDirection)
+    protected virtual void CreateProjectile(Vector2 fireDirection)
     {
         // TODO: Have towers pool projectiles
         GameObject instProj = Instantiate(
@@ -96,6 +96,11 @@ public abstract class Tower : Building
             new Quaternion());
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
         Projectile p = instProj.GetComponent<Projectile>();
+        SetProjectileValues(p);
+    }
+
+    protected virtual void SetProjectileValues(Projectile p)
+    {
         p.SetValues(this.projectileDamage, this.projectileLifespan, this.projectilePierce, this);
     }
 

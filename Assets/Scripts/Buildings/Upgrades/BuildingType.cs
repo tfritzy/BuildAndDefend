@@ -5,4 +5,6 @@ public enum BuildingType
     Lamp,
     Wall,
     FireBolt,
+    Fireball,
+    FireWall
 }

@@ -11,9 +11,9 @@ public class FireWallTower : DragSelectTower
     public override void SetTowerParameters() {
         this.Health = 100;
         this.projectileDamage = 1;
-        this.fireCooldown = 10f;
+        this.fireCooldown = 5f;
         this.projectileLifespan = 3f;
-        this.MaxFireSegments = 3;
+        this.MaxFireSegments = 6;
         this.FireDamageTickGapInSeconds = 1f;
     }
 
@@ -23,9 +23,15 @@ public class FireWallTower : DragSelectTower
         RaycastHit2D[] hits = Physics2D.LinecastAll(this.dragStartPos, this.dragEndPos);
         foreach (RaycastHit2D hit in hits)
         {
-            if (hit.collider.gameObject.CompareTag(Tags.Terrain)){
-                tilesInBetween.Add(hit.collider.gameObject);
+            if (!hit.collider.gameObject.CompareTag(Tags.Terrain)){
+                continue;
             }
+
+            if (!hit.collider.gameObject.GetComponent<EnvironmentTile>().CanBeBuiltUpon){
+                continue;
+            }
+
+            tilesInBetween.Add(hit.collider.gameObject);
         }
 
         // TODO Replace resource load with gameobject pooling.

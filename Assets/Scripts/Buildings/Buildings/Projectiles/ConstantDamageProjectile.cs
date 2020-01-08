@@ -5,12 +5,22 @@ using System;
 public class ConstantDamageProjectile : Projectile {
 
     /// <summary>
-    /// Dictionary that stores the enemies currently contained within this entity's realm
+    /// List that stores the enemies currently contained within this entity's realm
     /// </summary>
-    /// <typeparam name="GameObject">The gameobject inside the bounds</typeparam>
-    /// <typeparam name="float">The last time a damage tick was applied to the enemy</typeparam>
+    /// <typeparam name="DamageTickTracker">The gameobject inside the bounds along with the last time it was damaged</typeparam>
     /// <returns></returns>
-    protected Dictionary<GameObject, float> CurrentlyContainedEnemies = new Dictionary<GameObject, float>();
+    protected List<DamageTickTracker> CurrentlyContainedEnemies = new List<DamageTickTracker>();
+
+
+    protected struct DamageTickTracker{
+        public DamageTickTracker(GameObject enemy, float lastDamageTickTime){
+            this.enemy = enemy;
+            this.lastDamageTickTime = lastDamageTickTime;
+        }
+        public GameObject enemy;
+        public float lastDamageTickTime;
+    }
+
     public float DamageTickGapInSeconds;
 
     public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner){
@@ -31,16 +41,20 @@ public class ConstantDamageProjectile : Projectile {
 
     protected override void UpdateLoop() {
         base.UpdateLoop();
-        foreach (GameObject enemy in CurrentlyContainedEnemies.Keys){
-            if (Time.time > CurrentlyContainedEnemies[enemy] + DamageTickGapInSeconds){
-                CurrentlyContainedEnemies[enemy] = Time.time;
-                DealDamage(enemy);
+        for (int i = 0; i < CurrentlyContainedEnemies.Count; i++){
+            DamageTickTracker tracker = CurrentlyContainedEnemies[i];
+            if (tracker.enemy == null){
+                CurrentlyContainedEnemies.RemoveAt(i);
+            }
+            if (Time.time > tracker.lastDamageTickTime + DamageTickGapInSeconds){
+                tracker.lastDamageTickTime = Time.time;
+                DealDamage(tracker.enemy);
             }
         }
     }
 
     protected override void OnTargetCollisionEnter(GameObject target) {
-        CurrentlyContainedEnemies.Add(target.gameObject, Time.time);
+        CurrentlyContainedEnemies.Add(new DamageTickTracker (target.gameObject,Time.time));
         DealDamage(target.gameObject);
     }
 

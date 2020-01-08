@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4947884454581293650}
   - component: {fileID: 1725961458398634351}
   - component: {fileID: 5815744556563929306}
-  - component: {fileID: 7483593258856547110}
+  - component: {fileID: -1789810680126721779}
   m_Layer: 0
   m_Name: Sand
   m_TagString: Terrain
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4151432452328705369}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.221, y: -0.507, z: 0}
+  m_LocalPosition: {x: 0.254, y: -0.25, z: 0}
   m_LocalScale: {x: 3.0858, y: 3.1205, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -95,7 +95,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0017039925, y: 0.00084251165}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
     pivot: {x: 0.5, y: 0.5}
@@ -106,9 +106,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.18555999, y: 0.17853561}
+  m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
---- !u!114 &7483593258856547110
+--- !u!114 &-1789810680126721779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,6 +117,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4151432452328705369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bfec8c370764ba44925e41665a573e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 93da099df4c85304eb75767c158336c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

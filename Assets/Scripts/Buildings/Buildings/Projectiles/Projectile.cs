@@ -21,11 +21,13 @@ public abstract class Projectile : MonoBehaviour
         this.CreationTime = Time.time;
     }
 
-    protected virtual void UpdateLoop(){
+    protected virtual void UpdateLoop()
+    {
         CheckLifespan();
     }
 
-    public virtual void SetParameters(int damage, float lifespan, int pierceCount, Tower owner){
+    public virtual void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
+    {
         this.Damage = damage;
         this.Lifespan = lifespan;
         this.PierceCount = pierceCount;
@@ -40,16 +42,19 @@ public abstract class Projectile : MonoBehaviour
         }
     }
 
-    protected virtual bool IsTargetCollision(Collision2D collision)
+    protected virtual bool IsTargetCollision(Collider2D collision)
     {
-        if (NumHits > PierceCount){
+        if (NumHits > PierceCount)
+        {
             return false;
         }
         return (collision.gameObject.CompareTag("Zombie"));
     }
 
-    protected virtual void OnTargetCollisionEnter(GameObject target){
-        if (NumHits > PierceCount){
+    protected virtual void OnTargetCollisionEnter(GameObject target)
+    {
+        if (NumHits > PierceCount)
+        {
             return;
         }
         NumHits += 1;
@@ -58,29 +63,35 @@ public abstract class Projectile : MonoBehaviour
         OnHalt(target);
     }
 
-    protected virtual void OnTargetCollisionExit(GameObject target) {
+    protected virtual void OnTargetCollisionExit(GameObject target)
+    {
 
     }
 
-    protected virtual List<GameObject> GetDamageTakers(GameObject initialCollision){
+    protected virtual List<GameObject> GetDamageTakers(GameObject initialCollision)
+    {
         return new List<GameObject> { initialCollision };
     }
 
-    protected void DealDamage(List<GameObject> damageTakers){
-        foreach (GameObject damageTaker in damageTakers){
+    protected void DealDamage(List<GameObject> damageTakers)
+    {
+        foreach (GameObject damageTaker in damageTakers)
+        {
             DealDamage(damageTaker);
         }
     }
 
-    protected virtual void DealDamage(GameObject damageTaker){
+    protected virtual void DealDamage(GameObject damageTaker)
+    {
         damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
     }
 
-    protected virtual void DestroyThis(){
+    protected virtual void DestroyThis()
+    {
         Destroy(this.gameObject);
     }
 
-    protected virtual bool IsHaltingObject(Collision2D collision)
+    protected virtual bool IsHaltingObject(Collider2D collision)
     {
         return (collision.gameObject.CompareTag("Brush"));
     }
@@ -90,21 +101,23 @@ public abstract class Projectile : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (IsHaltingObject(collision))
+        if (IsHaltingObject(col))
         {
-            OnHalt(collision.gameObject);
+            OnHalt(col.gameObject);
         }
-        else if (IsTargetCollision(collision))
+        else if (IsTargetCollision(col))
         {
-            OnTargetCollisionEnter(collision.gameObject);
+            OnTargetCollisionEnter(col.gameObject);
         }
     }
 
-    private void OnCollisinExit2D(Collision2D collision){
-        if (IsTargetCollision(collision)){
-            OnTargetCollisionExit(collision.gameObject);
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (IsTargetCollision(col))
+        {
+            OnTargetCollisionExit(col.gameObject);
         }
     }
 }

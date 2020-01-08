@@ -8,8 +8,8 @@ public class MapLoader : MonoBehaviour
 {
     private Dictionary<EnvironmentTileType, GameObject> tileMap;
     private GameObject zombieSpawner;
-    public const int xGridSize = 40;
-    public const int yGridSize = 40;
+    public const int xGridSize = 34;
+    public const int yGridSize = 22;
 
     void Awake()
     {
@@ -84,12 +84,15 @@ public class MapLoader : MonoBehaviour
         }
     }
 
+    private float blockSpawnZLocation = 3f;
     private void PlaceBlock(EnvironmentTileType tile, int x, int y, Transform parent)
     {
         if (tile == EnvironmentTileType.Nothing)
             return;
         GameObject selectedBlock = tileMap[tile];
         Map.Environment[y, x] = tileMap[tile].GetComponent<EnvironmentTile>();
-        Instantiate(selectedBlock, Map.GridPointToWorldPoint(new int[] { x, y }), new Quaternion(), parent);
+        Vector3 spawnLocation = Map.GridPointToWorldPoint(new int[] { x, y });
+        spawnLocation.z = blockSpawnZLocation;
+        Instantiate(selectedBlock, spawnLocation, new Quaternion(), parent);
     }
 }

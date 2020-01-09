@@ -93,7 +93,14 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual bool IsHaltingObject(Collider2D collision)
     {
-        return (collision.gameObject.CompareTag("Brush"));
+        if (collision.gameObject.CompareTag("Terrain"))
+        {
+            if (collision.gameObject.GetComponent<EnvironmentTile>().StopsProjectiles)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected virtual void OnHalt(GameObject haltingObject)

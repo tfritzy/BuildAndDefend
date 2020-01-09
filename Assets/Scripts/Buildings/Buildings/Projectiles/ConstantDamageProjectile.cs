@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ConstantDamageProjectile : Projectile {
+public class ConstantDamageProjectile : Projectile
+{
 
     /// <summary>
     /// List that stores the enemies currently contained within this entity's realm
@@ -12,8 +13,10 @@ public class ConstantDamageProjectile : Projectile {
     protected List<DamageTickTracker> CurrentlyContainedEnemies = new List<DamageTickTracker>();
 
 
-    protected struct DamageTickTracker{
-        public DamageTickTracker(GameObject enemy, float lastDamageTickTime){
+    protected struct DamageTickTracker
+    {
+        public DamageTickTracker(GameObject enemy, float lastDamageTickTime)
+        {
             this.enemy = enemy;
             this.lastDamageTickTime = lastDamageTickTime;
         }
@@ -23,7 +26,8 @@ public class ConstantDamageProjectile : Projectile {
 
     public float DamageTickGapInSeconds;
 
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner){
+    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
+    {
         throw new NotSupportedException("The Set parameters on constant damage projectiles should be called "
          + "With damageTickGapInSecondsParameter");
     }
@@ -39,27 +43,40 @@ public class ConstantDamageProjectile : Projectile {
         this.DamageTickGapInSeconds = damageTickGapInSeconds;
     }
 
-    protected override void UpdateLoop() {
+    protected override void UpdateLoop()
+    {
         base.UpdateLoop();
-        for (int i = 0; i < CurrentlyContainedEnemies.Count; i++){
+        for (int i = 0; i < CurrentlyContainedEnemies.Count; i++)
+        {
             DamageTickTracker tracker = CurrentlyContainedEnemies[i];
-            if (tracker.enemy == null){
+            if (tracker.enemy == null)
+            {
                 CurrentlyContainedEnemies.RemoveAt(i);
             }
-            if (Time.time > tracker.lastDamageTickTime + DamageTickGapInSeconds){
+            if (Time.time > tracker.lastDamageTickTime + DamageTickGapInSeconds)
+            {
                 tracker.lastDamageTickTime = Time.time;
                 DealDamage(tracker.enemy);
             }
         }
     }
 
-    protected override void OnTargetCollisionEnter(GameObject target) {
-        CurrentlyContainedEnemies.Add(new DamageTickTracker (target.gameObject,Time.time));
+    protected override void OnTargetCollisionEnter(GameObject target)
+    {
+        CurrentlyContainedEnemies.Add(new DamageTickTracker(target.gameObject, Time.time));
         DealDamage(target.gameObject);
     }
 
-    protected override void OnTargetCollisionExit(GameObject target) {
-        CurrentlyContainedEnemies.Remove(target);
+    protected override void OnTargetCollisionExit(GameObject target)
+    {
+        for (int i = 0; i < CurrentlyContainedEnemies.Count; i++)
+        {
+            if (CurrentlyContainedEnemies[i].enemy.Equals(target))
+            {
+                CurrentlyContainedEnemies.RemoveAt(i);
+                return;
+            }
+        }
     }
 
 }

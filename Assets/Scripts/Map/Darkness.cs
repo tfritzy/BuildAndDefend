@@ -203,7 +203,7 @@ public class Darkness : MonoBehaviour
     {
         Vector2 pixelCoords = new Vector2(((float)x) * this.gridPlotWidth + xStart,
                                           ((float)y) * this.gridPlotHeight + yStart);
-        return Camera.main.ScreenToWorldPoint(pixelCoords);
+        return GameObjectCache.Camera.ScreenToWorldPoint(pixelCoords);
     }
 
     public Vector2 WorldPointToGridPoint(float x, float y)

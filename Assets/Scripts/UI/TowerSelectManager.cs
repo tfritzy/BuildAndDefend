@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TowerSelectManager
 {
@@ -33,6 +34,17 @@ public class TowerSelectManager
             return _towerSelectButton;
         }
     }
+
+    private static GameObject _towerSelectButtonParent;
+    public static GameObject TowerSelectButtonsParent {
+        get {
+            if (_towerSelectButtonParent == null){
+                _towerSelectButtonParent = Resources.Load<GameObject>("TowerSelectButtonsParent");
+            }
+            return _towerSelectButtonParent;
+        }
+    }
+
     public static void AddTowerButton(BuildingType type)
     {
         if (TowerSelectButtons.ContainsKey(type))
@@ -40,6 +52,8 @@ public class TowerSelectManager
             return;
         }
 
-        GameObject.Instantiate(selectTowerButton, Vector3.zero, new Quaternion(), null);
+        Vector3 buttonPosition = Vector3.zero;
+
+        GameObject.Instantiate(selectTowerButton, buttonPosition, new Quaternion(), null);
     }
 }

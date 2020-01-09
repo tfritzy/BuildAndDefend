@@ -90,7 +90,7 @@ public class Builder : MonoBehaviour
             }
 
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
-            location = Camera.main.ScreenToWorldPoint(location);
+            location = GameObjectCache.Camera.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
             if (gridLoc[1] < 0 || gridLoc[1] > (Map.Buildings.GetLength(1) - 1) || gridLoc[0] < 0 || gridLoc[0] > (Map.Buildings.GetLength(0) - 1))
             {

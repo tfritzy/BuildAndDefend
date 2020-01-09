@@ -75,7 +75,7 @@ public abstract class Tower : Building
             Vector2 location = Input.mousePosition != Vector3.zero
                 ? (Vector2)Input.mousePosition
                 : Input.GetTouch(0).position;
-            location = Camera.main.ScreenToWorldPoint(location);
+            location = GameObjectCache.Camera.ScreenToWorldPoint(location);
             return location;
         }
         else

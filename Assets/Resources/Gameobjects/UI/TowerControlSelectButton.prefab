@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4168810033100438387}
   - component: {fileID: 4339981970847665221}
   - component: {fileID: 7493486404069587285}
-  - component: {fileID: 4926486789207098977}
+  - component: {fileID: 7341545238908165730}
   m_Layer: 5
   m_Name: TowerControlSelectButton
   m_TagString: Untagged
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.000012249, y: 148}
-  m_SizeDelta: {x: 57.84, y: 43.36}
+  m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4168810033100438387
 CanvasRenderer:
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4926486789207098977
+--- !u!114 &7341545238908165730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e404203d5d749364fa073d95cd820c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectType: 0
 --- !u!1 &9163630488200463152
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,4 +208,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Fireball
+  m_Text: Tower Name

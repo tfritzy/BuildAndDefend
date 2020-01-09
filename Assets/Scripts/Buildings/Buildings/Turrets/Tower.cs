@@ -12,7 +12,7 @@ public abstract class Tower : Building
     public override PathableType PathableType => PathableType.UnPathable;
     protected abstract string projectilePrefabName { get; }
     public override bool IsTower => true;
-
+    public bool IsBeingControlled;
     protected float inaccuracy;
     protected float lastFireTime;
 
@@ -29,6 +29,7 @@ public abstract class Tower : Building
     protected override void Setup()
     {
         SetTowerParameters();
+        ConfigureUI();
     }
 
     // Update is called once per frame
@@ -38,6 +39,11 @@ public abstract class Tower : Building
         {
             Fire();
         }
+    }
+
+    protected virtual void ConfigureUI()
+    {
+        TowerSelectManager.AddTowerButton(this.Type);
     }
 
     protected virtual void Fire()
@@ -54,6 +60,10 @@ public abstract class Tower : Building
 
     protected bool CanFire()
     {
+        if (!IsBeingControlled)
+        {
+            return false;
+        }
         return (Time.time > fireCooldown + lastFireTime);
     }
 

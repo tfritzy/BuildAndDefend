@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114972235134667842}
   m_Layer: 10
   m_Name: FireBolt
-  m_TagString: Turret
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,3 +124,4 @@ MonoBehaviour:
   Position: {x: 9, y: 26}
   fireCooldown: 0
   projectilePierce: 0
+  IsBeingControlled: 0

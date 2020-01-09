@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7843863769587087305}
   m_Layer: 10
   m_Name: Ballista
-  m_TagString: Turret
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,6 +124,7 @@ MonoBehaviour:
   Position: {x: 27, y: 20}
   fireCooldown: 0
   projectilePierce: 0
+  IsBeingControlled: 0
   startChargeTime: 0
   isCharging: 0
   Level: 0

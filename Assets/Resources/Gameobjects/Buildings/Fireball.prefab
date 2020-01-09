@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6575082187801506109}
   m_Layer: 10
   m_Name: Fireball
-  m_TagString: Turret
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 0
-  Position: {x: 0, y: 0}
+  Position: {x: 13, y: 10}
   fireCooldown: 0
   projectilePierce: 0
+  IsBeingControlled: 0

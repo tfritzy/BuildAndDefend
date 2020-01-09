@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8588150263660642924}
   m_Layer: 10
   m_Name: FireWall
-  m_TagString: Turret
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,5 +124,6 @@ MonoBehaviour:
   Position: {x: 0, y: 0}
   fireCooldown: 0
   projectilePierce: 0
+  IsBeingControlled: 0
   MaxFireSegments: 0
   FireDamageTickGapInSeconds: 0

@@ -6,13 +6,13 @@ TagManager:
   tags:
   - Zombie
   - Projectile
-  - Turret
   - Wall
   - Brush
   - Spawner
   - Terrain
   - BuildGridLine
   - UIWindow
+  - Tower
   layers:
   - Default
   - TransparentFX

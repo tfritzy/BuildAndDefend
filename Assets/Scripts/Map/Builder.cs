@@ -111,9 +111,9 @@ public class Builder : MonoBehaviour
                     return;
                 }
 
+                GameObject newBuilding = InstantiateBuilding(gridLoc);
                 Purchaser.Buy(SelectedBuilding.GetComponent<Building>().BuildCost);
-                Map.AddBuildingToMap(SelectedBuilding.GetComponent<Building>(), gridLoc);
-                InstantiateBuilding(gridLoc);
+                Map.AddBuildingToMap(newBuilding.GetComponent<Building>(), gridLoc);
             }
             else
             {
@@ -136,7 +136,7 @@ public class Builder : MonoBehaviour
         return results.Count > 0;
     }
 
-    private void InstantiateBuilding(Vector2Int gridLoc)
+    private GameObject InstantiateBuilding(Vector2Int gridLoc)
     {
         Building building = SelectedBuilding.GetComponent<Building>();
         Vector2Int topRight = building.Position + building.Size;
@@ -148,6 +148,7 @@ public class Builder : MonoBehaviour
                                       new Quaternion());
         inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
         inst.GetComponent<Building>().Position = gridLoc;
+        return inst;
     }
 
     private void SetupBuildGrid()

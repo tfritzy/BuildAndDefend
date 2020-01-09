@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class TowerSelectManager
 {
@@ -35,11 +34,11 @@ public class TowerSelectManager
         }
     }
 
-    private static GameObject _towerSelectButtonParent;
-    public static GameObject TowerSelectButtonsParent {
+    private static Transform _towerSelectButtonParent;
+    public static Transform TowerSelectButtonsParent {
         get {
             if (_towerSelectButtonParent == null){
-                _towerSelectButtonParent = Resources.Load<GameObject>("TowerSelectButtonsParent");
+                _towerSelectButtonParent = GameObjectCache.Canvas.transform.Find("TowerSelectButtonsParent");
             }
             return _towerSelectButtonParent;
         }
@@ -51,9 +50,21 @@ public class TowerSelectManager
         {
             return;
         }
+        
+        float buttonWidth = selectTowerButton.GetComponent<RectTransform>().rect.width;
+        float buttonHeight = selectTowerButton.GetComponent<RectTransform>().rect.height;
+        float parentHeight = TowerSelectButtonsParent.GetComponent<RectTransform>().rect.height;
+        float buttonYPos = (parentHeight / 2 - buttonHeight / 2 - 5 - ((buttonHeight + 5) * TowerSelectButtons.Count))
+                           * GameObjectCache.Canvas.transform.localScale.y;
+        Vector3 buttonPosition = new Vector2(0, buttonYPos);
 
-        Vector3 buttonPosition = Vector3.zero;
-
-        GameObject.Instantiate(selectTowerButton, buttonPosition, new Quaternion(), null);
+        GameObject newButton = GameObject.Instantiate(
+            selectTowerButton,
+            TowerSelectButtonsParent.position + buttonPosition,
+            new Quaternion(),
+            TowerSelectButtonsParent.transform);
+        newButton.GetComponent<TowerControlSelect>().selectType = type;
+        newButton.GetComponentInChildren<UnityEngine.UI.Text>().text = type.ToString();
+        TowerSelectButtons.Add(type, newButton);
     }
 }

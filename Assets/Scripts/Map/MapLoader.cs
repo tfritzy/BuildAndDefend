@@ -8,12 +8,9 @@ public class MapLoader : MonoBehaviour
 {
     private Dictionary<EnvironmentTileType, GameObject> tileMap;
     private GameObject zombieSpawner;
-    public const int xGridSize = 34;
-    public const int yGridSize = 22;
 
     void Awake()
     {
-        ResetMapData();
     }
 
     void Start()
@@ -29,23 +26,18 @@ public class MapLoader : MonoBehaviour
 
     public void LoadMap(string mapName)
     {
-        ResetMapData();
         MapDAO map = ReadMapFile(mapName);
         LoadGrid(map);
         LoadSpawners(map);
     }
 
-    public void ResetMapData()
+    public void ResetMapData(int width, int height)
     {
-        Map.Environment = new EnvironmentTile[xGridSize, yGridSize];
-        Map.Buildings = new Building[xGridSize, yGridSize];
-        Map.PathingGrid = new PathableType[xGridSize, yGridSize];
+        Map.Environment = new EnvironmentTile[width, height];
+        Map.Buildings = new Building[width, height];
+        Map.PathingGrid = new PathableType[width, height];
         Map.Spawners = new Dictionary<string, GameObject>();
         Map.BuildingsDict = new Dictionary<string, GameObject>();
-        Map.PathingGrid = new PathableType[yGridSize, xGridSize];
-        Map.Buildings = new Building[yGridSize, xGridSize];
-        Map.Environment = new EnvironmentTile[yGridSize, xGridSize];
-        Map.Buildings = new Building[yGridSize, xGridSize];
     }
 
     private MapDAO ReadMapFile(String mapName)
@@ -58,13 +50,15 @@ public class MapLoader : MonoBehaviour
 
     private void LoadGrid(MapDAO map)
     {
+        Map.Environment = new EnvironmentTile[map.height, map.width];
+        ResetMapData(map.width, map.height);
         GameObject tileParent = new GameObject();
         tileParent.name = "Tiles";
         Instantiate(tileParent, Vector3.zero, new Quaternion(), null);
         for (int i = 0; i < map.environment.Length - 1; i++)
         {
-            int x = i % 32;
-            int y = i / 32;
+            int x = i % map.width;
+            int y = i / map.width;
             EnvironmentTileType value = map.environment[i];
             PlaceBlock(value, x, y, tileParent.transform);
         }
@@ -90,8 +84,8 @@ public class MapLoader : MonoBehaviour
         if (tile == EnvironmentTileType.Nothing)
             return;
         GameObject selectedBlock = tileMap[tile];
-        Map.Environment[y, x] = tileMap[tile].GetComponent<EnvironmentTile>();
-        Vector3 spawnLocation = Map.GridPointToWorldPoint(new int[] { x, y });
+        Map.Environment[x, y] = tileMap[tile].GetComponent<EnvironmentTile>();
+        Vector3 spawnLocation = Map.GridPointToWorldPoint(new Vector2(x, y));
         spawnLocation.z = blockSpawnZLocation;
         Instantiate(selectedBlock, spawnLocation, new Quaternion(), parent);
     }

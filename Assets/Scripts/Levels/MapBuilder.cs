@@ -16,7 +16,6 @@ public class MapBuilder : MonoBehaviour
 
     private void Awake()
     {
-        Map.Environment = new EnvironmentTile[16, 32];
     }
 
     // Use this for initialization
@@ -74,11 +73,11 @@ public class MapBuilder : MonoBehaviour
             location = GameObjectCache.Camera.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
 
-            if (Map.Environment[gridLoc.y, gridLoc.x].Type != EnvironmentTileType.Nothing)
+            if (Map.Environment[gridLoc.x, gridLoc.y].Type != EnvironmentTileType.Nothing)
             {
                 return;
             }
-            Map.Environment[gridLoc.y, gridLoc.x] = SelectedBlock.GetComponent<EnvironmentTile>();
+            Map.Environment[gridLoc.x, gridLoc.y] = SelectedBlock.GetComponent<EnvironmentTile>();
 
             Instantiate(SelectedBlock, Map.GridPointToWorldPoint(gridLoc), new Quaternion());
         }

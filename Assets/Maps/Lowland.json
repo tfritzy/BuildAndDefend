@@ -1,9 +1,11 @@
 {
     "name": "Lowland",
+    "width": 32,
+    "height": 16,
     "rewards": {
         "gold": 100,
         "wood": 15,
-        "iron": 10,
+        "iron": 10
     },
     "zombieSpawners": [
         {
@@ -539,6 +541,7 @@
         5,
         5,
         5,
-        5
+        5,
+        0
     ]
 }

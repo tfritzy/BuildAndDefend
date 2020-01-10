@@ -92,7 +92,8 @@ public class Builder : MonoBehaviour
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
             location = GameObjectCache.Camera.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
-            if (gridLoc[1] < 0 || gridLoc[1] > (Map.Buildings.GetLength(1) - 1) || gridLoc[0] < 0 || gridLoc[0] > (Map.Buildings.GetLength(0) - 1))
+            if (gridLoc[1] < 0 || gridLoc.y > (Map.Buildings.GetLength(1) - 1) ||
+                gridLoc[0] < 0 || gridLoc.x > (Map.Buildings.GetLength(0) - 1))
             {
                 return;
             }
@@ -117,7 +118,7 @@ public class Builder : MonoBehaviour
             }
             else
             {
-                Building building = Map.Buildings[gridLoc[1], gridLoc[0]].GetComponent<Building>();
+                Building building = Map.Buildings[gridLoc.x, gridLoc.y].GetComponent<Building>();
                 if (building != null)
                 {
                     building.Delete();

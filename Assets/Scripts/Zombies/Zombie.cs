@@ -207,7 +207,7 @@ public class Zombie : MonoBehaviour
                 }
 
                 if (IsWithinBounds(newX, newY) &&
-                    (Map.PathingGrid[newY, newX] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
+                    (Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
                     List<Vector2Int> newList = new List<Vector2Int>(cur);
@@ -230,12 +230,15 @@ public class Zombie : MonoBehaviour
 
     private bool IsPathable(int x, int y)
     {
-        return Map.PathingGrid[y, x] == PathableType.Pathable;
+        return Map.PathingGrid[x, y] == PathableType.Pathable;
     }
 
     private bool IsWithinBounds(int x, int y)
     {
-        if (y >= 0 && y < Map.PathingGrid.GetLength(0) && x >= 0 && x < Map.PathingGrid.GetLength(1))
+        if (y >= 0 &&
+            y < Map.PathingGrid.GetLength(1) &&
+            x >= 0 &&
+            x < Map.PathingGrid.GetLength(0))
         {
             return true;
         }

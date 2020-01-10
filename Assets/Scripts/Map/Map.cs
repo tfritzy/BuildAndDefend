@@ -22,10 +22,10 @@ public static class Map
     public static void ReprocessPathingLoc(Vector2Int location)
     {
         PathableType pathingType =
-            (Buildings[location.y, location.x].PathableType == PathableType.Pathable &&
-            Environment[location.y, location.x].PathableType == PathableType.Pathable) ?
+            (Buildings[location.x, location.y].PathableType == PathableType.Pathable &&
+            Environment[location.x, location.y].PathableType == PathableType.Pathable) ?
             PathableType.Pathable : PathableType.UnPathable;
-        PathingGrid[location.y, location.x] = pathingType;
+        PathingGrid[location.x, location.y] = pathingType;
     }
 
     /// <summary>
@@ -37,11 +37,11 @@ public static class Map
         {
             for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
             {
-                if (Buildings[y, x] != null && Buildings[y, x].Type != BuildingType.Nothing)
+                if (Buildings[x, y] != null && Buildings[x, y].Type != BuildingType.Nothing)
                 {
                     return false;
                 }
-                if (Environment[y, x] != null && !Environment[y, x].CanBeBuiltUpon)
+                if (Environment[x, y] != null && !Environment[x, y].CanBeBuiltUpon)
                 {
                     return false;
                 }
@@ -67,11 +67,11 @@ public static class Map
         {
             for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
             {
-                if (Buildings[y, x] != null && Buildings[y, x].Type != BuildingType.Nothing)
+                if (Buildings[x, y] != null && Buildings[x, y].Type != BuildingType.Nothing)
                 {
-                    throw new InvalidOperationException($"Cannot place building on occupied tile! Tile currently occupied by: {Buildings[y, x].Type}");
+                    throw new InvalidOperationException($"Cannot place building on occupied tile! Tile currently occupied by: {Buildings[x, y].Type}");
                 }
-                Buildings[y, x] = building;
+                Buildings[x, y] = building;
                 ReprocessPathingLoc(new Vector2Int(x, y));
                 NotifyPathTakersOfBuildingChange(x, y);
                 BuildingsDict.Add($"{x},{y}", building.gameObject);
@@ -85,12 +85,12 @@ public static class Map
         {
             for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
             {
-                if (Buildings[y, x] == null || Buildings[y, x].Type != building.Type)
+                if (Buildings[x, y] == null || Buildings[x, y].Type != building.Type)
                 {
                     throw new InvalidOperationException($"Call included removing incorrect building type." +
-                        " Tile ({x}, {y}) type={Buildings[y, x].Type}. RemovalType={building.Type}");
+                        " Tile ({x}, {y}) type={Buildings[x, y].Type}. RemovalType={building.Type}");
                 }
-                Buildings[y, x] = null;
+                Buildings[x, y] = null;
                 ReprocessPathingLoc(new Vector2Int(x, y));
                 BuildingsDict.Remove($"{x},{y}");
             }
@@ -125,37 +125,26 @@ public static class Map
     public static Vector2Int WorldPointToGridPoint(Vector2 worldPoint)
     {
         Vector2Int loc = new Vector2Int(
-            (int)(((worldPoint.x - .25f) * 2) + Map.Environment.GetLength(1) / 2),
-            (int)(((worldPoint.y - .25f) * 2) + Map.Environment.GetLength(0) / 2)
+            (int)(((worldPoint.x - .25f) * 2) + Map.Environment.GetLength(0) / 2),
+            (int)(((worldPoint.y - .25f) * 2) + Map.Environment.GetLength(1) / 2)
         );
         if (loc.x < 0)
             loc.x = 0;
-        if (loc.x > Map.Environment.GetLength(1) - 1)
-            loc.x = Map.Environment.GetLength(1) - 1;
+        if (loc.x > Map.Environment.GetLength(0) - 1)
+            loc.x = Map.Environment.GetLength(0) - 1;
         if (loc.y < 0)
             loc.y = 0;
-        if (loc.y > Map.Environment.GetLength(0) - 1)
-            loc.y = Map.Environment.GetLength(0) - 1;
+        if (loc.y > Map.Environment.GetLength(1) - 1)
+            loc.y = Map.Environment.GetLength(1) - 1;
         return loc;
     }
 
     public static Vector2 GridPointToWorldPoint(Vector2 gridLoc)
     {
         Vector3 loc = new Vector3(
-            ((float)gridLoc[0] - Map.Environment.GetLength(1) / 2) / 2f + .5f,
-            ((float)gridLoc[1] - Map.Environment.GetLength(0) / 2) / 2f + .5f);
+            ((float)gridLoc[0] - Map.Environment.GetLength(0) / 2) / 2f + .5f,
+            ((float)gridLoc[1] - Map.Environment.GetLength(1) / 2) / 2f + .5f);
 
         return loc;
     }
-
-    public static Vector2 GridPointToWorldPoint(int[] gridLoc)
-    {
-        Vector2 loc = new Vector2(
-            ((float)gridLoc[0] - Map.Environment.GetLength(1) / 2) / 2f + .5f,
-            ((float)gridLoc[1] - Map.Environment.GetLength(0) / 2) / 2f + .5f);
-
-        return loc;
-    }
-
-
 }

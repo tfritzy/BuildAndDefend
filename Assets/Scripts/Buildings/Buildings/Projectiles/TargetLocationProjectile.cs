@@ -9,7 +9,7 @@ public abstract class TargetLocationProjectile : ExplosiveProjectile
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        if (Mathf.Abs(Vector3.SqrMagnitude(TargetPosition - this.transform.position)) < .2f)
+        if (Mathf.Abs(Vector3.SqrMagnitude(TargetPosition - this.transform.position)) < .3f)
         {
             this.OnHalt(this.gameObject);
         }

@@ -103,7 +103,8 @@ public abstract class Tower : Building
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}"),
             this.transform.position,
-            new Quaternion());
+            new Quaternion(),
+            null);
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
         Projectile p = instProj.GetComponent<Projectile>();
         SetProjectileValues(p);

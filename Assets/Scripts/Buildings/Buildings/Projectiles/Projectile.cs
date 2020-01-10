@@ -18,6 +18,11 @@ public abstract class Projectile : MonoBehaviour
 
     void Start()
     {
+        Startup();
+    }
+
+    protected virtual void Startup()
+    {
         this.CreationTime = Time.time;
     }
 

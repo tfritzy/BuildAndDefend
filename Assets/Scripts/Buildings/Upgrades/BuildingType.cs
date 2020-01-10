@@ -6,5 +6,6 @@ public enum BuildingType
     Wall,
     FireBolt,
     Fireball,
-    FireWall
+    FireWall,
+    FireMissiles
 }

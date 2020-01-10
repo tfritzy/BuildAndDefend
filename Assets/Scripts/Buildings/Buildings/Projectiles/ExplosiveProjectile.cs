@@ -1,10 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ExplosiveProjectile : Projectile
 {
-    public abstract float ExplosionRadius { get; set; }
-    protected abstract string explosionPrefabName { get; set; }
+    public float ExplosionRadius;
+    protected abstract string explosionPrefabName { get; }
+
+    [Obsolete("The other set parameters needs to be used for this class.", true)]
+    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
+    {
+    }
+
+    public virtual void SetParameters(
+        int damage,
+        float lifespan,
+        int pierceCount,
+        Tower owner,
+        float explosionRadius
+    )
+    {
+        this.Damage = damage;
+        this.Lifespan = lifespan;
+        this.PierceCount = pierceCount;
+        this.Owner = owner;
+        this.ExplosionRadius = explosionRadius;
+    }
 
     protected override void OnHalt(GameObject haltingObject)
     {

@@ -1,4 +1,4 @@
-public class FireballTower : ExplosiveProjectileTower
+public class FireMissilesTower : TargetLocationTower
 {
     public override BuildingType Type => BuildingType.Fireball;
 

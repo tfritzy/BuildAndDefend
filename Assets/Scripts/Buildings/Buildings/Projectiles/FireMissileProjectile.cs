@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class FireMissileProjectile : TargetLocationProjectile
+public class FireMissileProjectile : TargetLocationFlyingProjectile
 {
     private float projectileMoveForce = 50f;
     protected override string explosionPrefabName => "FireMissileExplosion";

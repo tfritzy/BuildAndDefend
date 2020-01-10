@@ -2,27 +2,39 @@ using UnityEngine;
 
 public abstract class TargetLocationTower : ExplosiveProjectileTower
 {
-    protected Vector2 lastInputLocation;
+    protected float explosionDelay;
+    protected Vector3 lastInputPosition;
 
     protected override void Fire()
     {
         Vector2? inputLocation = GetInputLocation();
         if (inputLocation.HasValue)
         {
-            lastInputLocation = inputLocation.Value;
-            CreateProjectile(Vector3.zero);
+            lastInputPosition = inputLocation.Value;
+            CreateProjectile(inputLocation.Value);
             lastFireTime = Time.time;
         }
     }
 
     protected override void SetProjectileValues(Projectile p)
     {
-        p.GetComponent<TargetLocationProjectile>().SetParameters(
+        p.GetComponent<TargetLocationSpawningProjectile>().SetParameters(
             this.projectileDamage,
             this.projectileLifespan,
             this.projectilePierce,
             this,
             this.explosionRadius,
-            lastInputLocation);
+            this.explosionDelay
+        );
+    }
+
+    protected override void CreateProjectile(UnityEngine.Vector2 fireDirection){
+        GameObject instProj = Instantiate(
+            Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
+            lastInputPosition,
+            new Quaternion()
+        );
+        Projectile p = instProj.GetComponent<Projectile>();
+        SetProjectileValues(p);
     }
 }

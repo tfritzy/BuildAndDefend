@@ -26,7 +26,7 @@ public class MapBuilder : MonoBehaviour
         float width = selectionBox.GetComponent<RectTransform>().rect.width;
         int buttonsPerRow = 11;
         float distBetweenButtons = 1f;
-        Vector2 selectionBoxWorldPos = Camera.main.ScreenToWorldPoint(selectionBox.transform.position);
+        Vector2 selectionBoxWorldPos = GameObjectCache.Camera.ScreenToWorldPoint(selectionBox.transform.position);
         float xPos = selectionBoxWorldPos.x + 10;
         float yPos = selectionBoxWorldPos.y + .6f;
         EnvironmentTileType[] tileTypes = (EnvironmentTileType[])Enum.GetValues(typeof(EnvironmentTileType));
@@ -71,7 +71,7 @@ public class MapBuilder : MonoBehaviour
         if (Input.GetMouseButton(0) || Input.touchCount > 0)
         {
             Vector2 location = Input.mousePosition != Vector3.zero ? (Vector2)Input.mousePosition : Input.GetTouch(0).position;
-            location = Camera.main.ScreenToWorldPoint(location);
+            location = GameObjectCache.Camera.ScreenToWorldPoint(location);
             Vector2Int gridLoc = Map.WorldPointToGridPoint(location);
 
             if (Map.Environment[gridLoc.y, gridLoc.x].Type != EnvironmentTileType.Nothing)

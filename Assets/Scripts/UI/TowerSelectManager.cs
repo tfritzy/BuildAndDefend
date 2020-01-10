@@ -33,13 +33,38 @@ public class TowerSelectManager
             return _towerSelectButton;
         }
     }
+
+    private static Transform _towerSelectButtonParent;
+    public static Transform TowerSelectButtonsParent {
+        get {
+            if (_towerSelectButtonParent == null){
+                _towerSelectButtonParent = GameObjectCache.Canvas.transform.Find("TowerSelectButtonsParent");
+            }
+            return _towerSelectButtonParent;
+        }
+    }
+
     public static void AddTowerButton(BuildingType type)
     {
         if (TowerSelectButtons.ContainsKey(type))
         {
             return;
         }
+        
+        float buttonWidth = selectTowerButton.GetComponent<RectTransform>().rect.width;
+        float buttonHeight = selectTowerButton.GetComponent<RectTransform>().rect.height;
+        float parentHeight = TowerSelectButtonsParent.GetComponent<RectTransform>().rect.height;
+        float buttonYPos = (parentHeight / 2 - buttonHeight / 2 - 5 - ((buttonHeight + 5) * TowerSelectButtons.Count))
+                           * GameObjectCache.Canvas.transform.localScale.y;
+        Vector3 buttonPosition = new Vector2(0, buttonYPos);
 
-        GameObject.Instantiate(selectTowerButton, Vector3.zero, new Quaternion(), null);
+        GameObject newButton = GameObject.Instantiate(
+            selectTowerButton,
+            TowerSelectButtonsParent.position + buttonPosition,
+            new Quaternion(),
+            TowerSelectButtonsParent.transform);
+        newButton.GetComponent<TowerControlSelect>().selectType = type;
+        newButton.GetComponentInChildren<UnityEngine.UI.Text>().text = type.ToString();
+        TowerSelectButtons.Add(type, newButton);
     }
 }

@@ -38,9 +38,9 @@ public class WaveTimer : MonoBehaviour {
         numWaves = count;
         xVelocity = barWidth / (numWaves * waveLength);
 
-        float pixelWidth = Camera.main.pixelWidth;
+        float pixelWidth = GameObjectCache.Camera.pixelWidth;
         Vector2 topRightCorner = new Vector2(1, 1);
-        Vector2 edgeVector = Camera.main.ViewportToWorldPoint(topRightCorner);
+        Vector2 edgeVector = GameObjectCache.Camera.ViewportToWorldPoint(topRightCorner);
         float widthWorldPoints = edgeVector.x * 2;
 
         float distBetweenTicks = ((barWidth / numWaves) / pixelWidth) * widthWorldPoints;

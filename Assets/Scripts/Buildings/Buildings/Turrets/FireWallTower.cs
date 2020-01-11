@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class FireWallTower : DragSelectTower
 {
-    public override BuildingType Type => BuildingType.FireWall;
+    public override TowerType Type => TowerType.FireWall;
     protected override string projectilePrefabName => "FireWall";
     public int MaxFireSegments;
     public float FireDamageTickGapInSeconds;
 
-    public override void SetTowerParameters() {
+    public override void SetTowerParameters()
+    {
         this.Health = 100;
         this.projectileDamage = 1;
         this.fireCooldown = 5f;
@@ -19,15 +20,17 @@ public class FireWallTower : DragSelectTower
 
     protected override void CreateProjectile()
     {
-        List<GameObject> tilesInBetween = new List<GameObject>(); 
+        List<GameObject> tilesInBetween = new List<GameObject>();
         RaycastHit2D[] hits = Physics2D.LinecastAll(this.dragStartPos, this.dragEndPos);
         foreach (RaycastHit2D hit in hits)
         {
-            if (!hit.collider.gameObject.CompareTag(Tags.Terrain)){
+            if (!hit.collider.gameObject.CompareTag(Tags.Terrain))
+            {
                 continue;
             }
 
-            if (!hit.collider.gameObject.GetComponent<EnvironmentTile>().CanBeBuiltUpon){
+            if (!hit.collider.gameObject.GetComponent<EnvironmentTile>().CanBeBuiltUpon)
+            {
                 continue;
             }
 
@@ -36,7 +39,8 @@ public class FireWallTower : DragSelectTower
 
         // TODO Replace resource load with gameobject pooling.
         GameObject fireWallSegment = Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}");
-        for (int i = 0; i < Mathf.Min(tilesInBetween.Count, MaxFireSegments); i++){
+        for (int i = 0; i < Mathf.Min(tilesInBetween.Count, MaxFireSegments); i++)
+        {
             GameObject tile = tilesInBetween[i];
             GameObject fireSegmentInst = Instantiate(fireWallSegment, tile.transform.position, new Quaternion(), null);
             SetProjectileValues(fireSegmentInst.GetComponent<Projectile>());
@@ -44,7 +48,8 @@ public class FireWallTower : DragSelectTower
         lastFireTime = Time.time;
     }
 
-    protected override void SetProjectileValues(Projectile p) {
+    protected override void SetProjectileValues(Projectile p)
+    {
         p.GetComponent<ConstantDamageProjectile>().SetParameters(
             this.projectileDamage,
             this.projectileLifespan,

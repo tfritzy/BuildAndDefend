@@ -45,9 +45,9 @@ public class Player : MonoBehaviour
 
     private void LoadBuildingUpgradesWithInheritance()
     {
-        var buildingUpgradesWithInheritance = new Dictionary<BuildingType, BuildingUpgrade>();
+        var buildingUpgradesWithInheritance = new Dictionary<TowerType, BuildingUpgrade>();
 
-        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
+        foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
         {
             if (Data.vals.BuildingUpgrades.ContainsKey(type))
             {
@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        foreach (BuildingType type in Data.vals.BuildingUpgrades.Keys)
+        foreach (TowerType type in Data.vals.BuildingUpgrades.Keys)
         {
 
         }

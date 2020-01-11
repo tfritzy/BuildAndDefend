@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class TowerSelectManager
 {
-    private static Dictionary<BuildingType, GameObject> _towerSelectButtons;
-    public static Dictionary<BuildingType, GameObject> TowerSelectButtons
+    private static Dictionary<TowerType, GameObject> _towerSelectButtons;
+    public static Dictionary<TowerType, GameObject> TowerSelectButtons
     {
         get
         {
             if (_towerSelectButtons == null)
             {
-                _towerSelectButtons = new Dictionary<BuildingType, GameObject>();
+                _towerSelectButtons = new Dictionary<TowerType, GameObject>();
             }
             return _towerSelectButtons;
         }
@@ -35,22 +35,25 @@ public class TowerSelectManager
     }
 
     private static Transform _towerSelectButtonParent;
-    public static Transform TowerSelectButtonsParent {
-        get {
-            if (_towerSelectButtonParent == null){
+    public static Transform TowerSelectButtonsParent
+    {
+        get
+        {
+            if (_towerSelectButtonParent == null)
+            {
                 _towerSelectButtonParent = GameObjectCache.Canvas.transform.Find("TowerSelectButtonsParent");
             }
             return _towerSelectButtonParent;
         }
     }
 
-    public static void AddTowerButton(BuildingType type)
+    public static void AddTowerButton(TowerType type)
     {
         if (TowerSelectButtons.ContainsKey(type))
         {
             return;
         }
-        
+
         float buttonWidth = selectTowerButton.GetComponent<RectTransform>().rect.width;
         float buttonHeight = selectTowerButton.GetComponent<RectTransform>().rect.height;
         float parentHeight = TowerSelectButtonsParent.GetComponent<RectTransform>().rect.height;

@@ -4,7 +4,7 @@ using UnityEngine;
 public class FireMissileProjectile : TargetLocationFlyingProjectile
 {
     private float projectileMoveForce = 50f;
-    protected override string explosionPrefabName => "FireMissileExplosion";
+    protected override TowerType TowerType => TowerType.FireMissiles;
     protected override void UpdateLoop()
     {
         base.UpdateLoop();

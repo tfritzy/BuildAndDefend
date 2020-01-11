@@ -5,7 +5,7 @@ using UnityEngine;
 public class BuildingSelector : MonoBehaviour
 {
 
-    public BuildingType Type;
+    public TowerType Type;
 
     public void NotifyBuilderOfSelection()
     {

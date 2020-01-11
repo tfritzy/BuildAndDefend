@@ -16,19 +16,8 @@ public abstract class TargetLocationTower : ExplosiveProjectileTower
         }
     }
 
-    protected override void SetProjectileValues(Projectile p)
+    protected override void CreateProjectile(UnityEngine.Vector2 fireDirection)
     {
-        p.GetComponent<TargetLocationSpawningProjectile>().SetParameters(
-            this.projectileDamage,
-            this.projectileLifespan,
-            this.projectilePierce,
-            this,
-            this.explosionRadius,
-            this.explosionDelay
-        );
-    }
-
-    protected override void CreateProjectile(UnityEngine.Vector2 fireDirection){
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
             lastInputPosition,

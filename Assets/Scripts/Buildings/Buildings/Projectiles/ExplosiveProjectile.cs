@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class ExplosiveProjectile : Projectile
 {
     public float ExplosionRadius;
-    protected abstract string explosionPrefabName { get; }
 
     [Obsolete("The other set parameters needs to be used for this class.", true)]
     public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
@@ -38,7 +37,7 @@ public abstract class ExplosiveProjectile : Projectile
 
     protected GameObject GetExplosionGameObject()
     {
-        return Instantiate(Resources.Load<GameObject>($"{FilePaths.Projectiles}/Explosions/{explosionPrefabName}"));
+        return Instantiate(Resources.Load<GameObject>($"{FilePaths.Projectiles}/Explosions/{this.TowerType}Explosion"));
     }
 
     protected virtual List<GameObject> GetExplosionHits(GameObject initialCollision)

@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationFlyingProjectile : ExplosiveProjectile
+public abstract class TargetLocationProjectile : ExplosiveProjectile
 {
     public Vector3 TargetPosition;
-    public float MovementSpeed;
+
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        if (Mathf.Abs(Vector3.SqrMagnitude(TargetPosition - this.transform.position)) < .3f ||
-            this.transform.position.z > 0)
+        if (Mathf.Abs(Vector3.SqrMagnitude(TargetPosition - this.transform.position)) < .3f)
         {
             this.OnHalt(this.gameObject);
         }
@@ -37,8 +36,7 @@ public abstract class TargetLocationFlyingProjectile : ExplosiveProjectile
         int pierceCount,
         Tower owner,
         float explosionRadius,
-        Vector3 targetPosition,
-        float movementSpeed)
+        Vector3 targetPosition)
     {
         this.Damage = damage;
         this.Lifespan = lifespan;
@@ -46,7 +44,6 @@ public abstract class TargetLocationFlyingProjectile : ExplosiveProjectile
         this.TargetPosition = targetPosition;
         this.ExplosionRadius = explosionRadius;
         this.PierceCount = pierceCount;
-        this.MovementSpeed = movementSpeed;
     }
 
     protected override void OnTargetCollisionEnter(GameObject target)

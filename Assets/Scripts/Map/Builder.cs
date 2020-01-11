@@ -21,7 +21,7 @@ public class Builder : MonoBehaviour
     public int woodCount = 6000;
     public bool deleteMode = false;
     public GameObject gridLine;
-    public static Dictionary<BuildingType, GameObject> Buildings = new Dictionary<BuildingType, GameObject>();
+    public static Dictionary<TowerType, GameObject> Buildings = new Dictionary<TowerType, GameObject>();
     public static GameObject SelectedBuilding;
 
     private void Awake()
@@ -60,7 +60,7 @@ public class Builder : MonoBehaviour
         {
             return;
         }
-        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
+        foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
         {
             Buildings.Add(type, Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}"));
         }

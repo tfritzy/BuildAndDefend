@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UpgradeButton : MonoBehaviour
 {
-    public BuildingType BuildingType;
+    public TowerType BuildingType;
 
     void Start()
     {
@@ -22,11 +22,11 @@ public class UpgradeButton : MonoBehaviour
         Player.Data.vals.BuildingUpgrades[BuildingType].BuyUpgrade();
     }
 
-    private BuildingUpgrade GetDefaultUpgradeInstance(BuildingType buildingName)
+    private BuildingUpgrade GetDefaultUpgradeInstance(TowerType buildingName)
     {
         switch (buildingName)
         {
-            case (BuildingType.Ballista):
+            case (TowerType.Ballista):
                 return new BallistaUpgrade();
             default:
                 return null;

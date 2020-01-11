@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class FlamePlumeProjectile : TargetLocationSpawningProjectile
 {
-    protected override string explosionPrefabName => "FlamePlumeExplosion";
+    protected override TowerType TowerType => TowerType.FlamePlume;
 }

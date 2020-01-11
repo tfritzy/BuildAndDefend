@@ -1,4 +1,4 @@
 public class Fireball : ExplosiveProjectile
 {
-    protected override string explosionPrefabName => "FireballExplosion";
+    protected override TowerType TowerType => TowerType.Fireball;
 }

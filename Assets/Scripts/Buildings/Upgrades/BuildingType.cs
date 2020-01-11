@@ -1,4 +1,4 @@
-public enum BuildingType
+public enum TowerType
 {
     Nothing,
     Ballista,
@@ -8,5 +8,6 @@ public enum BuildingType
     Fireball,
     FireWall,
     FireMissiles,
-    FlamePlume
+    FlamePlume,
+    FireMeteor,
 }

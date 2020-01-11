@@ -1,8 +1,6 @@
-public class FireMissilesTower : TargetLocationTower
+public class FireMeteorTower : TargetLocationFlyingProjTower
 {
-    public override TowerType Type => TowerType.FireMissiles;
-
-    protected override string projectilePrefabName => "FireMissile";
+    public override TowerType Type => TowerType.FireMeteor;
 
     public override void SetTowerParameters()
     {
@@ -13,5 +11,6 @@ public class FireMissilesTower : TargetLocationTower
         this.fireCooldown = .3f;
         this.projectileLifespan = 10f;
         this.explosionRadius = 1f;
+        this.projectileMovementSpeed = 80f;
     }
 }

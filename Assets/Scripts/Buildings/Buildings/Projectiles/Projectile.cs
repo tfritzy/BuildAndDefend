@@ -10,6 +10,8 @@ public abstract class Projectile : MonoBehaviour
     public Tower Owner;
     public int NumHits;
     protected float CreationTime;
+    protected abstract TowerType TowerType { get; }
+
 
     void Update()
     {

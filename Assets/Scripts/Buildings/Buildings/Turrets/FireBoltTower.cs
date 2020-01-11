@@ -1,6 +1,6 @@
 public class FireBoltTower : Tower
 {
-    public override BuildingType Type => BuildingType.FireBolt;
+    public override TowerType Type => TowerType.FireBolt;
 
     protected override string projectilePrefabName => "FireBolt";
 

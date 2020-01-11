@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class DragSelectTower : Tower
 {
-    public override BuildingType Type => BuildingType.FireWall;
+    public override TowerType Type => TowerType.FireWall;
     protected override string projectilePrefabName => "FireWall";
     protected bool isDragging;
     protected Vector2 dragStartPos;

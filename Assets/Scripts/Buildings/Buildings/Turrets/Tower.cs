@@ -10,7 +10,7 @@ public abstract class Tower : Building
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
-    protected abstract string projectilePrefabName { get; }
+    protected virtual string projectilePrefabName => this.Type.ToString();
     public override bool IsTower => true;
     public bool IsBeingControlled;
     protected float inaccuracy;

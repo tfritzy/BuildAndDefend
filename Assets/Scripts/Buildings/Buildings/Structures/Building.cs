@@ -16,7 +16,7 @@ public abstract class Building : MonoBehaviour
     /// <value>The size of the building in <Length, Height> </value>
     public abstract Vector2Int Size { get; }
 
-    public abstract BuildingType Type { get; }
+    public abstract TowerType Type { get; }
     public abstract PathableType PathableType { get; }
 
     /// <summary>

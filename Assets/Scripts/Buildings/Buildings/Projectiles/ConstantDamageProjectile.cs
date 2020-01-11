@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ConstantDamageProjectile : Projectile
+public abstract class ConstantDamageProjectile : Projectile
 {
 
     /// <summary>

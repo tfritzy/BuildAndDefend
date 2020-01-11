@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireWall : DragSelectTower
 {
-    public override BuildingType Type => BuildingType.FireWall;
+    public override TowerType Type => TowerType.FireWall;
 
     protected override string projectilePrefabName => "FireWall";
 

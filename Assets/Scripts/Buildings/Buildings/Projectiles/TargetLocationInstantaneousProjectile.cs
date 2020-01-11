@@ -11,22 +11,28 @@ public abstract class TargetLocationSpawningProjectile : ExplosiveProjectile
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        if (Time.time > spawnTimerStartTime + spawnDelay){
+        if (Time.time > spawnTimerStartTime + spawnDelay)
+        {
             this.gameObject.transform.position = TargetPosition;
             OnHalt(this.gameObject);
         }
     }
 
-    protected override void Startup() {
+    protected override void Startup()
+    {
+        base.Startup();
         this.spawnTimerStartTime = Time.time;
+        Destroy(this.gameObject.GetComponent<Collider2D>());
     }
 
     [Obsolete("Blocking calls because other constructor should be called.", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner, float explosionRadius) {
+    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner, float explosionRadius)
+    {
     }
 
     [Obsolete("Blocking calls because other constructor should be called.", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner) {
+    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
+    {
     }
 
     public virtual void SetParameters(
@@ -35,7 +41,8 @@ public abstract class TargetLocationSpawningProjectile : ExplosiveProjectile
         int pierceCount,
         Tower owner,
         float explosionRadius,
-        float spawnDelay) 
+        float spawnDelay,
+        Vector2 targetPosition)
     {
         this.Damage = damage;
         this.Lifespan = lifespan;
@@ -43,5 +50,6 @@ public abstract class TargetLocationSpawningProjectile : ExplosiveProjectile
         this.Owner = owner;
         this.ExplosionRadius = explosionRadius;
         this.spawnDelay = spawnDelay;
+        this.TargetPosition = targetPosition;
     }
 }

@@ -3,14 +3,14 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class BuildingUpgrade
 {
-    public BuildingType Type;
+    public TowerType Type;
     public int Level;
     public virtual ResourceDAO Cost { get; }
     public int XP;
     public int Kills;
     public double DamageDealt;
 
-    public BuildingUpgrade(BuildingType type)
+    public BuildingUpgrade(TowerType type)
     {
         this.Type = type;
     }
@@ -34,7 +34,7 @@ public class BuildingUpgrade
         var serializedUpgrade = JsonConvert.SerializeObject(this);
         switch (this.Type)
         {
-            case (BuildingType.Ballista):
+            case (TowerType.Ballista):
                 return JsonConvert.DeserializeObject<BallistaUpgrade>(serializedUpgrade);
             default:
                 return this;

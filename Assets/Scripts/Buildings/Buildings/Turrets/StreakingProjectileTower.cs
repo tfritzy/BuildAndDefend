@@ -1,7 +1,6 @@
-public class FireballTower : Tower
+public class StreakingProjectileTower : Tower
 {
-    public override TowerType Type => TowerType.Fireball;
-    public override bool HasExplosiveProjectiles => true;
+    public override TowerType Type => TowerType.FireBolt;
 
     public override void SetTowerParameters()
     {
@@ -11,7 +10,5 @@ public class FireballTower : Tower
         this.ProjectileMovementSpeed = 5;
         this.FireCooldown = 1f;
         this.ProjectileLifespan = 3f;
-        this.ProjectilePierce = 0;
-        this.projectileExplosionRadius = 1f;
     }
 }

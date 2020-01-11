@@ -4,16 +4,15 @@ using UnityEngine;
 public class FireWallTower : DragSelectTower
 {
     public override TowerType Type => TowerType.FireWall;
-    protected override string projectilePrefabName => "FireWall";
     public int MaxFireSegments;
     public float FireDamageTickGapInSeconds;
 
     public override void SetTowerParameters()
     {
         this.Health = 100;
-        this.projectileDamage = 1;
-        this.fireCooldown = 5f;
-        this.projectileLifespan = 3f;
+        this.ProjectileDamage = 1;
+        this.FireCooldown = 5f;
+        this.ProjectileLifespan = 3f;
         this.MaxFireSegments = 6;
         this.FireDamageTickGapInSeconds = 1f;
     }
@@ -43,17 +42,17 @@ public class FireWallTower : DragSelectTower
         {
             GameObject tile = tilesInBetween[i];
             GameObject fireSegmentInst = Instantiate(fireWallSegment, tile.transform.position, new Quaternion(), null);
-            SetProjectileValues(fireSegmentInst.GetComponent<Projectile>());
+            SetProjectileValues(fireSegmentInst);
         }
         lastFireTime = Time.time;
     }
 
-    protected override void SetProjectileValues(Projectile p)
+    protected override void SetProjectileValues(GameObject p)
     {
         p.GetComponent<ConstantDamageProjectile>().SetParameters(
-            this.projectileDamage,
-            this.projectileLifespan,
-            this.projectilePierce,
+            this.ProjectileDamage,
+            this.ProjectileLifespan,
+            this.ProjectilePierce,
             this,
             this.FireDamageTickGapInSeconds);
     }

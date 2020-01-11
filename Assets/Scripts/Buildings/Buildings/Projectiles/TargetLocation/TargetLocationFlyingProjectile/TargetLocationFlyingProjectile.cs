@@ -2,33 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationFlyingProjectile : ExplosiveProjectile
+public abstract class TargetLocationFlyingProjectile : Projectile, ITargetLocationFlyingProjectile
 {
-    public Vector3 TargetPosition;
-    public float MovementSpeed;
+    private Vector3 targetPosition;
+    public Vector3 TargetPosition { get => targetPosition; set => targetPosition = value; }
+
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        if (Mathf.Abs(Vector3.SqrMagnitude(TargetPosition - this.transform.position)) < .3f ||
+        if (Mathf.Abs(Vector3.SqrMagnitude(this.TargetPosition - this.transform.position)) < .3f ||
             this.transform.position.z > 0)
         {
             this.OnHalt(this.gameObject);
         }
-    }
-
-    [Obsolete("The SetParameters needs to be called with target position and explosion radius", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
-    {
-    }
-
-    [Obsolete("The SetParameters needs to be called with target position and explosion radius", true)]
-    public virtual void SetParameters(
-        int damage,
-        float lifespan,
-        int pierceCount,
-        Tower owner,
-        float explosionRadius)
-    {
     }
 
     public virtual void SetParameters(

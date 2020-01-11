@@ -5,8 +5,6 @@ public class FireWall : DragSelectTower
 {
     public override TowerType Type => TowerType.FireWall;
 
-    protected override string projectilePrefabName => "FireWall";
-
     protected override void CreateProjectile()
     {
         List<GameObject> selectedTiles = new List<GameObject>();

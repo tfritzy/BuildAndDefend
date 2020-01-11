@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationSpawningProjectile : ExplosiveProjectile
+public abstract class TargetLocationSpawningProjectile : TargetLocationProjectile, ITargetLocationSpawningProjectile
 {
     protected float spawnDelay;
+    public float SpawnDelay { get => spawnDelay; set => spawnDelay = value; }
     protected float spawnTimerStartTime;
-    protected Vector3 TargetPosition;
+
 
     protected override void UpdateLoop()
     {
@@ -23,16 +24,6 @@ public abstract class TargetLocationSpawningProjectile : ExplosiveProjectile
         base.Startup();
         this.spawnTimerStartTime = Time.time;
         Destroy(this.gameObject.GetComponent<Collider2D>());
-    }
-
-    [Obsolete("Blocking calls because other constructor should be called.", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner, float explosionRadius)
-    {
-    }
-
-    [Obsolete("Blocking calls because other constructor should be called.", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
-    {
     }
 
     public virtual void SetParameters(

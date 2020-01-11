@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class TargetLocationTower : ExplosiveProjectileTower
+public abstract class TargetLocationTower : Tower
 {
     protected float explosionDelay;
     protected Vector3 lastInputPosition;
@@ -20,10 +20,20 @@ public abstract class TargetLocationTower : ExplosiveProjectileTower
     {
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
-            lastInputPosition,
+            this.transform.position,
             new Quaternion()
         );
-        Projectile p = instProj.GetComponent<Projectile>();
-        SetProjectileValues(p);
+        SetProjectileValues(instProj);
+    }
+
+    protected override void SetProjectileValues(GameObject p)
+    {
+        p.GetComponent<ITargetLocationProjectile>().SetParameters(
+            this.ProjectileDamage,
+            this.ProjectileLifespan,
+            this.ProjectilePierce,
+            this,
+            this.projectileExplosionRadius,
+            this.lastInputPosition);
     }
 }

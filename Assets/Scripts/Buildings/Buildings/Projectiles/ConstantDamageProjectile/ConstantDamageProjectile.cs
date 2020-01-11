@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class ConstantDamageProjectile : Projectile
+public abstract class ConstantDamageProjectile : Projectile, IConstantDamageProjectile
 {
 
     /// <summary>
@@ -11,7 +11,6 @@ public abstract class ConstantDamageProjectile : Projectile
     /// <typeparam name="DamageTickTracker">The gameobject inside the bounds along with the last time it was damaged</typeparam>
     /// <returns></returns>
     protected List<DamageTickTracker> CurrentlyContainedEnemies = new List<DamageTickTracker>();
-
 
     protected struct DamageTickTracker
     {
@@ -24,22 +23,18 @@ public abstract class ConstantDamageProjectile : Projectile
         public float lastDamageTickTime;
     }
 
-    public float DamageTickGapInSeconds;
+    public float DamageTickGapInSeconds { get; set; }
 
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
-    {
-        throw new NotSupportedException("The Set parameters on constant damage projectiles should be called "
-         + "With damageTickGapInSecondsParameter");
-    }
-
-    public void SetParameters(
+    public virtual void SetParameters(
         int damage,
         float lifespan,
-        int pierceCount,
         Tower owner,
         float damageTickGapInSeconds)
     {
-        base.SetParameters(damage, lifespan, pierceCount, owner);
+        this.Damage = damage;
+        this.Lifespan = lifespan;
+        this.PierceCount = int.MaxValue;
+        this.Owner = owner;
         this.DamageTickGapInSeconds = damageTickGapInSeconds;
     }
 

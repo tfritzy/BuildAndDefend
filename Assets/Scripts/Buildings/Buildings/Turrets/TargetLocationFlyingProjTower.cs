@@ -1,16 +1,17 @@
-public class TargetLocationFlyingProjTower : TargetLocationTower
+using UnityEngine;
+
+public abstract class TargetLocationFlyingProjTower : TargetLocationTower
 {
-    public override TowerType Type => TowerType.FireMeteor;
     protected float projectileMovementSpeed;
 
-    protected override void SetProjectileValues(Projectile p)
+    protected override void SetProjectileValues(GameObject p)
     {
         p.GetComponent<TargetLocationFlyingProjectile>().SetParameters(
-            this.projectileDamage,
-            this.projectileLifespan,
-            this.projectilePierce,
+            this.ProjectileDamage,
+            this.ProjectileLifespan,
+            this.ProjectilePierce,
             this,
-            this.explosionRadius,
+            this.projectileExplosionRadius,
             this.lastInputPosition,
             this.projectileMovementSpeed
         );

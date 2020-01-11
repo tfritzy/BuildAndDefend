@@ -7,23 +7,23 @@ public class FlamePlumeTower : TargetLocationTower
     public override void SetTowerParameters()
     {
         this.Health = 100;
-        this.projectileDamage = 10;
+        this.ProjectileDamage = 10;
         this.inaccuracy = .1f;
-        this.projectileSpeed = 5;
-        this.fireCooldown = .3f;
-        this.projectileLifespan = 20f;
-        this.explosionRadius = 1f;
-        this.explosionDelay = 10f;
+        this.ProjectileMovementSpeed = 5;
+        this.FireCooldown = .3f;
+        this.ProjectileLifespan = 20f;
+        this.projectileExplosionRadius = 1f;
+        this.explosionDelay = 1f;
     }
 
-    protected override void SetProjectileValues(Projectile p)
+    protected override void SetProjectileValues(GameObject p)
     {
         p.GetComponent<FlamePlumeProjectile>().SetParameters(
-            this.projectileDamage,
-            this.projectileLifespan,
-            this.projectilePierce,
+            this.ProjectileDamage,
+            this.ProjectileLifespan,
+            this.ProjectilePierce,
             this,
-            this.explosionRadius,
+            this.projectileExplosionRadius,
             this.explosionDelay,
             this.lastInputPosition
         );

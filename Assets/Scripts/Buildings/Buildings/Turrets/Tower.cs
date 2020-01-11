@@ -2,28 +2,30 @@
 
 public abstract class Tower : Building
 {
-    public float fireCooldown;
-    public int projectilePierce;
-    public virtual float projectileSpeed { get; set; }
-    public virtual int projectileDamage { get; set; }
-    public virtual float projectileLifespan { get; set; }
+    public float FireCooldown;
+    public int ProjectilePierce;
+    public virtual float ProjectileMovementSpeed { get; set; }
+    public virtual int ProjectileDamage { get; set; }
+    public virtual float ProjectileLifespan { get; set; }
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
+    public virtual bool HasExplosiveProjectiles => false;
+    public float projectileExplosionRadius;
+    public bool IsBeingControlled;
     protected virtual string projectilePrefabName => this.Type.ToString();
     public override bool IsTower => true;
-    public bool IsBeingControlled;
     protected float inaccuracy;
     protected float lastFireTime;
 
     public virtual void SetTowerParameters()
     {
         this.Health = 100;
-        this.projectileDamage = 5;
+        this.ProjectileDamage = 5;
         this.inaccuracy = .05f;
-        this.projectileSpeed = 10;
-        this.fireCooldown = 0.1f;
-        this.projectileLifespan = 1f;
+        this.ProjectileMovementSpeed = 10;
+        this.FireCooldown = 0.1f;
+        this.ProjectileLifespan = 1f;
     }
 
     protected override void Setup()
@@ -64,7 +66,7 @@ public abstract class Tower : Building
         {
             return false;
         }
-        return (Time.time > fireCooldown + lastFireTime);
+        return (Time.time > FireCooldown + lastFireTime);
     }
 
     protected Vector2? GetInputLocation()
@@ -105,14 +107,18 @@ public abstract class Tower : Building
             this.transform.position,
             new Quaternion(),
             null);
-        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * projectileSpeed;
-        Projectile p = instProj.GetComponent<Projectile>();
-        SetProjectileValues(p);
+        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
+        SetProjectileValues(instProj);
     }
 
-    protected virtual void SetProjectileValues(Projectile p)
+    protected virtual void SetProjectileValues(GameObject p)
     {
-        p.SetParameters(this.projectileDamage, this.projectileLifespan, this.projectilePierce, this);
+        p.GetComponent<Projectile>().SetParameters(
+            this.ProjectileDamage,
+            this.ProjectileLifespan,
+            this.ProjectilePierce,
+            this,
+            this.projectileExplosionRadius);
     }
 
     protected override void OnDeath()

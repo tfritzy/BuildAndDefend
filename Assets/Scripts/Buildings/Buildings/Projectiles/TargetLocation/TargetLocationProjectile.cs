@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationProjectile : ExplosiveProjectile
+public abstract class TargetLocationProjectile : Projectile, ITargetLocationProjectile
 {
-    public Vector3 TargetPosition;
+    private Vector3 targetPosition;
+    public Vector3 TargetPosition { get => targetPosition; set => targetPosition = value; }
 
     protected override void UpdateLoop()
     {
@@ -13,21 +14,6 @@ public abstract class TargetLocationProjectile : ExplosiveProjectile
         {
             this.OnHalt(this.gameObject);
         }
-    }
-
-    [Obsolete("The SetParameters needs to be called with target position and explosion radius", true)]
-    public override void SetParameters(int damage, float lifespan, int pierceCount, Tower owner)
-    {
-    }
-
-    [Obsolete("The SetParameters needs to be called with target position and explosion radius", true)]
-    public virtual void SetParameters(
-        int damage,
-        float lifespan,
-        int pierceCount,
-        Tower owner,
-        float explosionRadius)
-    {
     }
 
     public virtual void SetParameters(

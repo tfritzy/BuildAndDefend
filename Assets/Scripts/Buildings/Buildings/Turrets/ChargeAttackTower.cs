@@ -9,7 +9,7 @@ public abstract class ChargeAttack : Tower
     public float startChargeTime;
     public bool isCharging;
 
-    public override float projectileSpeed
+    public override float ProjectileMovementSpeed
     {
         get
         {
@@ -21,7 +21,7 @@ public abstract class ChargeAttack : Tower
     }
 
     protected int maxProjectileDamage;
-    public override int projectileDamage
+    public override int ProjectileDamage
     {
         get
         {
@@ -33,7 +33,7 @@ public abstract class ChargeAttack : Tower
     }
 
     protected float maxProjectileLifespan;
-    public override float projectileLifespan
+    public override float ProjectileLifespan
     {
         get
         {

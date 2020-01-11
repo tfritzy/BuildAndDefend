@@ -8,10 +8,9 @@ public abstract class Projectile : MonoBehaviour
     public int PierceCount;
     public float Lifespan;
     public Tower Owner;
-    public int NumHits;
     protected float CreationTime;
     protected abstract TowerType TowerType { get; }
-
+    protected HashSet<GameObject> hits;
 
     void Update()
     {
@@ -26,6 +25,7 @@ public abstract class Projectile : MonoBehaviour
     protected virtual void Startup()
     {
         this.CreationTime = Time.time;
+        this.hits = new HashSet<GameObject>();
     }
 
     protected virtual void UpdateLoop()
@@ -51,23 +51,13 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual bool IsTargetCollision(Collider2D collision)
     {
-        if (NumHits > PierceCount)
-        {
-            return false;
-        }
         return (collision.gameObject.CompareTag("Zombie"));
     }
 
     protected virtual void OnTargetCollisionEnter(GameObject target)
     {
-        if (NumHits > PierceCount)
-        {
-            return;
-        }
-        NumHits += 1;
         List<GameObject> damageTakers = GetDamageTakers(target);
         DealDamage(damageTakers);
-        OnHalt(target);
     }
 
     protected virtual void OnTargetCollisionExit(GameObject target)
@@ -77,7 +67,12 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual List<GameObject> GetDamageTakers(GameObject initialCollision)
     {
-        return new List<GameObject> { initialCollision };
+        List<GameObject> damageTakers = new List<GameObject>();
+        if (initialCollision.GetComponent<Zombie>().health > 0)
+        {
+            damageTakers.Add(initialCollision);
+        }
+        return damageTakers;
     }
 
     protected void DealDamage(List<GameObject> damageTakers)
@@ -90,7 +85,12 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void DealDamage(GameObject damageTaker)
     {
+        this.hits.Add(damageTaker);
         damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
+        if (this.hits.Count > PierceCount)
+        {
+            OnHalt(damageTaker);
+        }
     }
 
     protected virtual void DestroyThis()

@@ -13,5 +13,6 @@ public class FireballTower : ExplosiveProjectileTower
         this.fireCooldown = 1f;
         this.projectileLifespan = 3f;
         this.explosionRadius = 1f;
+        this.projectilePierce = 0;
     }
 }

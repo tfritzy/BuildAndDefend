@@ -1,6 +1,7 @@
 public class RapidFireTower : Tower
 {
     public override TowerType Type => TowerType.RapidFire;
+    protected override bool hasScalingProjectiles => true;
 
     public override void SetTowerParameters()
     {
@@ -10,5 +11,6 @@ public class RapidFireTower : Tower
         this.ProjectileMovementSpeed = 0;
         this.FireCooldown = 1f;
         this.ProjectileLifespan = .2f;
+        this.ProjectilePierce = int.MaxValue;
     }
 }

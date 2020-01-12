@@ -2887,9 +2887,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelStartTime: 0
-  waveDuration: 3
-  timeBetweenWaves: 30
-  waveStartBanner: {fileID: 1339374084155472, guid: 90db991a198c13a4db2f101bb555e52b,
-    type: 3}
+  waveDuration: 2
+  timeBetweenWaves: 25
+  waveStartBanner: {fileID: 0}
   waveGroupCount: 2
-  levelDuration: 10
+  levelDuration: 120

@@ -8,6 +8,7 @@ public abstract class Building : MonoBehaviour
     private GameObject Structure;
     public abstract ResourceDAO BuildCost { get; }
     public int Health;
+    protected int startingHealth;
     public abstract bool IsTower { get; }
 
     /// <summary>
@@ -34,6 +35,7 @@ public abstract class Building : MonoBehaviour
     public void TakeDamage(int amount)
     {
         this.Health -= amount;
+        updateHealthbar();
         if (this.Health <= 0)
         {
             this.Health = 0;
@@ -44,12 +46,37 @@ public abstract class Building : MonoBehaviour
     }
 
     protected virtual void OnDeath() { }
-    protected virtual void Setup() { }
+    protected virtual void Setup()
+    {
+        this.startingHealth = this.Health;
+        SetupHealthbar();
+    }
 
     public void Delete()
     {
         OnDeath();
         Map.RemoveBuildingFromMap(this);
         Destroy(this.gameObject);
+    }
+
+    protected GameObject healthbar;
+    protected float startingHealthbarScale;
+    protected string healthbarPrefabName => "buildingHealthbar";
+    private void SetupHealthbar()
+    {
+        this.healthbar = Instantiate(
+            Resources.Load<GameObject>($"{FilePaths.Buildings}/{healthbarPrefabName}"),
+            this.transform.position + new Vector3(0, .5f),
+            new Quaternion(),
+            this.transform);
+        healthbar.name = "healthbar";
+        this.startingHealthbarScale = this.healthbar.transform.localScale.y;
+    }
+
+    protected void updateHealthbar()
+    {
+        Vector3 scale = this.healthbar.transform.localScale;
+        scale.y = (this.Health / this.startingHealth) * this.startingHealth;
+        this.healthbar.transform.localScale = scale;
     }
 }

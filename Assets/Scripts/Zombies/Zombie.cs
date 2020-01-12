@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,18 +17,20 @@ public class Zombie : MonoBehaviour
     protected float calculateNewPathTime;
 
     public float zombieSpeed = .3f;
-    public int health = 5;
+    public int health = 100;
+    protected int startingHealth;
     public GameObject target;
     public virtual ResourceDAO KillReward { get => new ResourceDAO(gold: 10); }
     public virtual int XP => 1;
+    private GameObject healthbar;
+    private float originalHealthbarScale;
+
 
     // Use this for initialization
     void Start()
     {
-        this.path = new List<Vector2>();
-        lastAttackTime = Time.time;
         RestartPath();
-        ChildrenSetup();
+        Setup();
     }
 
     // Update is called once per frame
@@ -66,7 +69,7 @@ public class Zombie : MonoBehaviour
             return;
         }
         this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
-        if ((path[pathProgress] - (Vector2)transform.position).magnitude < .3f)
+        if (Vector3.Distance(path[pathProgress], transform.position) < .6f)
         {
             pathProgress += 1;
             if (pathProgress >= path.Count)
@@ -76,10 +79,15 @@ public class Zombie : MonoBehaviour
         }
     }
 
-    protected virtual void ChildrenSetup()
+    protected virtual void Setup()
     {
-        return;
+        this.path = new List<Vector2>();
+        lastAttackTime = Time.time;
+        this.healthbar = this.transform.Find("Healthbar").gameObject;
+        originalHealthbarScale = this.healthbar.transform.localScale.y;
+        this.startingHealth = health;
     }
+
     void Attack()
     {
         if (!atFinalLoc)
@@ -94,7 +102,7 @@ public class Zombie : MonoBehaviour
 
         if (target != null)
         {
-            target.SendMessage("TakeDamage", this.damage);
+            target.GetComponent<Building>().TakeDamage(this.damage);
         }
         else
         {
@@ -273,6 +281,13 @@ public class Zombie : MonoBehaviour
         }
     }
 
+    protected void updateHealthbar()
+    {
+        Vector3 scale = this.healthbar.transform.localScale;
+        scale.y = ((float)this.health / (float)startingHealth) * this.originalHealthbarScale;
+        this.healthbar.transform.localScale = scale;
+    }
+
 
     private bool hasAlreadyDied = false;
     public void TakeDamage(int damage, Tower attacker)
@@ -280,6 +295,7 @@ public class Zombie : MonoBehaviour
         this.health -= damage;
         Player.Data.vals.BuildingUpgrades[attacker.Type].DamageDealt += damage;
         Player.Data.vals.BuildingUpgrades[attacker.Type].XP += this.XP;
+        updateHealthbar();
 
         if (health <= 0 && !hasAlreadyDied)
         {

@@ -89,6 +89,11 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void DealDamage(GameObject damageTaker)
     {
+        if (hits.Contains(damageTaker) || this.hits.Count > PierceCount)
+        {
+            return;
+        }
+
         this.hits.Add(damageTaker);
         damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
         if (this.hits.Count > PierceCount)

@@ -13,11 +13,11 @@ public class LevelManager : MonoBehaviour
     private bool duringNight = false;
 
     public float levelStartTime;
-    public float waveDuration;
-    public float timeBetweenWaves = 5f;
+    public float waveDuration = 2f;
+    public float timeBetweenWaves = 25f;
     public GameObject waveStartBanner;
     public int waveGroupCount = 2;
-    public float levelDuration = 3f;
+    public float levelDuration = 120f;
 
     private void Awake()
     {

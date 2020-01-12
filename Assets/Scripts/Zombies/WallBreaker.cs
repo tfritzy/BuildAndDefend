@@ -7,9 +7,9 @@ public class WallBreaker : Zombie
 
     public override ResourceDAO KillReward { get => new ResourceDAO(gold: 30); }
 
-    protected override void ChildrenSetup()
+    protected override void Setup()
     {
-        base.ChildrenSetup();
+        base.Setup();
         this.health = 500;
         this.damage = 25;
         this.attackSpeed = 3f;

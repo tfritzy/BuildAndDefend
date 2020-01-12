@@ -18,6 +18,9 @@ public abstract class Tower : Building
     protected float inaccuracy;
     protected float lastFireTime;
 
+    // Projectiles that stretch themselves until they hit the nearest object.
+    protected virtual bool hasScalingProjectiles => false;
+
     public virtual void SetTowerParameters()
     {
         this.Health = 100;
@@ -30,6 +33,7 @@ public abstract class Tower : Building
 
     protected override void Setup()
     {
+        base.Setup();
         SetTowerParameters();
         ConfigureUI();
     }
@@ -99,6 +103,29 @@ public abstract class Tower : Building
         return fireDirection;
     }
 
+    private void ScaleProjectile(GameObject projectile, Vector3 fireDirection)
+    {
+        ColliderDistance2D projectileLength = closestHaltingHit(fireDirection);
+        projectileLength.distance += (projectileLength.pointB - (Vector2)this.transform.position).magnitude;
+        Vector3 currentScale = projectile.transform.localScale;
+        currentScale.y = currentScale.y * projectileLength.distance;
+        projectile.transform.localScale = currentScale;
+    }
+
+    private void SetProjectileRotation(GameObject projectile, Vector3 fireDirection)
+    {
+        float degAngle = Mathf.Rad2Deg * Mathf.Atan(fireDirection.y / fireDirection.x);
+        if (fireDirection.x > 0)
+        {
+            degAngle -= 90;
+        }
+        else
+        {
+            degAngle += 90;
+        }
+        projectile.transform.eulerAngles = new Vector3(0, 0, degAngle);
+    }
+
     protected virtual void CreateProjectile(Vector2 fireDirection)
     {
         // TODO: Have towers pool projectiles
@@ -108,25 +135,12 @@ public abstract class Tower : Building
             new Quaternion(),
             null);
 
-        ColliderDistance2D projectileLength = closestHaltingHit(fireDirection);
-        projectileLength.distance += (projectileLength.pointB - (Vector2)this.transform.position).magnitude;
-        Vector3 currentScale = instProj.transform.localScale;
-        currentScale.y = currentScale.y * projectileLength.distance;
-        instProj.transform.localScale = currentScale;
-        float x = fireDirection.x;
-        float y = fireDirection.y;
-        float radAngle = Mathf.Atan(y / x);
-        float degAngle = Mathf.Rad2Deg * radAngle;
-        if (x > 0)
+        SetProjectileRotation(instProj, fireDirection);
+        if (hasScalingProjectiles)
         {
-            degAngle -= 90;
-        }
-        else
-        {
-            degAngle += 90;
+            ScaleProjectile(instProj, fireDirection);
         }
 
-        instProj.transform.eulerAngles = new Vector3(0, 0, degAngle);
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
         SetProjectileValues(instProj);
     }

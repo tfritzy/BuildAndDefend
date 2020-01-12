@@ -4805,5 +4805,31 @@
         7,
         7
     ],
-    "zombieSpawners": null
+    "zombieSpawners": [
+        {
+            "xPos": 40,
+            "yPos": 24,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 25,
+            "yPos": 40,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 25,
+            "yPos": 35,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 40,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 50,
+            "yPos": 35,
+            "spawnRate": 6
+        }
+    ],
 }

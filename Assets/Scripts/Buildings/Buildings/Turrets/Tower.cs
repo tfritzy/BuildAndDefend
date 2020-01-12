@@ -107,8 +107,62 @@ public abstract class Tower : Building
             this.transform.position,
             new Quaternion(),
             null);
+
+        ColliderDistance2D projectileLength = closestHaltingHit(fireDirection);
+        projectileLength.distance += (projectileLength.pointB - (Vector2)this.transform.position).magnitude;
+        Vector3 currentScale = instProj.transform.localScale;
+        currentScale.y = currentScale.y * projectileLength.distance;
+        instProj.transform.localScale = currentScale;
+        float x = fireDirection.x;
+        float y = fireDirection.y;
+        float radAngle = Mathf.Atan(y / x);
+        float degAngle = Mathf.Rad2Deg * radAngle;
+        if (x > 0)
+        {
+            degAngle -= 90;
+        }
+        else
+        {
+            degAngle += 90;
+        }
+
+        instProj.transform.eulerAngles = new Vector3(0, 0, degAngle);
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
         SetProjectileValues(instProj);
+    }
+
+    private ColliderDistance2D closestHaltingHit(Vector2 fireDirection)
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(this.transform.position, fireDirection);
+        ColliderDistance2D closestDist = new ColliderDistance2D();
+        closestDist.distance = 100f;
+        foreach (RaycastHit2D hit in hits)
+        {
+            if (!isHaltingObject(hit.transform.gameObject))
+            {
+                continue;
+            }
+
+            ColliderDistance2D distance = hit.transform.gameObject.GetComponent<Collider2D>().Distance(this.GetComponent<Collider2D>());
+            if (distance.distance < closestDist.distance)
+            {
+                closestDist = distance;
+            }
+        }
+        return closestDist;
+    }
+
+    private bool isHaltingObject(GameObject gameObject)
+    {
+        if (gameObject.CompareTag("Terrain") && gameObject.GetComponent<EnvironmentTile>().StopsProjectiles)
+        {
+            return true;
+        }
+        if (gameObject.GetComponent<Building>() != null && gameObject.GetComponent<Building>().StopsProjectiles)
+        {
+            return true;
+        }
+        return false;
     }
 
     protected virtual void SetProjectileValues(GameObject p)

@@ -11,5 +11,6 @@ public enum TowerType
     FlamePlume,
     FireMeteor,
     FireNova,
+    RapidFire,
 
 }

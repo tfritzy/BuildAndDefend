@@ -18,6 +18,8 @@ public abstract class Building : MonoBehaviour
 
     public abstract TowerType Type { get; }
     public abstract PathableType PathableType { get; }
+    public virtual bool StopsProjectiles => false;
+
 
     /// <summary>
     /// The (0,0) position of this building. It may occupy more spots as determined by Building.Size

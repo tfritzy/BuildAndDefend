@@ -28,8 +28,8 @@ public abstract class Building : MonoBehaviour
     public Vector2Int Position;
     void Start()
     {
-        this.Health = 200;
         Setup();
+        this.startingHealth = this.Health;
     }
 
     public void TakeDamage(int amount)
@@ -39,8 +39,6 @@ public abstract class Building : MonoBehaviour
         if (this.Health <= 0)
         {
             this.Health = 0;
-            Map.RemoveBuildingFromMap(this);
-            OnDeath();
             Delete();
         }
     }
@@ -48,12 +46,17 @@ public abstract class Building : MonoBehaviour
     protected virtual void OnDeath() { }
     protected virtual void Setup()
     {
-        this.startingHealth = this.Health;
         SetupHealthbar();
     }
 
+    private bool hasAlreadyBeenDeleted = false;
     public void Delete()
     {
+        if (hasAlreadyBeenDeleted)
+        {
+            return;
+        }
+        hasAlreadyBeenDeleted = true;
         OnDeath();
         Map.RemoveBuildingFromMap(this);
         Destroy(this.gameObject);
@@ -66,7 +69,7 @@ public abstract class Building : MonoBehaviour
     {
         this.healthbar = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Buildings}/{healthbarPrefabName}"),
-            this.transform.position + new Vector3(0, .5f),
+            this.transform.position + new Vector3(-.4f, .25f),
             new Quaternion(),
             this.transform);
         healthbar.name = "healthbar";
@@ -76,7 +79,7 @@ public abstract class Building : MonoBehaviour
     protected void updateHealthbar()
     {
         Vector3 scale = this.healthbar.transform.localScale;
-        scale.y = (this.Health / this.startingHealth) * this.startingHealth;
+        scale.x = ((float)this.Health / this.startingHealth) * this.startingHealthbarScale;
         this.healthbar.transform.localScale = scale;
     }
 }

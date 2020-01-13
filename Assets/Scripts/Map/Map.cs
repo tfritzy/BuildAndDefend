@@ -111,8 +111,6 @@ public static class Map
         }
     }
 
-
-
     public static void TellAllZombiesToGetNewPath()
     {
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");

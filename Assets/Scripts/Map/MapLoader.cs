@@ -85,6 +85,7 @@ public class MapLoader : MonoBehaviour
             return;
         GameObject selectedBlock = tileMap[tile];
         Map.Environment[x, y] = tileMap[tile].GetComponent<EnvironmentTile>();
+        Map.PathingGrid[x, y] = tileMap[tile].GetComponent<EnvironmentTile>().PathableType;
         Vector3 spawnLocation = Map.GridPointToWorldPoint(new Vector2(x, y));
         spawnLocation.z = blockSpawnZLocation;
         Instantiate(selectedBlock, spawnLocation, new Quaternion(), parent);

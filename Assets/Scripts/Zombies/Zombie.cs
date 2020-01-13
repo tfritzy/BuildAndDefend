@@ -214,8 +214,7 @@ public class Zombie : MonoBehaviour
                     continue;
                 }
 
-                if (IsWithinBounds(newX, newY) &&
-                    (Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
+                if ((Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
                     !v.Contains(newX + "," + newY))
                 {
                     List<Vector2Int> newList = new List<Vector2Int>(cur);

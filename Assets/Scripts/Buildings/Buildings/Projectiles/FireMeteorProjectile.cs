@@ -4,6 +4,9 @@ using UnityEngine;
 public class FireMeteorProjectile : TargetLocationFlyingProjectile
 {
     protected override TowerType TowerType => TowerType.FireMeteor;
+
+    protected override bool ConstantVelocity => true;
+
     public float startSize = 20f;
     public float endSize = 6f;
     public float startZ = -200;

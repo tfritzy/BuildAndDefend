@@ -7,7 +7,7 @@ public class FlameStalkerTower : AutoAttackTower
         this.Health = 100;
         this.ProjectileDamage = 30;
         this.inaccuracy = .9f;
-        this.ProjectileMovementSpeed = 3f;
+        this.ProjectileMovementSpeed = 1f;
         this.FireCooldown = 3f;
         this.ProjectileLifespan = 20f;
         this.Range = 5f;

@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private void load()
     {
         string fullPath = $"{Application.persistentDataPath}/{fileName}";
+        Debug.Log(fullPath);
         if (File.Exists(fullPath))
         {
             StreamReader reader = new StreamReader(fullPath, true);

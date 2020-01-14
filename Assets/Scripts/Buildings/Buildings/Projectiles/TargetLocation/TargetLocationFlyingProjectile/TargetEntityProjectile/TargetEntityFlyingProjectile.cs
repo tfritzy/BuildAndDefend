@@ -7,7 +7,10 @@ public abstract class TargetEntityFlyingProjectile : TargetLocationFlyingProject
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        this.TargetPosition = this.Target.transform.position;
+        if (this.Target != null)
+        {
+            this.TargetPosition = this.Target.transform.position;
+        }
     }
 
     public virtual void SetParameters(

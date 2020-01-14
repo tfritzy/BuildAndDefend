@@ -3,18 +3,10 @@ using UnityEngine;
 
 public class FireHawkProjectile : TargetLocationFlyingProjectile, ITargetLocationFlyingProjectile
 {
-    public float projectileMoveForce = 50;
     public float initialZVelocity = -50f;
     public float initialOpposingSpeed = 10f;
     protected override TowerType TowerType => TowerType.FireHawks;
-    protected override void UpdateLoop()
-    {
-        base.UpdateLoop();
-        Vector3 forceVector = this.TargetPosition - this.transform.position;
-        forceVector /= forceVector.magnitude;
-        forceVector *= projectileMoveForce;
-        this.GetComponent<Rigidbody>().AddForce(forceVector);
-    }
+    protected override bool ConstantVelocity => false;
 
     protected override void Startup()
     {

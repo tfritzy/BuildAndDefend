@@ -7,10 +7,11 @@ public enum TowerType
     FireBolt,
     Fireball,
     FireWall,
-    FireMissiles,
+    FireHawks,
     FlamePlume,
     FireMeteor,
     FireNova,
     RapidFire,
-    FireSpark
+    FireSpark,
+    FlameStalker,
 }

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class FireMissileProjectile : TargetLocationFlyingProjectile, ITargetLocationFlyingProjectile
+public class FireHawkProjectile : TargetLocationFlyingProjectile, ITargetLocationFlyingProjectile
 {
     public float projectileMoveForce = 50;
     public float initialZVelocity = -50f;
     public float initialOpposingSpeed = 10f;
-    protected override TowerType TowerType => TowerType.FireMissiles;
+    protected override TowerType TowerType => TowerType.FireHawks;
     protected override void UpdateLoop()
     {
         base.UpdateLoop();

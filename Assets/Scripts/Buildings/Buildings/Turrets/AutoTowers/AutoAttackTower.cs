@@ -63,6 +63,11 @@ public abstract class AutoAttackTower : Tower
 
     protected override void Fire()
     {
+        if (Vector3.Distance(this.transform.position, this.Target.transform.position) > this.Range)
+        {
+            this.Target = null;
+            return;
+        }
         Vector2 fireDirection = CalculateProjectileTargetLocation(this.Target.transform.position);
         CreateProjectile(fireDirection);
         lastFireTime = Time.time;

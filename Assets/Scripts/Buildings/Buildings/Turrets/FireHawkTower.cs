@@ -1,6 +1,6 @@
-public class FireMissilesTower : TargetLocationFlyingProjTower
+public class FireHawkTower : TargetLocationFlyingProjTower
 {
-    public override TowerType Type => TowerType.FireMissiles;
+    public override TowerType Type => TowerType.FireHawks;
     public override bool HasExplosiveProjectiles => true;
 
     public override void SetTowerParameters()

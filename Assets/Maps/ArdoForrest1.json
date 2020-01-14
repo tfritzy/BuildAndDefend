@@ -4827,6 +4827,36 @@
             "spawnRate": 3
         },
         {
+            "xPos": 40,
+            "yPos": 41,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 42,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 43,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 44,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 45,
+            "spawnRate": 3
+        },
+        {
+            "xPos": 40,
+            "yPos": 46,
+            "spawnRate": 3
+        },
+        {
             "xPos": 50,
             "yPos": 35,
             "spawnRate": 6

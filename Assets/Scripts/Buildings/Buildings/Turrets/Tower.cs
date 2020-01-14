@@ -16,21 +16,12 @@ public abstract class Tower : Building
     protected virtual string projectilePrefabName => this.Type.ToString();
     public override bool IsTower => true;
     protected float inaccuracy;
-    protected float lastFireTime;
+    public float lastFireTime;
 
     // Projectiles that stretch themselves until they hit the nearest object.
     protected virtual bool hasScalingProjectiles => false;
 
-    public virtual void SetTowerParameters()
-    {
-        this.Health = 100;
-        this.ProjectileDamage = 5;
-        this.inaccuracy = .05f;
-        this.ProjectileMovementSpeed = 10;
-        this.FireCooldown = 0.1f;
-        this.ProjectileLifespan = 1f;
-    }
-
+    public abstract void SetTowerParameters();
     protected override void Setup()
     {
         base.Setup();
@@ -40,6 +31,11 @@ public abstract class Tower : Building
 
     // Update is called once per frame
     void Update()
+    {
+        UpdateLoop();
+    }
+
+    protected virtual void UpdateLoop()
     {
         if (CanFire())
         {
@@ -64,7 +60,7 @@ public abstract class Tower : Building
         }
     }
 
-    protected bool CanFire()
+    protected virtual bool CanFire()
     {
         if (!IsBeingControlled)
         {

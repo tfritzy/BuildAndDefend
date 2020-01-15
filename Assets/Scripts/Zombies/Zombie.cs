@@ -16,6 +16,8 @@ public class Zombie : MonoBehaviour
     protected float attackSpeed = 1;
     protected bool needsNewPath;
     protected float calculateNewPathTime;
+    private GameObject healthbar;
+    private float originalHealthbarScale;
 
     public float zombieSpeed = .3f;
     public int health = 100;
@@ -23,8 +25,7 @@ public class Zombie : MonoBehaviour
     public GameObject target;
     public virtual ResourceDAO KillReward { get => new ResourceDAO(gold: 10); }
     public virtual int XP => 1;
-    private GameObject healthbar;
-    private float originalHealthbarScale;
+    public static float lastZombieFindPathTime;
 
 
     // Use this for initialization
@@ -128,6 +129,10 @@ public class Zombie : MonoBehaviour
         (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: !attackClosestBuilding);
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
         this.path = await FindPath(locationInGrid, this.targetLoc);
+        if (this.path == null)
+        {
+            return null;
+        }
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
         foreach (Collider2D col in nearbyZombs)
@@ -180,6 +185,13 @@ public class Zombie : MonoBehaviour
     // Perform BFS to find shortest path to the desired location
     public Task<List<Vector2>> FindPath(Vector2Int startLoc, Vector2Int endLoc, bool ignoreBuildings = false)
     {
+        if (Time.time < Zombie.lastZombieFindPathTime + .2f)
+        {
+            this.needsNewPath = true;
+            return Task.FromResult<List<Vector2>>(null);
+        }
+
+        Zombie.lastZombieFindPathTime = Time.time;
         return Task.Run(() =>
         {
             LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();

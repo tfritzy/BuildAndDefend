@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Zombie : MonoBehaviour
@@ -27,9 +28,9 @@ public class Zombie : MonoBehaviour
 
 
     // Use this for initialization
-    void Start()
+    async void Start()
     {
-        RestartPath();
+        await RestartPath();
         Setup();
     }
 
@@ -49,11 +50,11 @@ public class Zombie : MonoBehaviour
         this.calculateNewPathTime = Time.time + Random.Range(.1f, 1f);
     }
 
-    protected void FollowPath()
+    protected async void FollowPath()
     {
         if (this.needsNewPath && Time.time > this.calculateNewPathTime)
         {
-            RestartPath();
+            await RestartPath();
             this.needsNewPath = false;
         }
         if (atFinalLoc)
@@ -65,7 +66,7 @@ public class Zombie : MonoBehaviour
         }
         if (path == null || path.Count == 0)
         {
-            RestartPath(attackClosestBuilding: true);
+            await RestartPath(attackClosestBuilding: true);
             return;
         }
         this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
@@ -88,7 +89,7 @@ public class Zombie : MonoBehaviour
         this.startingHealth = health;
     }
 
-    void Attack()
+    async void Attack()
     {
         if (!atFinalLoc)
         {
@@ -106,7 +107,7 @@ public class Zombie : MonoBehaviour
         }
         else
         {
-            RestartPath();
+            await RestartPath();
         }
         lastAttackTime = Time.time;
     }
@@ -120,13 +121,13 @@ public class Zombie : MonoBehaviour
         SubscribeToPath();
     }
 
-    public virtual List<Vector2> RestartPath(bool attackClosestBuilding = false)
+    public async virtual Task<List<Vector2>> RestartPath(bool attackClosestBuilding = false)
     {
         pathProgress = 0;
         UnsubscribeToPath();
         (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: !attackClosestBuilding);
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
-        this.path = FindPath(locationInGrid, this.targetLoc);
+        this.path = await FindPath(locationInGrid, this.targetLoc);
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
         foreach (Collider2D col in nearbyZombs)
@@ -177,62 +178,65 @@ public class Zombie : MonoBehaviour
     }
 
     // Perform BFS to find shortest path to the desired location
-    public List<Vector2> FindPath(Vector2Int startLoc, Vector2Int endLoc, bool ignoreBuildings = false)
+    public Task<List<Vector2>> FindPath(Vector2Int startLoc, Vector2Int endLoc, bool ignoreBuildings = false)
     {
-        LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();
-        HashSet<string> v = new HashSet<string>();
-
-        List<Vector2Int> firstElement = new List<Vector2Int>();
-        firstElement.Add(startLoc);
-        q.AddFirst(firstElement);
-
-        int[,] searchDirections = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-
-        while (q.Count > 0)
+        return Task.Run(() =>
         {
-            List<Vector2Int> cur = q.First.Value;
+            LinkedList<List<Vector2Int>> q = new LinkedList<List<Vector2Int>>();
+            HashSet<string> v = new HashSet<string>();
 
-            int x = cur[cur.Count - 1][0];
-            int y = cur[cur.Count - 1][1];
-            if (v.Contains(x + "," + y))
-            {
-                q.RemoveFirst();
-                continue;
-            }
+            List<Vector2Int> firstElement = new List<Vector2Int>();
+            firstElement.Add(startLoc);
+            q.AddFirst(firstElement);
 
-            if (x == endLoc[0] && y == endLoc[1])
-            {
-                return ConvertGridPointListToWorldPoint(cur);
-            }
+            int[,] searchDirections = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
-            for (int i = 0; i < searchDirections.GetLength(0); i++)
+            while (q.Count > 0)
             {
-                int newX = x + searchDirections[i, 0];
-                int newY = y + searchDirections[i, 1];
-                if (!IsWithinBounds(newX, newY))
+                List<Vector2Int> cur = q.First.Value;
+
+                int x = cur[cur.Count - 1][0];
+                int y = cur[cur.Count - 1][1];
+                if (v.Contains(x + "," + y))
                 {
+                    q.RemoveFirst();
                     continue;
                 }
 
-                if ((Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
-                    !v.Contains(newX + "," + newY))
+                if (x == endLoc[0] && y == endLoc[1])
                 {
-                    List<Vector2Int> newList = new List<Vector2Int>(cur);
-                    newList.Add(new Vector2Int(newX, newY));
-                    q.AddLast(newList);
+                    return ConvertGridPointListToWorldPoint(cur);
                 }
+
+                for (int i = 0; i < searchDirections.GetLength(0); i++)
+                {
+                    int newX = x + searchDirections[i, 0];
+                    int newY = y + searchDirections[i, 1];
+                    if (!IsWithinBounds(newX, newY))
+                    {
+                        continue;
+                    }
+
+                    if ((Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
+                        !v.Contains(newX + "," + newY))
+                    {
+                        List<Vector2Int> newList = new List<Vector2Int>(cur);
+                        newList.Add(new Vector2Int(newX, newY));
+                        q.AddLast(newList);
+                    }
+                }
+
+                v.Add(x + "," + y);
+                if (q.Count == 1)
+                {
+                    this.target = null;
+                    return ConvertGridPointListToWorldPoint(q.First.Value);
+                }
+                q.RemoveFirst();
             }
 
-            v.Add(x + "," + y);
-            if (q.Count == 1)
-            {
-                this.target = null;
-                return ConvertGridPointListToWorldPoint(q.First.Value);
-            }
-            q.RemoveFirst();
-        }
-
-        return new List<Vector2>();
+            return new List<Vector2>();
+        });
     }
 
     private bool IsPathable(int x, int y)

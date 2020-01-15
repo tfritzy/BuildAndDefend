@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class FireNovaTower : TargetLocationTower
+public class FireNovaTower : AutoAttackTower
 {
     public override TowerType Type => TowerType.FireNova;
-    private int numProjectiles = 36;
+    private int numProjectiles = 18;
     private float offset;
     protected float damageTickGap;
 
@@ -13,7 +13,7 @@ public class FireNovaTower : TargetLocationTower
         {
             GameObject instProj = Instantiate(
                 Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
-                lastInputPosition,
+                this.transform.position,
                 new Quaternion()
             );
             instProj.GetComponent<Rigidbody2D>().velocity = new Vector2(
@@ -38,8 +38,9 @@ public class FireNovaTower : TargetLocationTower
         this.ProjectileDamage = 10;
         this.inaccuracy = .1f;
         this.ProjectileMovementSpeed = .7f;
-        this.FireCooldown = .3f;
-        this.ProjectileLifespan = .8f;
+        this.FireCooldown = 4f;
+        this.ProjectileLifespan = 1.5f;
         this.damageTickGap = .5f;
+        this.Range = 1.5f;
     }
 }

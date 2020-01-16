@@ -31,5 +31,5 @@ public abstract class DragSelectTower : Tower
         }
     }
 
-    protected abstract void CreateProjectile();
+    protected abstract GameObject CreateProjectile();
 }

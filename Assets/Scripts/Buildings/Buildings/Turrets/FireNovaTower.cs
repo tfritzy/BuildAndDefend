@@ -7,7 +7,7 @@ public class FireNovaTower : AutoAttackTower
     private float offset;
     protected float damageTickGap;
 
-    protected override void CreateProjectile(UnityEngine.Vector2 fireDirection)
+    protected override GameObject CreateProjectile(UnityEngine.Vector2 fireDirection)
     {
         for (int i = 0; i < numProjectiles; i++)
         {
@@ -21,6 +21,7 @@ public class FireNovaTower : AutoAttackTower
                 Mathf.Sin(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i)) * (float)this.ProjectileMovementSpeed;
             SetProjectileValues(instProj);
         }
+        return null;
     }
 
     protected override void SetProjectileValues(GameObject p)

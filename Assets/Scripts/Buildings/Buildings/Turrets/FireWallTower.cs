@@ -17,7 +17,7 @@ public class FireWallTower : DragSelectTower
         this.FireDamageTickGapInSeconds = 1f;
     }
 
-    protected override void CreateProjectile()
+    protected override GameObject CreateProjectile()
     {
         List<GameObject> tilesInBetween = new List<GameObject>();
         RaycastHit2D[] hits = Physics2D.LinecastAll(this.dragStartPos, this.dragEndPos);
@@ -45,6 +45,7 @@ public class FireWallTower : DragSelectTower
             SetProjectileValues(fireSegmentInst);
         }
         lastFireTime = Time.time;
+        return fireWallSegment;
     }
 
     protected override void SetProjectileValues(GameObject p)

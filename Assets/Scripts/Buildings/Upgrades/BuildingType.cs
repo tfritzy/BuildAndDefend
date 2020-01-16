@@ -14,4 +14,5 @@ public enum TowerType
     RapidFire,
     FireSpark,
     FlameStalker,
+    FireCannon,
 }

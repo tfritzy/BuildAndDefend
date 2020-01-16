@@ -1,7 +1,8 @@
-public class RapidFireTower : Tower
+using UnityEngine;
+
+public class RapidFireTower : StretchProjectileTower
 {
     public override TowerType Type => TowerType.RapidFire;
-    protected override bool hasScalingProjectiles => true;
 
     public override void SetTowerParameters()
     {

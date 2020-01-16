@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class Tower : Building
 {
@@ -19,8 +20,6 @@ public abstract class Tower : Building
     public float lastFireTime;
 
     // Projectiles that stretch themselves until they hit the nearest object.
-    protected virtual bool hasScalingProjectiles => false;
-
     public abstract void SetTowerParameters();
     protected override void Setup()
     {
@@ -48,16 +47,15 @@ public abstract class Tower : Building
         TowerSelectManager.AddTowerButton(this.Type);
     }
 
-    protected virtual void Fire()
+    protected virtual void Fire(InputDAO input)
     {
-        Vector2? inputLocation = GetInputLocation();
-        if (inputLocation.HasValue)
+        if (!(input is BasicInputDAO))
         {
-            Vector2 fireDirection = CalculateProjectileTargetLocation(inputLocation.Value);
-            CreateProjectile(fireDirection);
-
-            lastFireTime = Time.time;
+            throw new ArgumentException("Input was not the correct type.");
         }
+        Vector2 fireDirection = CalculateProjectileTargetLocation(((BasicInputDAO)input).location.Value);
+        CreateProjectile(fireDirection);
+        lastFireTime = Time.time;
     }
 
     protected virtual bool CanFire()
@@ -69,20 +67,22 @@ public abstract class Tower : Building
         return (Time.time > FireCooldown + lastFireTime);
     }
 
-    protected Vector2? GetInputLocation()
+    protected virtual void InputLoop()
     {
-        if (Input.GetMouseButton(0) || Input.touchCount > 0)
+        ProcessInput(GetInput());
+    }
+
+    protected virtual InputController InputController => new BasicClickInput();
+    protected InputDAO GetInput()
+    {
+        return InputController.GetInput();
+    }
+
+    protected virtual void ProcessInput(InputDAO input)
+    {
+        if (input.HasValue() && CanFire())
         {
-            // TODO: Check what will happen if click on 0,0,0
-            Vector2 location = Input.mousePosition != Vector3.zero
-                ? (Vector2)Input.mousePosition
-                : Input.GetTouch(0).position;
-            location = GameObjectCache.Camera.ScreenToWorldPoint(location);
-            return location;
-        }
-        else
-        {
-            return null;
+            Fire(input);
         }
     }
 
@@ -99,15 +99,6 @@ public abstract class Tower : Building
         return fireDirection;
     }
 
-    private void ScaleProjectile(GameObject projectile, Vector3 fireDirection)
-    {
-        ColliderDistance2D projectileLength = closestHaltingHit(fireDirection);
-        projectileLength.distance += (projectileLength.pointB - (Vector2)this.transform.position).magnitude;
-        Vector3 currentScale = projectile.transform.localScale;
-        currentScale.y = currentScale.y * projectileLength.distance;
-        projectile.transform.localScale = currentScale;
-    }
-
     private void SetProjectileRotation(GameObject projectile, Vector3 fireDirection)
     {
         float degAngle = Mathf.Rad2Deg * Mathf.Atan(fireDirection.y / fireDirection.x);
@@ -122,7 +113,7 @@ public abstract class Tower : Building
         projectile.transform.eulerAngles = new Vector3(0, 0, degAngle);
     }
 
-    protected virtual void CreateProjectile(Vector2 fireDirection)
+    protected virtual GameObject CreateProjectile(Vector2 fireDirection)
     {
         // TODO: Have towers pool projectiles
         GameObject instProj = Instantiate(
@@ -132,37 +123,13 @@ public abstract class Tower : Building
             null);
 
         SetProjectileRotation(instProj, fireDirection);
-        if (hasScalingProjectiles)
-        {
-            ScaleProjectile(instProj, fireDirection);
-        }
 
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
         SetProjectileValues(instProj);
+        return instProj;
     }
 
-    private ColliderDistance2D closestHaltingHit(Vector2 fireDirection)
-    {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(this.transform.position, fireDirection);
-        ColliderDistance2D closestDist = new ColliderDistance2D();
-        closestDist.distance = 100f;
-        foreach (RaycastHit2D hit in hits)
-        {
-            if (!isHaltingObject(hit.transform.gameObject))
-            {
-                continue;
-            }
-
-            ColliderDistance2D distance = hit.transform.gameObject.GetComponent<Collider2D>().Distance(this.GetComponent<Collider2D>());
-            if (distance.distance < closestDist.distance)
-            {
-                closestDist = distance;
-            }
-        }
-        return closestDist;
-    }
-
-    private bool isHaltingObject(GameObject gameObject)
+    protected bool isHaltingObject(GameObject gameObject)
     {
         if (gameObject.CompareTag("Terrain") && gameObject.GetComponent<EnvironmentTile>().StopsProjectiles)
         {

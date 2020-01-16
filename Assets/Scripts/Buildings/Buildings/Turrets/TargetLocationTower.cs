@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class TargetLocationTower : Tower
@@ -5,25 +6,26 @@ public abstract class TargetLocationTower : Tower
     protected float explosionDelay;
     protected Vector3 lastInputPosition;
 
-    protected override void Fire()
+    protected override void Fire(InputDAO input)
     {
-        Vector2? inputLocation = GetInputLocation();
-        if (inputLocation.HasValue)
+        if (!(input is BasicInputDAO))
         {
-            lastInputPosition = inputLocation.Value;
-            CreateProjectile(inputLocation.Value);
-            lastFireTime = Time.time;
+            throw new ArgumentException("Input was not the correct type.");
         }
+
+        CreateProjectile(((BasicInputDAO)input).location.Value);
+        lastFireTime = Time.time;
     }
 
-    protected override void CreateProjectile(UnityEngine.Vector2 fireDirection)
+    protected override GameObject CreateProjectile(UnityEngine.Vector2 fireDirection)
     {
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
-            this.transform.position,
+            fireDirection,
             new Quaternion()
         );
         SetProjectileValues(instProj);
+        return instProj;
     }
 
     protected override void SetProjectileValues(GameObject p)

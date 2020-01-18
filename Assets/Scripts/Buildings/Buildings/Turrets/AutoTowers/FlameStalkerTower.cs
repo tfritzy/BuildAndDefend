@@ -4,6 +4,7 @@ using UnityEngine;
 public class FlameStalkerTower : Tower
 {
     public override TowerType Type => TowerType.FlameStalker;
+    public override Vector2Int Size => new Vector2Int(0, 0);
 
     protected override InputController inputController
     {
@@ -28,12 +29,26 @@ public class FlameStalkerTower : Tower
         lastFireTime = Time.time;
     }
 
+    protected override GameObject CreateProjectile(InputDAO input)
+    {
+        // TODO: Have towers pool projectiles
+        GameObject instProj = Instantiate(
+            Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}"),
+            this.transform.position,
+            new Quaternion(),
+            null);
+
+        SetProjectileValues(instProj, input);
+        return instProj;
+    }
+
+
     public override void SetTowerParameters()
     {
         this.Health = 100;
         this.ProjectileDamage = 30;
         this.inaccuracy = .9f;
-        this.ProjectileMovementSpeed = 1f;
+        this.ProjectileMovementSpeed = 3f;
         this.FireCooldown = 3f;
         this.ProjectileLifespan = 20f;
         this.Range = 5f;

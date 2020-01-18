@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlamePlumeProjectile : TargetLocationSpawningProjectile
+public class FlamePlumeProjectile : TimedExplosionProjectile
 {
     protected override TowerType TowerType => TowerType.FlamePlume;
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITargetLocationSpawningProjectile
+public interface ITimedExplosionProjectile
 {
-    float SpawnDelay { get; set; }
+    float ExplosionDelay { get; set; }
 
     void SetParameters(
         int damage,
@@ -12,6 +12,5 @@ public interface ITargetLocationSpawningProjectile
         int pierceCount,
         Tower owner,
         float explosionRadius,
-        float spawnDelay,
-        Vector2 targetPosition);
+        float spawnDelay);
 }

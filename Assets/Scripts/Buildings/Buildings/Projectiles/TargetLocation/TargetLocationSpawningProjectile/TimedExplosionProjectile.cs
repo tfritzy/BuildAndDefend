@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationSpawningProjectile : TargetLocationProjectile, ITargetLocationSpawningProjectile
+public abstract class TimedExplosionProjectile : Projectile, ITimedExplosionProjectile
 {
-    protected float spawnDelay;
-    public float SpawnDelay { get => spawnDelay; set => spawnDelay = value; }
+    protected float explosionDelay;
+    public float ExplosionDelay { get => explosionDelay; set => explosionDelay = value; }
     protected float spawnTimerStartTime;
 
 
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        if (Time.time > spawnTimerStartTime + spawnDelay)
+        if (Time.time > spawnTimerStartTime + ExplosionDelay)
         {
-            this.gameObject.transform.position = TargetPosition;
             OnHalt(this.gameObject);
         }
     }
@@ -32,15 +31,13 @@ public abstract class TargetLocationSpawningProjectile : TargetLocationProjectil
         int pierceCount,
         Tower owner,
         float explosionRadius,
-        float spawnDelay,
-        Vector2 targetPosition)
+        float spawnDelay)
     {
         this.Damage = damage;
         this.Lifespan = lifespan;
         this.PierceCount = pierceCount;
         this.Owner = owner;
         this.ExplosionRadius = explosionRadius;
-        this.spawnDelay = spawnDelay;
-        this.TargetPosition = targetPosition;
+        this.explosionDelay = spawnDelay;
     }
 }

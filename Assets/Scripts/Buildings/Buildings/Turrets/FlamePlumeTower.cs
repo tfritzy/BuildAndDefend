@@ -18,15 +18,25 @@ public class FlamePlumeTower : TargetLocationTower
 
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
-        p.GetComponent<FlamePlumeProjectile>().SetParameters(
+        p.GetComponent<ITimedExplosionProjectile>().SetParameters(
             this.ProjectileDamage,
             this.ProjectileLifespan,
             this.ProjectilePierce,
             this,
             this.projectileExplosionRadius,
-            this.explosionDelay,
-            ((VectorInputDAO)input).location.Value
+            this.explosionDelay
         );
+    }
+
+    protected override GameObject CreateProjectile(InputDAO input)
+    {
+        GameObject instProj = Instantiate(
+            Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
+            ((VectorInputDAO)input).location.Value,
+            new Quaternion()
+        );
+        SetProjectileValues(instProj, input);
+        return instProj;
     }
 
     protected override void Setup()

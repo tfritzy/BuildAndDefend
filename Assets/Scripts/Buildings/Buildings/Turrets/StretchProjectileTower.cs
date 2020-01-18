@@ -11,10 +11,10 @@ public abstract class StretchProjectileTower : Tower
         projectile.transform.localScale = currentScale;
     }
 
-    protected override GameObject CreateProjectile(UnityEngine.Vector2 fireDirection)
+    protected override GameObject CreateProjectile(InputDAO input)
     {
-        GameObject instProj = base.CreateProjectile(fireDirection);
-        ScaleProjectile(instProj, fireDirection);
+        GameObject instProj = base.CreateProjectile(input);
+        ScaleProjectile(instProj, ((VectorInputDAO)input).location.Value);
         return instProj;
     }
 

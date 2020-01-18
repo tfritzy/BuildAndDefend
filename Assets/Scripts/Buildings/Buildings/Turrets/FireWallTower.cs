@@ -1,11 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireWallTower : DragSelectTower
+public class FireWallTower : Tower
 {
     public override TowerType Type => TowerType.FireWall;
     public int MaxFireSegments;
     public float FireDamageTickGapInSeconds;
+    protected override InputController inputController
+    {
+        get
+        {
+            if (_inputController == null)
+            {
+                _inputController = new DragSelectInput();
+            }
+            return _inputController;
+        }
+    }
+
 
     public override void SetTowerParameters()
     {
@@ -17,10 +29,12 @@ public class FireWallTower : DragSelectTower
         this.FireDamageTickGapInSeconds = 1f;
     }
 
-    protected override GameObject CreateProjectile()
+    protected override GameObject CreateProjectile(InputDAO input)
     {
         List<GameObject> tilesInBetween = new List<GameObject>();
-        RaycastHit2D[] hits = Physics2D.LinecastAll(this.dragStartPos, this.dragEndPos);
+        RaycastHit2D[] hits = Physics2D.LinecastAll(
+            ((DragSelectInputDAO)input).point1.Value,
+            ((DragSelectInputDAO)input).point2.Value);
         foreach (RaycastHit2D hit in hits)
         {
             if (!hit.collider.gameObject.CompareTag(Tags.Terrain))
@@ -41,14 +55,14 @@ public class FireWallTower : DragSelectTower
         for (int i = 0; i < Mathf.Min(tilesInBetween.Count, MaxFireSegments); i++)
         {
             GameObject tile = tilesInBetween[i];
-            GameObject fireSegmentInst = Instantiate(fireWallSegment, tile.transform.position, new Quaternion(), null);
-            SetProjectileValues(fireSegmentInst);
+            GameObject fireSegmentInst = Instantiate(fireWallSegment, tile.transform.position + Vector3.back, new Quaternion(), null);
+            SetProjectileValues(fireSegmentInst, input);
         }
         lastFireTime = Time.time;
         return fireWallSegment;
     }
 
-    protected override void SetProjectileValues(GameObject p)
+    protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<ConstantDamageProjectile>().SetParameters(
             this.ProjectileDamage,

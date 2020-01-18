@@ -1,13 +1,25 @@
 using UnityEngine;
 
-public class FireNovaTower : AutoAttackTower
+public class FireNovaTower : Tower
 {
     public override TowerType Type => TowerType.FireNova;
     private int numProjectiles = 18;
     private float offset;
     protected float damageTickGap;
 
-    protected override GameObject CreateProjectile(UnityEngine.Vector2 fireDirection)
+    protected override InputController inputController
+    {
+        get
+        {
+            if (this._inputController == null)
+            {
+                this._inputController = new VectorAutoInput(this);
+            }
+            return this._inputController;
+        }
+    }
+
+    protected override GameObject CreateProjectile(InputDAO input)
     {
         for (int i = 0; i < numProjectiles; i++)
         {
@@ -19,12 +31,12 @@ public class FireNovaTower : AutoAttackTower
             instProj.GetComponent<Rigidbody2D>().velocity = new Vector2(
                 Mathf.Cos(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i),
                 Mathf.Sin(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i)) * (float)this.ProjectileMovementSpeed;
-            SetProjectileValues(instProj);
+            SetProjectileValues(instProj, input);
         }
         return null;
     }
 
-    protected override void SetProjectileValues(GameObject p)
+    protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<IConstantDamageProjectile>().SetParameters(
             this.ProjectileDamage,

@@ -4,7 +4,7 @@ public abstract class TargetLocationFlyingProjTower : TargetLocationTower
 {
     protected float projectileMovementSpeed;
 
-    protected override void SetProjectileValues(GameObject p)
+    protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<TargetLocationFlyingProjectile>().SetParameters(
             this.ProjectileDamage,
@@ -12,7 +12,7 @@ public abstract class TargetLocationFlyingProjTower : TargetLocationTower
             this.ProjectilePierce,
             this,
             this.projectileExplosionRadius,
-            this.lastInputPosition,
+            ((VectorInputDAO)input).location.Value,
             this.projectileMovementSpeed
         );
     }

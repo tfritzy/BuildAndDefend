@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class BasicClickInput : InputController
+public class VectorClickInput : InputController
 {
-    private BasicInputDAO _inputDAO;
-    public BasicInputDAO PlayerInput
+    private VectorInputDAO _inputDAO;
+    public VectorInputDAO PlayerInput
     {
         get
         {
             if (_inputDAO == null)
             {
-                _inputDAO = new BasicInputDAO();
+                _inputDAO = new VectorInputDAO(null);
             }
             return _inputDAO;
         }
@@ -21,18 +21,18 @@ public class BasicClickInput : InputController
 
     public override InputDAO GetInput()
     {
-        if (Input.GetMouseButton(0) || Input.touchCount > 0)
+        if (Input.GetMouseButton(0) || Input.touchCount > 0 && IsActive)
         {
             // TODO: Check what will happen if click on 0,0,0
             PlayerInput.location = Input.mousePosition != Vector3.zero
                 ? (Vector2)Input.mousePosition
                 : Input.GetTouch(0).position;
             PlayerInput.location = GameObjectCache.Camera.ScreenToWorldPoint(PlayerInput.location.Value);
-            return PlayerInput;
         }
         else
         {
-            return null;
+            PlayerInput.location = null;
         }
+        return PlayerInput;
     }
 }

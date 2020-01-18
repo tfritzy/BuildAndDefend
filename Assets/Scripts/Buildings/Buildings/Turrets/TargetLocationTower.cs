@@ -4,31 +4,30 @@ using UnityEngine;
 public abstract class TargetLocationTower : Tower
 {
     protected float explosionDelay;
-    protected Vector3 lastInputPosition;
 
     protected override void Fire(InputDAO input)
     {
-        if (!(input is BasicInputDAO))
+        if (!(input is VectorInputDAO))
         {
             throw new ArgumentException("Input was not the correct type.");
         }
 
-        CreateProjectile(((BasicInputDAO)input).location.Value);
+        CreateProjectile(input);
         lastFireTime = Time.time;
     }
 
-    protected override GameObject CreateProjectile(UnityEngine.Vector2 fireDirection)
+    protected override GameObject CreateProjectile(InputDAO input)
     {
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
-            fireDirection,
+            ((VectorInputDAO)input).location.Value,
             new Quaternion()
         );
-        SetProjectileValues(instProj);
+        SetProjectileValues(instProj, input);
         return instProj;
     }
 
-    protected override void SetProjectileValues(GameObject p)
+    protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<ITargetLocationProjectile>().SetParameters(
             this.ProjectileDamage,
@@ -36,6 +35,6 @@ public abstract class TargetLocationTower : Tower
             this.ProjectilePierce,
             this,
             this.projectileExplosionRadius,
-            this.lastInputPosition);
+            ((VectorInputDAO)input).location.Value);
     }
 }

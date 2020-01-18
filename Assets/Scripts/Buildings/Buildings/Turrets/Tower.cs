@@ -13,11 +13,11 @@ public abstract class Tower : Building
     public override PathableType PathableType => PathableType.UnPathable;
     public virtual bool HasExplosiveProjectiles => false;
     public float projectileExplosionRadius;
-    public bool IsBeingControlled;
     protected virtual string projectilePrefabName => this.Type.ToString();
     public override bool IsTower => true;
     protected float inaccuracy;
     public float lastFireTime;
+    public float Range;
 
     // Projectiles that stretch themselves until they hit the nearest object.
     public abstract void SetTowerParameters();
@@ -36,10 +36,7 @@ public abstract class Tower : Building
 
     protected virtual void UpdateLoop()
     {
-        if (CanFire())
-        {
-            Fire();
-        }
+        InputLoop();
     }
 
     protected virtual void ConfigureUI()
@@ -49,21 +46,12 @@ public abstract class Tower : Building
 
     protected virtual void Fire(InputDAO input)
     {
-        if (!(input is BasicInputDAO))
-        {
-            throw new ArgumentException("Input was not the correct type.");
-        }
-        Vector2 fireDirection = CalculateProjectileTargetLocation(((BasicInputDAO)input).location.Value);
-        CreateProjectile(fireDirection);
+        CreateProjectile(input);
         lastFireTime = Time.time;
     }
 
     protected virtual bool CanFire()
     {
-        if (!IsBeingControlled)
-        {
-            return false;
-        }
         return (Time.time > FireCooldown + lastFireTime);
     }
 
@@ -72,10 +60,21 @@ public abstract class Tower : Building
         ProcessInput(GetInput());
     }
 
-    protected virtual InputController InputController => new BasicClickInput();
+    protected virtual InputController inputController
+    {
+        get
+        {
+            if (_inputController == null)
+            {
+                _inputController = new VectorClickInput();
+            }
+            return _inputController;
+        }
+    }
+    protected InputController _inputController;
     protected InputDAO GetInput()
     {
-        return InputController.GetInput();
+        return inputController.GetInput();
     }
 
     protected virtual void ProcessInput(InputDAO input)
@@ -113,8 +112,10 @@ public abstract class Tower : Building
         projectile.transform.eulerAngles = new Vector3(0, 0, degAngle);
     }
 
-    protected virtual GameObject CreateProjectile(Vector2 fireDirection)
+    protected virtual GameObject CreateProjectile(InputDAO input)
     {
+        Vector2 fireDirection = CalculateProjectileTargetLocation(((VectorInputDAO)input).location.Value);
+
         // TODO: Have towers pool projectiles
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}"),
@@ -122,10 +123,10 @@ public abstract class Tower : Building
             new Quaternion(),
             null);
 
-        SetProjectileRotation(instProj, fireDirection);
+        SetProjectileRotation(instProj, ((VectorInputDAO)input).location.Value);
 
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
-        SetProjectileValues(instProj);
+        SetProjectileValues(instProj, input);
         return instProj;
     }
 
@@ -142,7 +143,7 @@ public abstract class Tower : Building
         return false;
     }
 
-    protected virtual void SetProjectileValues(GameObject p)
+    protected virtual void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<Projectile>().SetParameters(
             this.ProjectileDamage,
@@ -155,5 +156,10 @@ public abstract class Tower : Building
     protected override void OnDeath()
     {
         LevelManager.ShowLoseScreen();
+    }
+
+    public void SetIsActive(bool value)
+    {
+        this.inputController.IsActive = value;
     }
 }

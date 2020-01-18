@@ -49,13 +49,11 @@ public abstract class ChargeAttack : Tower
         return ((Time.time - startChargeTime) / chargeTime);
     }
 
-    protected override void Fire()
+    protected override void Fire(InputDAO input)
     {
-        Vector2? inputLocation = GetInputLocation();
-
-        if (inputLocation.HasValue)
+        if (input.HasValue())
         {
-            lastTouchLocation = inputLocation.Value;
+            lastTouchLocation = ((VectorInputDAO)input).location.Value;
             if (!isCharging)
             {
                 startChargeTime = Time.time;
@@ -67,7 +65,7 @@ public abstract class ChargeAttack : Tower
             if (isCharging)
             {
                 Vector2 fireDirection = CalculateProjectileTargetLocation(lastTouchLocation);
-                CreateProjectile(fireDirection);
+                CreateProjectile(input);
                 isCharging = false;
             }
         }

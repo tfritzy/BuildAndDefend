@@ -16,7 +16,7 @@ public class FlamePlumeTower : TargetLocationTower
         this.explosionDelay = 1f;
     }
 
-    protected override void SetProjectileValues(GameObject p)
+    protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<FlamePlumeProjectile>().SetParameters(
             this.ProjectileDamage,
@@ -25,7 +25,7 @@ public class FlamePlumeTower : TargetLocationTower
             this,
             this.projectileExplosionRadius,
             this.explosionDelay,
-            this.lastInputPosition
+            ((VectorInputDAO)input).location.Value
         );
     }
 

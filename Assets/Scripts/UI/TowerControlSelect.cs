@@ -14,11 +14,11 @@ public class TowerControlSelect : MonoBehaviour
             {
                 if (Map.BuildingsDict[key].GetComponent<Tower>().Type == selectType)
                 {
-                    Map.BuildingsDict[key].GetComponent<Tower>().IsBeingControlled = true;
+                    Map.BuildingsDict[key].GetComponent<Tower>().SetIsActive(true);
                 }
                 else
                 {
-                    Map.BuildingsDict[key].GetComponent<Tower>().IsBeingControlled = false;
+                    Map.BuildingsDict[key].GetComponent<Tower>().SetIsActive(false);
                 }
             }
         }

@@ -2,6 +2,17 @@ public class FireHawkTower : TargetLocationFlyingProjTower
 {
     public override TowerType Type => TowerType.FireHawks;
     public override bool HasExplosiveProjectiles => true;
+    protected virtual InputController inputController
+    {
+        get
+        {
+            if (_inputController == null)
+            {
+                _inputController = new TargetObjectAutoInput(this);
+            }
+            return _inputController;
+        }
+    }
 
     public override void SetTowerParameters()
     {

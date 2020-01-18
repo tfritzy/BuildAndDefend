@@ -87,6 +87,14 @@ public abstract class Projectile : MonoBehaviour
         }
     }
 
+    protected virtual void DealExplosiveDamage(List<GameObject> damageTakers)
+    {
+        foreach (GameObject damageTaker in damageTakers)
+        {
+            damageTaker.GetComponent<Zombie>().TakeDamage(this.Damage, this.Owner);
+        }
+    }
+
     protected virtual void DealDamage(GameObject damageTaker)
     {
         if (hits.Contains(damageTaker) || this.hits.Count > PierceCount)
@@ -151,7 +159,7 @@ public abstract class Projectile : MonoBehaviour
     protected virtual void Explode()
     {
         List<GameObject> hits = GetExplosionHits();
-        DealDamage(hits);
+        DealExplosiveDamage(hits);
         GameObject explosion = GetExplosionGameObject();
         explosion.transform.position = this.transform.position;
     }

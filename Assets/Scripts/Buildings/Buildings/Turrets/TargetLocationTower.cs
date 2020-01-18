@@ -20,7 +20,7 @@ public abstract class TargetLocationTower : Tower
     {
         GameObject instProj = Instantiate(
             Resources.Load<GameObject>($"{FilePaths.Projectiles}/{projectilePrefabName}"),
-            ((VectorInputDAO)input).location.Value,
+            this.transform.position,
             new Quaternion()
         );
         SetProjectileValues(instProj, input);

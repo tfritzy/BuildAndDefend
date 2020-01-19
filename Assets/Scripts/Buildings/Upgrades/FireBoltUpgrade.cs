@@ -1,4 +1,4 @@
-public class FireBoltUpgrade : BuildingUpgrade
+public class FireBoltUpgrade : BuildingDAO
 {
     public override ResourceDAO Cost { get => new ResourceDAO(gold: 100); }
 

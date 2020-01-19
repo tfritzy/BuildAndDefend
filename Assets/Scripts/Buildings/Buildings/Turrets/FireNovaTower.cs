@@ -7,6 +7,8 @@ public class FireNovaTower : Tower
     private float offset;
     protected float damageTickGap;
     public override Vector2Int Size => new Vector2Int(0, 0);
+    public override string Name => "Fire Nova";
+    public override Faction Faction => Faction.Fire;
 
     protected override InputController inputController
     {

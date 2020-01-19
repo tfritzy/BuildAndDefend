@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 
 [System.Serializable]
-public class BuildingUpgrade
+public class BuildingDAO
 {
     public TowerType Type;
     public int Level;
@@ -9,8 +9,9 @@ public class BuildingUpgrade
     public int XP;
     public int Kills;
     public double DamageDealt;
+    public string Name;
 
-    public BuildingUpgrade(TowerType type)
+    public BuildingDAO(TowerType type)
     {
         this.Type = type;
     }
@@ -29,7 +30,7 @@ public class BuildingUpgrade
         this.Level += 1;
     }
 
-    public BuildingUpgrade GetInstance()
+    public BuildingDAO GetInstance()
     {
         var serializedUpgrade = JsonConvert.SerializeObject(this);
         switch (this.Type)

@@ -10,4 +10,6 @@ public class WoodWall : Building
     public override TowerType Type => TowerType.Wall;
     public override PathableType PathableType => PathableType.UnPathable;
     public override bool IsTower => false;
+    public override string Name => "Wood Wall";
+    public override Faction Faction => Faction.All;
 }

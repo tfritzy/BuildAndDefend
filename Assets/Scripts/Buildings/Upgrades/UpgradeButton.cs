@@ -8,7 +8,7 @@ public class UpgradeButton : MonoBehaviour
     {
         if (!Player.Data.vals.BuildingUpgrades.ContainsKey(BuildingType))
         {
-            BuildingUpgrade upgrade = GetDefaultUpgradeInstance(this.BuildingType);
+            BuildingDAO upgrade = GetDefaultUpgradeInstance(this.BuildingType);
             if (upgrade == null)
             {
                 Debug.LogError($"Upgrade for building named '{this.BuildingType}' does not exist.");
@@ -22,7 +22,7 @@ public class UpgradeButton : MonoBehaviour
         Player.Data.vals.BuildingUpgrades[BuildingType].BuyUpgrade();
     }
 
-    private BuildingUpgrade GetDefaultUpgradeInstance(TowerType buildingName)
+    private BuildingDAO GetDefaultUpgradeInstance(TowerType buildingName)
     {
         switch (buildingName)
         {

@@ -13,6 +13,8 @@ public class Lamp : Building
     public override TowerType Type => TowerType.Lamp;
     public override PathableType PathableType => PathableType.UnPathable;
     public override bool IsTower => false;
+    public override string Name => "Lamp";
+    public override Faction Faction => Faction.All;
 
     protected override void OnDeath()
     {

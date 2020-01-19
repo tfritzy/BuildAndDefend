@@ -13,15 +13,15 @@ public class PlayerDataDAO
 
     public string CurrentLevel;
 
-    private Dictionary<TowerType, BuildingUpgrade> _buildingUpgrades;
+    private Dictionary<TowerType, BuildingDAO> _buildingUpgrades;
 
-    public Dictionary<TowerType, BuildingUpgrade> BuildingUpgrades
+    public Dictionary<TowerType, BuildingDAO> BuildingUpgrades
     {
         get
         {
             if (_buildingUpgrades == null)
             {
-                _buildingUpgrades = new Dictionary<TowerType, BuildingUpgrade>();
+                _buildingUpgrades = new Dictionary<TowerType, BuildingDAO>();
             }
             return _buildingUpgrades;
         }

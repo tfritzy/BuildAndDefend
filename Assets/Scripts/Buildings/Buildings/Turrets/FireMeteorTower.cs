@@ -2,6 +2,8 @@ public class FireMeteorTower : TargetLocationFlyingProjTower
 {
     public override TowerType Type => TowerType.FireMeteor;
     public override bool HasExplosiveProjectiles => true;
+    public override string Name => "Fire Meteor";
+    public override Faction Faction => Faction.Fire;
 
     public override void SetTowerParameters()
     {

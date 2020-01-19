@@ -6,6 +6,9 @@ public class FireWallTower : Tower
     public override TowerType Type => TowerType.FireWall;
     public int MaxFireSegments;
     public float FireDamageTickGapInSeconds;
+    public override string Name => "Fire Wall";
+    public override Faction Faction => Faction.Fire;
+
     protected override InputController inputController
     {
         get

@@ -16,10 +16,11 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     /// <value>The size of the building in <Length, Height> </value>
     public abstract Vector2Int Size { get; }
-
+    public abstract string Name { get; }
     public abstract TowerType Type { get; }
     public abstract PathableType PathableType { get; }
     public virtual bool StopsProjectiles => false;
+    public abstract Faction Faction { get; }
 
 
     /// <summary>

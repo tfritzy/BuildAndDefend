@@ -2,6 +2,8 @@ public class FireballTower : Tower
 {
     public override TowerType Type => TowerType.Fireball;
     public override bool HasExplosiveProjectiles => true;
+    public override string Name => "Fireball";
+    public override Faction Faction => Faction.Fire;
 
     public override void SetTowerParameters()
     {

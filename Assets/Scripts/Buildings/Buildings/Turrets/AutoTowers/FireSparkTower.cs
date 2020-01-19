@@ -3,6 +3,8 @@ using UnityEngine;
 public class FireSparkTower : Tower
 {
     public override TowerType Type => TowerType.FireSpark;
+    public override string Name => "Fire Spark";
+    public override Faction Faction => Faction.Fire;
 
     protected override InputController inputController
     {
@@ -17,6 +19,8 @@ public class FireSparkTower : Tower
     }
 
     public override Vector2Int Size => new Vector2Int(0, 0);
+
+
 
     public override void SetTowerParameters()
     {

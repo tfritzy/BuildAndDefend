@@ -21,7 +21,6 @@ public class Builder : MonoBehaviour
     public int woodCount = 6000;
     public bool deleteMode = false;
     public GameObject gridLine;
-    public static Dictionary<TowerType, GameObject> Buildings = new Dictionary<TowerType, GameObject>();
     public static GameObject SelectedBuilding;
 
     private void Awake()
@@ -32,7 +31,6 @@ public class Builder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        LoadBuildings();
         this.woodLabel = GameObject.Find("WoodValueLabel").GetComponent<Text>();
         woodLabel.text = woodCount.ToString();
         this.gridParent = GameObject.Find("BuildGrid").transform;
@@ -51,18 +49,6 @@ public class Builder : MonoBehaviour
             Time.timeScale = 1f;
             RemoveBuildGrid();
             Map.TellAllZombiesToGetNewPath();
-        }
-    }
-
-    private void LoadBuildings()
-    {
-        if (Buildings.Count > 0)
-        {
-            return;
-        }
-        foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
-        {
-            Buildings.Add(type, Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}"));
         }
     }
 

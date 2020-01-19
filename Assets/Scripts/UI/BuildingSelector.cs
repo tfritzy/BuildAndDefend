@@ -9,6 +9,6 @@ public class BuildingSelector : MonoBehaviour
 
     public void NotifyBuilderOfSelection()
     {
-        Builder.SelectedBuilding = Builder.Buildings[this.Type];
+        Builder.SelectedBuilding = GameObjectCache.Buildings[this.Type];
     }
 }

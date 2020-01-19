@@ -5,6 +5,7 @@ public class BuildingDAO
 {
     public TowerType Type;
     public int Level;
+    public int Tier;
     public virtual ResourceDAO Cost { get; }
     public int XP;
     public int Kills;

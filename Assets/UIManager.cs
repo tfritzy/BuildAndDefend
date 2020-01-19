@@ -34,5 +34,6 @@ public class UIManager : MonoBehaviour
         GameObject button = Instantiate(towerButton, position, new Quaternion(), parent.transform);
         button.transform.Find("Name").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[towerType].GetComponent<Building>().Name;
         button.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Level.ToString();
+        button.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Tier.ToString();
     }
 }

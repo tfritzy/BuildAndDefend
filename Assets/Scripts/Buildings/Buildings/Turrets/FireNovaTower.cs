@@ -6,6 +6,7 @@ public class FireNovaTower : Tower
     private int numProjectiles = 18;
     private float offset;
     protected float damageTickGap;
+    public override Vector2Int Size => new Vector2Int(0, 0);
 
     protected override InputController inputController
     {

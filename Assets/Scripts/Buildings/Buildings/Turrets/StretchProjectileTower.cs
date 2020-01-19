@@ -4,25 +4,36 @@ public abstract class StretchProjectileTower : Tower
 {
     protected void ScaleProjectile(GameObject projectile, Vector3 fireDirection)
     {
-        ColliderDistance2D projectileLength = closestHaltingHit(fireDirection);
-        projectileLength.distance += (projectileLength.pointB - (Vector2)this.transform.position).magnitude;
+        float projectileLength = closestHaltingHit(fireDirection);
+        // projectileLength.distance += Vector3.Distance(projectileLength, this.transform.position);
         Vector3 currentScale = projectile.transform.localScale;
-        currentScale.y = currentScale.y * projectileLength.distance;
+        currentScale.y = currentScale.y * projectileLength;
         projectile.transform.localScale = currentScale;
     }
 
     protected override GameObject CreateProjectile(InputDAO input)
     {
-        GameObject instProj = base.CreateProjectile(input);
-        ScaleProjectile(instProj, ((VectorInputDAO)input).location.Value);
+        Vector2 fireDirection = CalculateProjectileTargetLocation(((VectorInputDAO)input).location.Value);
+
+        // TODO: Have towers pool projectiles
+        GameObject instProj = Instantiate(
+            Resources.Load<GameObject>($"{FilePaths.Projectiles}/{this.projectilePrefabName}"),
+            this.transform.position,
+            new Quaternion(),
+            null);
+
+        SetProjectileRotation(instProj, fireDirection);
+        ScaleProjectile(instProj, fireDirection);
+
+        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
+        SetProjectileValues(instProj, input);
         return instProj;
     }
 
-    protected ColliderDistance2D closestHaltingHit(Vector2 fireDirection)
+    protected float closestHaltingHit(Vector2 fireDirection)
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(this.transform.position, fireDirection);
-        ColliderDistance2D closestDist = new ColliderDistance2D();
-        closestDist.distance = 100f;
+        float closestDist = 100f;
         foreach (RaycastHit2D hit in hits)
         {
             if (!isHaltingObject(hit.transform.gameObject))
@@ -30,8 +41,8 @@ public abstract class StretchProjectileTower : Tower
                 continue;
             }
 
-            ColliderDistance2D distance = hit.transform.gameObject.GetComponent<Collider2D>().Distance(this.GetComponent<Collider2D>());
-            if (distance.distance < closestDist.distance)
+            float distance = Vector2.Distance(hit.point, this.transform.position);
+            if (distance < closestDist)
             {
                 closestDist = distance;
             }

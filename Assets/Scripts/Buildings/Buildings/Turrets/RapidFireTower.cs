@@ -10,7 +10,7 @@ public class RapidFireTower : StretchProjectileTower
         this.ProjectileDamage = 10;
         this.inaccuracy = .1f;
         this.ProjectileMovementSpeed = 0;
-        this.FireCooldown = 1f;
+        this.FireCooldown = .01f;
         this.ProjectileLifespan = .2f;
         this.ProjectilePierce = int.MaxValue;
     }

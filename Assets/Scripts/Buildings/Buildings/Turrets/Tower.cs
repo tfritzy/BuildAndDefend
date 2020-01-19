@@ -98,7 +98,7 @@ public abstract class Tower : Building
         return fireDirection;
     }
 
-    private void SetProjectileRotation(GameObject projectile, Vector3 fireDirection)
+    protected void SetProjectileRotation(GameObject projectile, Vector3 fireDirection)
     {
         float degAngle = Mathf.Rad2Deg * Mathf.Atan(fireDirection.y / fireDirection.x);
         if (fireDirection.x > 0)
@@ -123,7 +123,7 @@ public abstract class Tower : Building
             new Quaternion(),
             null);
 
-        SetProjectileRotation(instProj, ((VectorInputDAO)input).location.Value);
+        SetProjectileRotation(instProj, fireDirection);
 
         instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
         SetProjectileValues(instProj, input);

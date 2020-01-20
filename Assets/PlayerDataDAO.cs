@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 [System.Serializable]
 public class PlayerDataDAO
@@ -8,6 +9,7 @@ public class PlayerDataDAO
     public int Iron;
     public int Wood;
     public int Stone;
+    public int SkillPoints;
 
     public List<string> BeatenLevels;
 

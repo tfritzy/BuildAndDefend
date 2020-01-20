@@ -21,7 +21,7 @@ public class MapNode : MonoBehaviour
 
     public void Load()
     {
-        string path = $"{FilePaths.Maps}/{this.name}.json";
+        string path = $"{FilePaths.Maps}/{this.mapName}.json";
         StreamReader reader = new StreamReader(path);
         string jsonMap = reader.ReadToEnd();
         MapDAO map = JsonConvert.DeserializeObject<MapDAO>(jsonMap);

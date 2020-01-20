@@ -9,7 +9,16 @@ public class FireNovaTower : Tower
     public override Vector2Int Size => new Vector2Int(0, 0);
     public override string Name => "Fire Nova";
     public override Faction Faction => Faction.Fire;
-
+    public override ResourceDAO PowerUpCost
+    {
+        get
+        {
+            return new ResourceDAO(
+                gold: 100 * this.Level,
+                wood: 40 * this.Level,
+                stone: 10 * this.Level);
+        }
+    }
     protected override InputController inputController
     {
         get

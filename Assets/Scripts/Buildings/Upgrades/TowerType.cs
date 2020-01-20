@@ -1,6 +1,5 @@
 public enum TowerType
 {
-    Nothing,
     Ballista,
     Lamp,
     Wall,
@@ -14,5 +13,4 @@ public enum TowerType
     RapidFire,
     FireSpark,
     FlameStalker,
-    FireCannon,
 }

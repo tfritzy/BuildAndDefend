@@ -37,7 +37,7 @@ public static class Map
         {
             for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
             {
-                if (Buildings[x, y] != null && Buildings[x, y].Type != TowerType.Nothing)
+                if (Buildings[x, y] != null)
                 {
                     return false;
                 }
@@ -67,7 +67,7 @@ public static class Map
         {
             for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
             {
-                if (Buildings[x, y] != null && Buildings[x, y].Type != TowerType.Nothing)
+                if (Buildings[x, y] != null)
                 {
                     throw new InvalidOperationException($"Cannot place building on occupied tile! Tile currently occupied by: {Buildings[x, y].Type}");
                 }

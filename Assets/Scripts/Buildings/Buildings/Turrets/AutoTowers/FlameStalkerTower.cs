@@ -8,6 +8,17 @@ public class FlameStalkerTower : Tower
     public override string Name => "Flame Stalker";
     public override Faction Faction => Faction.Fire;
 
+    public override ResourceDAO PowerUpCost
+    {
+        get
+        {
+            return new ResourceDAO(
+                gold: 100 * this.Level,
+                wood: 40 * this.Level,
+                stone: 10 * this.Level);
+        }
+    }
+
     protected override InputController inputController
     {
         get

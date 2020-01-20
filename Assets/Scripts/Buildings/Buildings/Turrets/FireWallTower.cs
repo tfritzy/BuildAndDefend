@@ -8,7 +8,16 @@ public class FireWallTower : Tower
     public float FireDamageTickGapInSeconds;
     public override string Name => "Fire Wall";
     public override Faction Faction => Faction.Fire;
-
+    public override ResourceDAO PowerUpCost
+    {
+        get
+        {
+            return new ResourceDAO(
+                gold: 100 * this.Level,
+                wood: 40 * this.Level,
+                stone: 10 * this.Level);
+        }
+    }
     protected override InputController inputController
     {
         get

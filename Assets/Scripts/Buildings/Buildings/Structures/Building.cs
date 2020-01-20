@@ -21,7 +21,10 @@ public abstract class Building : MonoBehaviour
     public abstract PathableType PathableType { get; }
     public virtual bool StopsProjectiles => false;
     public abstract Faction Faction { get; }
-
+    public abstract ResourceDAO PowerUpCost { get; }
+    private ResourceDAO _levelUpCost = new ResourceDAO(skillPoints: 1);
+    public virtual ResourceDAO LevelUpCost { get { return _levelUpCost; } }
+    public int Level { get { return Player.Data.vals.BuildingUpgrades[this.Type].Level; } }
 
     /// <summary>
     /// The (0,0) position of this building. It may occupy more spots as determined by Building.Size

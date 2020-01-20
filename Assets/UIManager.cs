@@ -33,7 +33,8 @@ public class UIManager : MonoBehaviour
         Vector2 position = new Vector2(UnityEngine.Random.Range(-7, 7), UnityEngine.Random.Range(-4, 4));
         GameObject button = Instantiate(towerButton, position, new Quaternion(), parent.transform);
         button.transform.Find("Name").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[towerType].GetComponent<Building>().Name;
-        button.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Level.ToString();
         button.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Tier.ToString();
+        button.transform.Find("Level").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Level.ToString();
+        button.GetComponent<UpgradeTreeButton>().Type = towerType;
     }
 }

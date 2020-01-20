@@ -11,6 +11,7 @@ public static class Purchaser
         Player.Data.vals.Gold -= cost.Gold;
         Player.Data.vals.Wood -= cost.Wood;
         Player.Data.vals.Stone -= cost.Stone;
+        Player.Data.vals.SkillPoints -= cost.SkillPoints;
     }
 
     public static void Give(ResourceDAO amount)
@@ -19,6 +20,7 @@ public static class Purchaser
         Player.Data.vals.Gold += amount.Gold;
         Player.Data.vals.Wood += amount.Wood;
         Player.Data.vals.Stone += amount.Stone;
+        Player.Data.vals.SkillPoints += amount.SkillPoints;
     }
 
     public static bool CanBuy(ResourceDAO cost)
@@ -39,6 +41,11 @@ public static class Purchaser
         {
             return false;
         }
+        if (Player.Data.vals.SkillPoints < cost.SkillPoints)
+        {
+            return false;
+        }
+
         return true;
     }
 

@@ -7,7 +7,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public static Player Data;
-
     public PlayerDataDAO vals;
 
     void Awake()
@@ -33,45 +32,33 @@ public class Player : MonoBehaviour
         {
             StreamReader reader = new StreamReader(fullPath, true);
             string jsonPlayerData = reader.ReadToEndAsync().Result;
+            if (string.IsNullOrEmpty(jsonPlayerData))
+            {
+                reader.Close();
+                CreateNewSaveFile();
+                return;
+            }
             reader.Close();
-            Data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
-            LoadBuildingUpgradesWithInheritance();
+            Player.Data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
         }
         else
         {
-            Player.Data.vals = new PlayerDataDAO();
-            Save();
+            CreateNewSaveFile();
         }
     }
 
-    private void LoadBuildingUpgradesWithInheritance()
+    private void CreateNewSaveFile()
     {
-        var buildingUpgradesWithInheritance = new Dictionary<TowerType, BuildingDAO>();
-
-        foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
-        {
-            if (Data.vals.BuildingUpgrades.ContainsKey(type))
-            {
-                buildingUpgradesWithInheritance[type] = Data.vals.BuildingUpgrades[type].GetInstance();
-            }
-            else
-            {
-                buildingUpgradesWithInheritance[type] = new BuildingDAO(type).GetInstance();
-            }
-        }
-
-        foreach (TowerType type in Data.vals.BuildingUpgrades.Keys)
-        {
-
-        }
-        Data.vals.BuildingUpgrades = buildingUpgradesWithInheritance;
+        Player.Data.vals = new PlayerDataDAO();
+        Save();
     }
 
     public void Save()
     {
+        string serializedObject = JsonConvert.SerializeObject(Player.Data.vals).ToString();
         string fullPath = $"{Application.persistentDataPath}/{fileName}";
         StreamWriter writer = new StreamWriter(fullPath, false);
-        writer.Write(JsonConvert.SerializeObject(Player.Data.vals).ToString());
+        writer.Write(serializedObject);
         writer.Close();
     }
 

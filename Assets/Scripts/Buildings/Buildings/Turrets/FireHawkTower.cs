@@ -15,6 +15,16 @@ public class FireHawkTower : TargetLocationFlyingProjTower
             return _inputController;
         }
     }
+    public override ResourceDAO PowerUpCost
+    {
+        get
+        {
+            return new ResourceDAO(
+                gold: 100 * this.Level,
+                wood: 40 * this.Level,
+                stone: 10 * this.Level);
+        }
+    }
 
     public override void SetTowerParameters()
     {

@@ -4,7 +4,16 @@ public class FireMeteorTower : TargetLocationFlyingProjTower
     public override bool HasExplosiveProjectiles => true;
     public override string Name => "Fire Meteor";
     public override Faction Faction => Faction.Fire;
-
+    public override ResourceDAO PowerUpCost
+    {
+        get
+        {
+            return new ResourceDAO(
+                gold: 100 * this.Level,
+                wood: 40 * this.Level,
+                stone: 10 * this.Level);
+        }
+    }
     public override void SetTowerParameters()
     {
         this.Health = 100;

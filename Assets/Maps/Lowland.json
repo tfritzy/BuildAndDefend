@@ -11,22 +11,7 @@
         {
             "xPos": 2,
             "yPos": 4,
-            "spawnRate": 3
-        },
-        {
-            "xPos": 13,
-            "yPos": 18,
-            "spawnRate": 2
-        },
-        {
-            "xPos": 3,
-            "yPos": 5,
-            "spawnRate": 4
-        },
-        {
-            "xPos": 9,
-            "yPos": 9,
-            "spawnRate": 7
+            "spawnRate": 100
         }
     ],
     "environment": [

@@ -23,9 +23,9 @@ public abstract class Tower : Building
     public abstract void SetTowerParameters();
     protected override void Setup()
     {
-        base.Setup();
         SetTowerParameters();
         ConfigureUI();
+        base.Setup();
     }
 
     // Update is called once per frame

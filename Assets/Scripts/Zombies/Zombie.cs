@@ -9,37 +9,31 @@ public class Zombie : MonoBehaviour
     protected List<Vector2> path;
     protected Vector2Int locationInGrid;
     public Vector2Int targetLoc;
-    protected bool atFinalLoc = false;
     protected int pathProgress = 0;
-    protected int damage = 1;
+    protected int damage = 5;
     protected float lastAttackTime;
     protected float attackSpeed = 1;
-    protected bool needsNewPath;
-    protected float calculateNewPathTime;
     private GameObject healthbar;
     private float originalHealthbarScale;
 
     public float zombieSpeed = .3f;
-    public int health = 100;
+    public int health = 50;
     protected int startingHealth;
     public GameObject target;
     public virtual ResourceDAO KillReward { get => new ResourceDAO(gold: 10); }
     public virtual int XP => 1;
     public static float lastZombieFindPathTime;
+    public ZombieState CurrentState;
 
-
-    // Use this for initialization
-    async void Start()
+    void Start()
     {
-        await RestartPath();
         Setup();
     }
 
     // Update is called once per frame
     void Update()
     {
-        FollowPath();
-        Attack();
+        AILoop();
     }
 
     /// <summary>
@@ -47,55 +41,61 @@ public class Zombie : MonoBehaviour
     /// </summary>
     public void NotifyOfPathBreak()
     {
-        this.needsNewPath = true;
-        this.calculateNewPathTime = Time.time + Random.Range(.1f, 1f);
+        this.path = null;
+        this.CurrentState = ZombieState.LookingForPathToTower;
     }
 
-    protected async void FollowPath()
+    protected async void AILoop()
     {
-        if (this.needsNewPath && Time.time > this.calculateNewPathTime)
+        switch (this.CurrentState)
         {
-            await RestartPath();
-            this.needsNewPath = false;
-        }
-        if (atFinalLoc)
-        {
-            if (target == null)
-                return;
-            this.transform.position = Vector2.MoveTowards(transform.position, target.transform.position, zombieSpeed * Time.deltaTime);
-            return;
-        }
-        if (path == null || path.Count == 0)
-        {
-            await RestartPath(attackClosestBuilding: true);
-            return;
-        }
-        this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
-        if (Vector3.Distance(path[pathProgress], transform.position) < .6f)
-        {
-            pathProgress += 1;
-            if (pathProgress >= path.Count)
-            {
-                atFinalLoc = true;
-            }
+            case (ZombieState.LookingForPathToNearestBuilding):
+            case (ZombieState.LookingForPathToTower):
+                await RestartPath();
+                break;
+            case (ZombieState.AttackingTarget):
+                Attack();
+                break;
+            case (ZombieState.FollowingPathToNearestBuilding):
+            case (ZombieState.FollowingPathToTower):
+                moveTowardsNextPathPoint();
+                break;
         }
     }
 
     protected virtual void Setup()
     {
-        this.path = new List<Vector2>();
+        this.CurrentState = ZombieState.LookingForPathToTower;
+        this.path = null;
         lastAttackTime = Time.time;
         this.healthbar = this.transform.Find("Healthbar").gameObject;
         originalHealthbarScale = this.healthbar.transform.localScale.y;
         this.startingHealth = health;
     }
 
+    private void moveTowardsNextPathPoint()
+    {
+        this.transform.position = Vector2.MoveTowards(transform.position, path[pathProgress], zombieSpeed * Time.deltaTime);
+        if (Vector3.Distance(path[pathProgress], transform.position) < .51f)
+        {
+            pathProgress += 1;
+            if (pathProgress >= path.Count)
+            {
+                this.CurrentState = ZombieState.AttackingTarget;
+            }
+        }
+    }
+
     async void Attack()
     {
-        if (!atFinalLoc)
+        if (this.target == null)
         {
+            this.path = null;
+            this.CurrentState = ZombieState.LookingForPathToTower;
+            UnsubscribeToPath();
             return;
         }
+        this.transform.position = Vector2.MoveTowards(transform.position, target.transform.position, zombieSpeed * Time.deltaTime);
 
         if (Time.time < lastAttackTime + attackSpeed)
         {
@@ -113,25 +113,104 @@ public class Zombie : MonoBehaviour
         lastAttackTime = Time.time;
     }
 
+    protected bool IsCurrentPathIsValid()
+    {
+        if (this.path == null)
+        {
+            return false;
+        }
+        for (int i = 0; i < this.path.Count - 1; i++)
+        {
+            Vector2Int gridPos = Map.WorldPointToGridPoint(this.path[i]);
+            if (Map.PathingGrid[gridPos.x, gridPos.y] == PathableType.UnPathable)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void NotifyOfPotentialPath(List<Vector2> newPath)
+    {
+        if (this.IsCurrentPathIsValid() || !needsNewPath())
+        {
+            return;
+        }
+        SetPath(newPath);
+    }
+
     public void SetPath(List<Vector2> newPath)
     {
+        if (!needsNewPath())
+        {
+            return;
+        }
         pathProgress = 0;
         UnsubscribeToPath();
         this.path = newPath;
-        this.needsNewPath = false;
         SubscribeToPath();
     }
 
-    public async virtual Task<List<Vector2>> RestartPath(bool attackClosestBuilding = false)
+    protected bool needsNewPath()
     {
-        pathProgress = 0;
+        return (this.CurrentState == ZombieState.LookingForPathToNearestBuilding ||
+                this.CurrentState == ZombieState.LookingForPathToTower);
+    }
+
+    public async virtual Task<List<Vector2>> RestartPath()
+    {
+        if (Time.time < Zombie.lastZombieFindPathTime + .05f)
+        {
+            return await Task.FromResult<List<Vector2>>(null);
+        }
+
         UnsubscribeToPath();
-        (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: !attackClosestBuilding);
+
+        if (this.CurrentState == ZombieState.LookingForPathToTower)
+        {
+            (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: true);
+        }
+        else if (this.CurrentState == ZombieState.LookingForPathToNearestBuilding)
+        {
+            (this.targetLoc, this.target) = findClosestBuilding(findOnlyTowers: false);
+        }
+
+        // Couldn't find any buildings on the map.
+        if (this.target == null)
+        {
+            this.CurrentState = ZombieState.LookingForPathToTower;
+            return null;
+        }
+
         this.locationInGrid = Map.WorldPointToGridPoint(this.transform.position);
         this.path = await FindPath(locationInGrid, this.targetLoc);
+
+        // If FindPath 
         if (this.path == null)
         {
+            if (this.CurrentState == ZombieState.LookingForPathToTower)
+            {
+                this.CurrentState = ZombieState.LookingForPathToNearestBuilding;
+            }
+            else if (this.CurrentState == ZombieState.LookingForPathToNearestBuilding)
+            {
+                // If the zombie is trapped, There isn't much it can do.
+                // TODO Make the zombie perform a bfs to find the closest building.
+                // This would be far more likely to produce the correct result.
+                Destroy(this.gameObject);
+            }
             return null;
+        }
+        else
+        {
+            if (this.CurrentState == ZombieState.LookingForPathToTower)
+            {
+                this.CurrentState = ZombieState.FollowingPathToTower;
+            }
+            else if (this.CurrentState == ZombieState.LookingForPathToNearestBuilding)
+            {
+                this.CurrentState = ZombieState.FollowingPathToNearestBuilding;
+            }
         }
 
         Collider2D[] nearbyZombs = Physics2D.OverlapCircleAll(this.transform.position, 1f);
@@ -139,24 +218,13 @@ public class Zombie : MonoBehaviour
         {
             if (col.tag != "Zombie" || col.gameObject == this.gameObject)
                 continue;
-            if (col == null)
-            {
-                continue;
-            }
+
             Zombie colZomb = col.GetComponent<Zombie>();
-            colZomb.SetPath(this.path);
+            colZomb.NotifyOfPotentialPath(this.path);
         }
 
         SubscribeToPath();
         return path;
-    }
-
-    private void SetWallBlockingPathAsTarget()
-    {
-        foreach (Building building in Map.Buildings)
-        {
-
-        }
     }
 
     private (Vector2Int, GameObject) findClosestBuilding(bool findOnlyTowers = false)
@@ -182,15 +250,10 @@ public class Zombie : MonoBehaviour
         return (closestPos, closestTarget);
     }
 
+    protected static int[,] searchDirections = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
     // Perform BFS to find shortest path to the desired location
     public Task<List<Vector2>> FindPath(Vector2Int startLoc, Vector2Int endLoc, bool ignoreBuildings = false)
     {
-        if (Time.time < Zombie.lastZombieFindPathTime + .2f)
-        {
-            this.needsNewPath = true;
-            return Task.FromResult<List<Vector2>>(null);
-        }
-
         Zombie.lastZombieFindPathTime = Time.time;
         return Task.Run(() =>
         {
@@ -200,8 +263,6 @@ public class Zombie : MonoBehaviour
             List<Vector2Int> firstElement = new List<Vector2Int>();
             firstElement.Add(startLoc);
             q.AddFirst(firstElement);
-
-            int[,] searchDirections = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
             while (q.Count > 0)
             {
@@ -239,15 +300,10 @@ public class Zombie : MonoBehaviour
                 }
 
                 v.Add(x + "," + y);
-                if (q.Count == 1)
-                {
-                    this.target = null;
-                    return ConvertGridPointListToWorldPoint(q.First.Value);
-                }
                 q.RemoveFirst();
             }
 
-            return new List<Vector2>();
+            return null;
         });
     }
 
@@ -270,6 +326,7 @@ public class Zombie : MonoBehaviour
 
     protected void UnsubscribeToPath()
     {
+        pathProgress = 0;
         if (path == null)
         {
             return;
@@ -280,6 +337,7 @@ public class Zombie : MonoBehaviour
             string key = gridLoc[0] + "," + gridLoc[1];
             Map.PathTakers[key].Remove(this);
         }
+        this.path = null;
     }
 
     protected void SubscribeToPath()

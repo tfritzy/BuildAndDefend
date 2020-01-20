@@ -12,6 +12,7 @@ public class WoodWall : Building
     public override bool IsTower => false;
     public override string Name => "Wood Wall";
     public override Faction Faction => Faction.All;
+
     public override ResourceDAO PowerUpCost
     {
         get

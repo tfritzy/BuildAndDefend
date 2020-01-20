@@ -35,7 +35,6 @@ public abstract class Building : MonoBehaviour
     void Start()
     {
         Setup();
-        this.startingHealth = this.Health;
     }
 
     public void TakeDamage(int amount)
@@ -53,6 +52,7 @@ public abstract class Building : MonoBehaviour
     protected virtual void Setup()
     {
         SetupHealthbar();
+        this.startingHealth = this.Health;
     }
 
     private bool hasAlreadyBeenDeleted = false;

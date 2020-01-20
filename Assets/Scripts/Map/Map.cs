@@ -22,9 +22,9 @@ public static class Map
     public static void ReprocessPathingLoc(Vector2Int location)
     {
         PathableType pathingType =
-            (Buildings[location.x, location.y].PathableType == PathableType.Pathable &&
-            Environment[location.x, location.y].PathableType == PathableType.Pathable) ?
-            PathableType.Pathable : PathableType.UnPathable;
+            (Buildings[location.x, location.y]?.PathableType == PathableType.UnPathable ||
+            Environment[location.x, location.y]?.PathableType == PathableType.UnPathable) ?
+            PathableType.UnPathable : PathableType.Pathable;
         PathingGrid[location.x, location.y] = pathingType;
     }
 

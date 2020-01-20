@@ -9,7 +9,6 @@ public class BuildingDAO
     public int XP;
     public int Kills;
     public double DamageDealt;
-    public string Name;
 
     public BuildingDAO(TowerType type)
     {

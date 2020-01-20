@@ -14,9 +14,9 @@ public class FireNovaTower : Tower
         get
         {
             return new ResourceDAO(
-                gold: 100 * this.Level,
-                wood: 40 * this.Level,
-                stone: 10 * this.Level);
+                gold: 100 * this.Tier,
+                wood: 40 * this.Tier,
+                stone: 10 * this.Tier);
         }
     }
     protected override InputController inputController

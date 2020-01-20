@@ -16,4 +16,9 @@ public class ResourceDAO
     public int Stone;
     public int Iron;
     public int SkillPoints;
+
+    public override string ToString()
+    {
+        return $"{Gold} gold, {Wood} wood, {Stone} stone, {Iron} iron, {SkillPoints} skillPoints";
+    }
 }

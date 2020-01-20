@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 5858956567273402098}
   - component: {fileID: 6145932058487524985}
   - component: {fileID: 3404123075284965005}
-  - component: {fileID: 2510903433511407992}
+  - component: {fileID: 1989860557925345144}
   m_Layer: 5
   m_Name: PowerUpButton
   m_TagString: Untagged
@@ -805,7 +805,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2510903433511407992}
+      - m_Target: {fileID: 1989860557925345144}
         m_MethodName: BuyPowerUp
         m_Mode: 1
         m_Arguments:
@@ -816,7 +816,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2510903433511407992
+--- !u!114 &1989860557925345144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -825,10 +825,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6894559154020361363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 838de99ab30533b4ab44f2bcdb77a357, type: 3}
+  m_Script: {fileID: 11500000, guid: 84d1d419510cc62478fa106c6694fa95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingType: 0
+  ParentUpgradeTreeButton: {fileID: 0}
+  Type: 0
 --- !u!1 &7517148607608448541
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,7 +842,7 @@ GameObject:
   - component: {fileID: 302280620024038922}
   - component: {fileID: 4052663914556346387}
   - component: {fileID: 3945909992078529599}
-  - component: {fileID: 2510903433511407993}
+  - component: {fileID: 5000373436446503596}
   m_Layer: 5
   m_Name: LevelUpButton
   m_TagString: Untagged
@@ -948,7 +949,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2510903433511407993}
+      - m_Target: {fileID: 5000373436446503596}
         m_MethodName: BuyLevelUp
         m_Mode: 1
         m_Arguments:
@@ -959,7 +960,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2510903433511407993
+--- !u!114 &5000373436446503596
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -968,10 +969,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7517148607608448541}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 838de99ab30533b4ab44f2bcdb77a357, type: 3}
+  m_Script: {fileID: 11500000, guid: 84d1d419510cc62478fa106c6694fa95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingType: 0
+  ParentUpgradeTreeButton: {fileID: 0}
+  Type: 0
 --- !u!1 &7763235497576320388
 GameObject:
   m_ObjectHideFlags: 0

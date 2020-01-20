@@ -21,20 +21,20 @@ public class UIManager : MonoBehaviour
 
     private void SetupUpgradeMenuButtons(GameObject parent)
     {
+        int i = 1;
         foreach (TowerType tower in FactionTowers.Towers[Faction.Fire])
         {
-            CreateTowerButton(tower, parent);
+            CreateTowerButton(tower, parent, i);
+            i += 1;
         }
     }
 
-    private void CreateTowerButton(TowerType towerType, GameObject parent)
+    private void CreateTowerButton(TowerType towerType, GameObject parent, int i)
     {
         GameObject towerButton = Resources.Load<GameObject>($"{FilePaths.UI}/UpgradeTreeButton");
-        Vector2 position = new Vector2(UnityEngine.Random.Range(-7, 7), UnityEngine.Random.Range(-4, 4));
+        Vector2 position = new Vector2((i % 10) * 1.1f - 5f, (i / 10) * 1.1f);
         GameObject button = Instantiate(towerButton, position, new Quaternion(), parent.transform);
-        button.transform.Find("Name").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[towerType].GetComponent<Building>().Name;
-        button.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Tier.ToString();
-        button.transform.Find("Level").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[towerType].Level.ToString();
         button.GetComponent<UpgradeTreeButton>().Type = towerType;
+        button.GetComponent<UpgradeTreeButton>().ParentUpgradeTreeButton = button;
     }
 }

@@ -16,14 +16,4 @@ public class UpgradeButton : MonoBehaviour
             Player.Data.vals.BuildingUpgrades.Add(upgrade.Type, upgrade);
         }
     }
-
-    public void BuyLevelUp()
-    {
-        Player.Data.vals.BuildingUpgrades[BuildingType].BuyLevelUp();
-    }
-
-    public void BuyPowerUp()
-    {
-        Player.Data.vals.BuildingUpgrades[BuildingType].BuyPowerUp();
-    }
 }

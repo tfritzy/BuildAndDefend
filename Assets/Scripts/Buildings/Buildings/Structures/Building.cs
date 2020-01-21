@@ -26,12 +26,10 @@ public abstract class Building : MonoBehaviour
     public int Level
     {
         get { return Player.Data.vals.BuildingUpgrades[this.Type].Level; }
-        set { Player.Data.vals.BuildingUpgrades[this.Type].Level = value; }
     }
     public int Tier
     {
         get { return Player.Data.vals.BuildingUpgrades[this.Type].Tier; }
-        set { Player.Data.vals.BuildingUpgrades[this.Type].Level = value; }
     }
     public BuildingStats Stats;
 
@@ -46,18 +44,19 @@ public abstract class Building : MonoBehaviour
 
     public virtual void SetStats()
     {
-        this.Stats = GetStats(this.Level);
+        this.Stats = GetStats(this.Level, this.Tier);
     }
 
-    public virtual BuildingStats GetStats(int level)
+    public virtual BuildingStats GetStats(int level, int tier)
     {
         return new BuildingStats(health: 100 + level * 10);
     }
 
-    public BuildingStats GetNextLevelStats()
+    public BuildingStats GetUpgradeStats(int numLevels, int numTiers)
     {
-        return GetStats(this.Level + 1);
+        return GetStats(this.Level + numLevels, this.Tier + numTiers);
     }
+
 
     public void TakeDamage(int amount)
     {

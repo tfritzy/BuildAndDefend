@@ -13,11 +13,11 @@ public class FireMeteorTower : TargetLocationFlyingProjTower
                 stone: 10 * this.Tier);
         }
     }
-    public override TowerStats GetTowerParameters(int level)
+    public override TowerStats GetTowerParameters(int level, int tier)
     {
         TowerStats stats = new TowerStats();
-        stats.Health = 100;
-        stats.Damage = 10;
+        stats.Health = 100 + 10 * level + 5 * tier;
+        stats.Damage = 10 + level * 5 + tier * 3;
         stats.Inaccuracy = .1f;
         stats.FireCooldown = .3f;
         stats.ProjectileLifespan = 10f;

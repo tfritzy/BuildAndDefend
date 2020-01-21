@@ -25,6 +25,13 @@ public class PlayerDataDAO
             {
                 _buildingUpgrades = new Dictionary<TowerType, BuildingDAO>();
             }
+            foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
+            {
+                if (!_buildingUpgrades.ContainsKey(type))
+                {
+                    _buildingUpgrades.Add(type, new BuildingDAO(type));
+                }
+            }
             return _buildingUpgrades;
         }
         set

@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 0
+  ParentUpgradeTreeButton: {fileID: 0}
 --- !u!114 &3337099098621284763
 MonoBehaviour:
   m_ObjectHideFlags: 0

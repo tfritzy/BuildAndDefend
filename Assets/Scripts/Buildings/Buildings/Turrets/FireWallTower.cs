@@ -31,11 +31,11 @@ public class FireWallTower : Tower
     }
 
 
-    public override TowerStats GetTowerParameters(int level)
+    public override TowerStats GetTowerParameters(int level, int tier)
     {
         TowerStats stats = new TowerStats();
-        stats.Health = 100;
-        stats.Damage = 1;
+        stats.Health = 100 + 10 * level + 5 * tier;
+        stats.Damage = 1 + level * 5 + tier * 3;
         stats.FireCooldown = 5f;
         stats.ProjectileLifespan = 3f;
         this.MaxFireSegments = 6;

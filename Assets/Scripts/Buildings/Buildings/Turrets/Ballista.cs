@@ -19,7 +19,7 @@ public class Ballista : ChargeAttack
         }
     }
 
-    public override TowerStats GetTowerParameters(int level)
+    public override TowerStats GetTowerParameters(int level, int tier)
     {
         TowerStats stats = new TowerStats();
         stats.FireCooldown = 4;

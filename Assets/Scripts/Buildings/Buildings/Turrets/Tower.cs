@@ -12,7 +12,7 @@ public abstract class Tower : Building
     public new TowerStats Stats;
 
     // Projectiles that stretch themselves until they hit the nearest object.
-    public abstract TowerStats GetTowerParameters(int level);
+    public abstract TowerStats GetTowerParameters(int level, int tier);
     public override void Setup()
     {
         SetStats();
@@ -22,12 +22,12 @@ public abstract class Tower : Building
 
     public override void SetStats()
     {
-        this.Stats = (TowerStats)GetStats(this.Level);
+        this.Stats = (TowerStats)GetStats(this.Level, this.Tier);
     }
 
-    public override BuildingStats GetStats(int level)
+    public override BuildingStats GetStats(int level, int tier)
     {
-        return GetTowerParameters(level);
+        return GetTowerParameters(level, tier);
     }
     // Update is called once per frame
     void Update()

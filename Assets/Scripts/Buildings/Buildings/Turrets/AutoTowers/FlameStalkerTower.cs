@@ -56,11 +56,11 @@ public class FlameStalkerTower : Tower
     }
 
 
-    public override TowerStats GetTowerParameters(int level)
+    public override TowerStats GetTowerParameters(int level, int tier)
     {
         TowerStats stats = new TowerStats();
-        stats.Health = 100;
-        stats.Damage = 30;
+        stats.Health = 100 + 10 * level + 5 * tier;
+        stats.Damage = 30 + level * 5 + tier * 3;
         stats.Inaccuracy = .9f;
         stats.ProjectileMovementSpeed = 3f;
         stats.FireCooldown = 3f;

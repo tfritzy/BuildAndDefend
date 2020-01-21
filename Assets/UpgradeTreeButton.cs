@@ -39,6 +39,9 @@ public class UpgradeTreeButton : MonoBehaviour
         UpgradePane.transform.Find("PowerUpButton").gameObject.GetComponent<PurchaseUpgradeButton>().ParentUpgradeTreeButton = this;
         UpgradePane.transform.Find("Title").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Building>().Name;
         UpgradePane.transform.Find("Cost").Find("Costs").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Building>().PowerUpCost.ToString();
+        UpgradePane.transform.Find("Upgrades").Find("UpgradeTitle").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Tower>().Stats.FieldsToString();
+        UpgradePane.transform.Find("Upgrades").Find("CurrentStats").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Tower>().Stats.ToString();
+        UpgradePane.transform.Find("Upgrades").Find("TargetStats").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Tower>().GetNextLevelStats().ToString();
     }
 
     private void SetUpgradeTreeButtonValues()

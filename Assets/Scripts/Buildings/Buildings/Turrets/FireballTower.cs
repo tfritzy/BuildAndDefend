@@ -1,7 +1,6 @@
 public class FireballTower : Tower
 {
     public override TowerType Type => TowerType.Fireball;
-    public override bool HasExplosiveProjectiles => true;
     public override string Name => "Fireball";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost
@@ -14,15 +13,17 @@ public class FireballTower : Tower
                 stone: 10 * this.Tier);
         }
     }
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = 5;
-        this.FireCooldown = 1f;
-        this.ProjectileLifespan = 3f;
-        this.ProjectilePierce = 0;
-        this.projectileExplosionRadius = 1f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = 5;
+        stats.FireCooldown = 1f;
+        stats.ProjectileLifespan = 3f;
+        stats.Pierce = 0;
+        stats.ExplosionRadius = 1f;
+        return stats;
     }
 }

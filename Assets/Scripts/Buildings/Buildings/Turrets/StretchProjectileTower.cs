@@ -25,7 +25,7 @@ public abstract class StretchProjectileTower : Tower
         SetProjectileRotation(instProj, fireDirection);
         ScaleProjectile(instProj, fireDirection);
 
-        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
+        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * Stats.ProjectileMovementSpeed;
         SetProjectileValues(instProj, input);
         return instProj;
     }

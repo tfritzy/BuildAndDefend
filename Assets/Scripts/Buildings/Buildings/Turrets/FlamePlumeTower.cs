@@ -16,26 +16,28 @@ public class FlamePlumeTower : TargetLocationTower
         }
     }
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = 5;
-        this.FireCooldown = .3f;
-        this.ProjectileLifespan = 20f;
-        this.projectileExplosionRadius = 1f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = 5;
+        stats.FireCooldown = .3f;
+        stats.ProjectileLifespan = 20f;
+        stats.ExplosionRadius = 1f;
         this.explosionDelay = 1f;
+        return stats;
     }
 
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<ITimedExplosionProjectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
-            this.ProjectilePierce,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
+            Stats.Pierce,
             this,
-            this.projectileExplosionRadius,
+            Stats.ExplosionRadius,
             this.explosionDelay
         );
     }
@@ -51,7 +53,7 @@ public class FlamePlumeTower : TargetLocationTower
         return instProj;
     }
 
-    protected override void Setup()
+    public override void Setup()
     {
         base.Setup();
     }

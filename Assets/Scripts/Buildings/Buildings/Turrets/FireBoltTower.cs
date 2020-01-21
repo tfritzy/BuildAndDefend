@@ -13,13 +13,15 @@ public class FireBoltTower : Tower
                 stone: 10 * this.Tier);
         }
     }
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = 5;
-        this.FireCooldown = 1f;
-        this.ProjectileLifespan = 3f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = 5;
+        stats.FireCooldown = 1f;
+        stats.ProjectileLifespan = 3f;
+        return stats;
     }
 }

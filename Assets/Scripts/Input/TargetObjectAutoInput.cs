@@ -28,7 +28,7 @@ public class TargetObjectAutoInput : VectorAutoInput
     {
         if (this.Target != null)
         {
-            if (Vector3.Distance(Tower.gameObject.transform.position, Target.transform.position) > Tower.Range)
+            if (Vector3.Distance(Tower.gameObject.transform.position, Target.transform.position) > Tower.Stats.Range)
             {
                 this.Target = null;
                 this.input.Target = null;

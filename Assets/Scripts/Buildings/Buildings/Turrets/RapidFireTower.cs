@@ -15,14 +15,16 @@ public class RapidFireTower : StretchProjectileTower
                 stone: 10 * this.Tier);
         }
     }
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = 0;
-        this.FireCooldown = .01f;
-        this.ProjectileLifespan = .2f;
-        this.ProjectilePierce = int.MaxValue;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = 0;
+        stats.FireCooldown = .01f;
+        stats.ProjectileLifespan = .2f;
+        stats.Pierce = int.MaxValue;
+        return stats;
     }
 }

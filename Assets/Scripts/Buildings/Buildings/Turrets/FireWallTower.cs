@@ -31,14 +31,16 @@ public class FireWallTower : Tower
     }
 
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 1;
-        this.FireCooldown = 5f;
-        this.ProjectileLifespan = 3f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 1;
+        stats.FireCooldown = 5f;
+        stats.ProjectileLifespan = 3f;
         this.MaxFireSegments = 6;
         this.FireDamageTickGapInSeconds = 1f;
+        return stats;
     }
 
     protected override GameObject CreateProjectile(InputDAO input)
@@ -77,9 +79,9 @@ public class FireWallTower : Tower
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<ConstantDamageProjectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
-            this.ProjectilePierce,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
+            Stats.Pierce,
             this,
             this.FireDamageTickGapInSeconds);
     }

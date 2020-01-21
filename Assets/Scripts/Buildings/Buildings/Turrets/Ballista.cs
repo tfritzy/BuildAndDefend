@@ -19,13 +19,15 @@ public class Ballista : ChargeAttack
         }
     }
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.FireCooldown = 4;
-        this.Health = 100 * Level;
+        TowerStats stats = new TowerStats();
+        stats.FireCooldown = 4;
+        stats.Health = 100 * Level;
         this.chargeTime = 4f;
         this.maxProjectileSpeed = 20f;
         this.maxProjectileDamage = 10;
         this.maxProjectileLifespan = 4f;
+        return stats;
     }
 }

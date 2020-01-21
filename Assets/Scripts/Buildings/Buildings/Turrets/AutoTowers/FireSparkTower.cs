@@ -32,14 +32,16 @@ public class FireSparkTower : Tower
 
 
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 5;
-        this.inaccuracy = .05f;
-        this.ProjectileMovementSpeed = 10;
-        this.FireCooldown = 0.3f;
-        this.ProjectileLifespan = 1f;
-        this.Range = 1f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 5;
+        stats.Inaccuracy = .05f;
+        stats.ProjectileMovementSpeed = 10;
+        stats.FireCooldown = 0.3f;
+        stats.ProjectileLifespan = 1f;
+        stats.Range = 1f;
+        return stats;
     }
 }

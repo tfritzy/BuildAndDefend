@@ -33,7 +33,7 @@ public class Lamp : Building
         darkness.RemoveLight((int)gridPos.x, (int)gridPos.y);
     }
 
-    protected override void Setup()
+    public override void Setup()
     {
         this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
         Vector2 curPos = this.transform.position;

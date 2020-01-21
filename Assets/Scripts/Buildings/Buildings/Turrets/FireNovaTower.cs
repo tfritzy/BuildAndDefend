@@ -42,7 +42,7 @@ public class FireNovaTower : Tower
             );
             instProj.GetComponent<Rigidbody2D>().velocity = new Vector2(
                 Mathf.Cos(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i),
-                Mathf.Sin(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i)) * (float)this.ProjectileMovementSpeed;
+                Mathf.Sin(Mathf.Deg2Rad * (360f / (float)numProjectiles) * (float)i)) * (float)Stats.ProjectileMovementSpeed;
             SetProjectileValues(instProj, input);
         }
         return null;
@@ -51,21 +51,23 @@ public class FireNovaTower : Tower
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<IConstantDamageProjectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
             this,
             this.damageTickGap);
     }
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = .7f;
-        this.FireCooldown = 4f;
-        this.ProjectileLifespan = 1.5f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = .7f;
+        stats.FireCooldown = 4f;
+        stats.ProjectileLifespan = 1.5f;
         this.damageTickGap = .5f;
-        this.Range = 1.5f;
+        stats.Range = 1.5f;
+        return stats;
     }
 }

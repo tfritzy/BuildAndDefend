@@ -7,7 +7,6 @@ public abstract class Building : MonoBehaviour
 {
     private GameObject Structure;
     public abstract ResourceDAO BuildCost { get; }
-    public int Health;
     protected int startingHealth;
     public abstract bool IsTower { get; }
 
@@ -24,9 +23,17 @@ public abstract class Building : MonoBehaviour
     public abstract ResourceDAO PowerUpCost { get; }
     private ResourceDAO _levelUpCost = new ResourceDAO(skillPoints: 1);
     public virtual ResourceDAO LevelUpCost { get { return _levelUpCost; } }
-    public int Level { get { return Player.Data.vals.BuildingUpgrades[this.Type].Level; } }
-    public int Tier { get { return Player.Data.vals.BuildingUpgrades[this.Type].Tier; } }
-
+    public int Level
+    {
+        get { return Player.Data.vals.BuildingUpgrades[this.Type].Level; }
+        set { Player.Data.vals.BuildingUpgrades[this.Type].Level = value; }
+    }
+    public int Tier
+    {
+        get { return Player.Data.vals.BuildingUpgrades[this.Type].Tier; }
+        set { Player.Data.vals.BuildingUpgrades[this.Type].Level = value; }
+    }
+    public BuildingStats Stats;
 
     /// <summary>
     /// The (0,0) position of this building. It may occupy more spots as determined by Building.Size
@@ -37,22 +44,37 @@ public abstract class Building : MonoBehaviour
         Setup();
     }
 
+    public virtual void SetStats()
+    {
+        this.Stats = GetStats(this.Level);
+    }
+
+    public virtual BuildingStats GetStats(int level)
+    {
+        return new BuildingStats(health: 100 + level * 10);
+    }
+
+    public BuildingStats GetNextLevelStats()
+    {
+        return GetStats(this.Level + 1);
+    }
+
     public void TakeDamage(int amount)
     {
-        this.Health -= amount;
+        Stats.Health -= amount;
         updateHealthbar();
-        if (this.Health <= 0)
+        if (Stats.Health <= 0)
         {
-            this.Health = 0;
+            Stats.Health = 0;
             Delete();
         }
     }
 
     protected virtual void OnDeath() { }
-    protected virtual void Setup()
+    public virtual void Setup()
     {
         SetupHealthbar();
-        this.startingHealth = this.Health;
+        this.startingHealth = Stats.Health;
     }
 
     private bool hasAlreadyBeenDeleted = false;
@@ -85,7 +107,7 @@ public abstract class Building : MonoBehaviour
     protected void updateHealthbar()
     {
         Vector3 scale = this.healthbar.transform.localScale;
-        scale.x = ((float)this.Health / this.startingHealth) * this.startingHealthbarScale;
+        scale.x = ((float)Stats.Health / this.startingHealth) * this.startingHealthbarScale;
         this.healthbar.transform.localScale = scale;
     }
 }

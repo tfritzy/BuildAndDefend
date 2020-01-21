@@ -8,41 +8,8 @@ public abstract class ChargeAttack : Tower
     protected float maxProjectileSpeed;
     public float startChargeTime;
     public bool isCharging;
-
-    public override float ProjectileMovementSpeed
-    {
-        get
-        {
-            return Mathf.Min(
-                getChargePercentage() * maxProjectileSpeed,
-                maxProjectileSpeed
-            );
-        }
-    }
-
     protected int maxProjectileDamage;
-    public override int ProjectileDamage
-    {
-        get
-        {
-            return Mathf.Min(
-                (int)(getChargePercentage() * maxProjectileSpeed),
-                maxProjectileDamage
-            );
-        }
-    }
-
     protected float maxProjectileLifespan;
-    public override float ProjectileLifespan
-    {
-        get
-        {
-            return Mathf.Min(
-                (getChargePercentage() * maxProjectileLifespan),
-                maxProjectileDamage
-            );
-        }
-    }
 
     private float getChargePercentage()
     {

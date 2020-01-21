@@ -42,6 +42,7 @@ public static class GameObjectCache
                 foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
                 {
                     GameObject building = Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}");
+                    building.GetComponent<Building>().SetStats();
                     if (building != null)
                     {
                         _buildings.Add(type, building);

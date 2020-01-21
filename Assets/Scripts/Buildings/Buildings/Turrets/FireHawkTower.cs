@@ -1,7 +1,6 @@
 public class FireHawkTower : TargetLocationFlyingProjTower
 {
     public override TowerType Type => TowerType.FireHawks;
-    public override bool HasExplosiveProjectiles => true;
     public override string Name => "Fire Hawk";
     public override Faction Faction => Faction.Fire;
     protected override InputController inputController
@@ -26,14 +25,16 @@ public class FireHawkTower : TargetLocationFlyingProjTower
         }
     }
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 10;
-        this.inaccuracy = .1f;
-        this.ProjectileMovementSpeed = 3f;
-        this.FireCooldown = .3f;
-        this.ProjectileLifespan = 10f;
-        this.projectileExplosionRadius = 1f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 10;
+        stats.Inaccuracy = .1f;
+        stats.ProjectileMovementSpeed = 3f;
+        stats.FireCooldown = .3f;
+        stats.ProjectileLifespan = 10f;
+        stats.ExplosionRadius = 1f;
+        return stats;
     }
 }

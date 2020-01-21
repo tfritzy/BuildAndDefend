@@ -3,31 +3,32 @@ using UnityEngine;
 
 public abstract class Tower : Building
 {
-    public float FireCooldown;
-    public int ProjectilePierce;
-    public virtual float ProjectileMovementSpeed { get; set; }
-    public virtual int ProjectileDamage { get; set; }
-    public virtual float ProjectileLifespan { get; set; }
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 175, gold: 50, stone: 30); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
-    public virtual bool HasExplosiveProjectiles => false;
-    public float projectileExplosionRadius;
     protected virtual string projectilePrefabName => this.Type.ToString();
     public override bool IsTower => true;
-    protected float inaccuracy;
     public float lastFireTime;
-    public float Range;
+    public new TowerStats Stats;
 
     // Projectiles that stretch themselves until they hit the nearest object.
-    public abstract void SetTowerParameters();
-    protected override void Setup()
+    public abstract TowerStats GetTowerParameters(int level);
+    public override void Setup()
     {
-        SetTowerParameters();
+        SetStats();
         ConfigureUI();
         base.Setup();
     }
 
+    public override void SetStats()
+    {
+        this.Stats = (TowerStats)GetStats(this.Level);
+    }
+
+    public override BuildingStats GetStats(int level)
+    {
+        return GetTowerParameters(level);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -52,7 +53,7 @@ public abstract class Tower : Building
 
     protected virtual bool CanFire()
     {
-        return (Time.time > FireCooldown + lastFireTime);
+        return (Time.time > Stats.FireCooldown + lastFireTime);
     }
 
     protected virtual void InputLoop()
@@ -91,8 +92,8 @@ public abstract class Tower : Building
         fireDirection = fireDirection / fireDirection.magnitude;
 
         Vector2 shakeAmount = new Vector3(
-            UnityEngine.Random.Range(-1 * inaccuracy, 1 * inaccuracy),
-            UnityEngine.Random.Range(-1 * inaccuracy, 1 * inaccuracy));
+            UnityEngine.Random.Range(-1 * Stats.Inaccuracy, 1 * Stats.Inaccuracy),
+            UnityEngine.Random.Range(-1 * Stats.Inaccuracy, 1 * Stats.Inaccuracy));
         fireDirection += shakeAmount;
 
         return fireDirection;
@@ -125,7 +126,7 @@ public abstract class Tower : Building
 
         SetProjectileRotation(instProj, fireDirection);
 
-        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * ProjectileMovementSpeed;
+        instProj.GetComponent<Rigidbody2D>().velocity = fireDirection * Stats.ProjectileMovementSpeed;
         SetProjectileValues(instProj, input);
         return instProj;
     }
@@ -146,11 +147,11 @@ public abstract class Tower : Building
     protected virtual void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<Projectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
-            this.ProjectilePierce,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
+            Stats.Pierce,
             this,
-            this.projectileExplosionRadius);
+            Stats.ExplosionRadius);
     }
 
     protected override void OnDeath()

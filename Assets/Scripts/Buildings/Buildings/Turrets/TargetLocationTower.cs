@@ -30,11 +30,11 @@ public abstract class TargetLocationTower : Tower
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
         p.GetComponent<ITargetLocationProjectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
-            this.ProjectilePierce,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
+            Stats.Pierce,
             this,
-            this.projectileExplosionRadius,
+            Stats.ExplosionRadius,
             ((VectorInputDAO)input).location.Value);
     }
 }

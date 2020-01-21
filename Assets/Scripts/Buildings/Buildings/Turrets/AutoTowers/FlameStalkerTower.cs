@@ -56,28 +56,30 @@ public class FlameStalkerTower : Tower
     }
 
 
-    public override void SetTowerParameters()
+    public override TowerStats GetTowerParameters(int level)
     {
-        this.Health = 100;
-        this.ProjectileDamage = 30;
-        this.inaccuracy = .9f;
-        this.ProjectileMovementSpeed = 3f;
-        this.FireCooldown = 3f;
-        this.ProjectileLifespan = 20f;
-        this.Range = 5f;
-        this.projectileExplosionRadius = .3f;
+        TowerStats stats = new TowerStats();
+        stats.Health = 100;
+        stats.Damage = 30;
+        stats.Inaccuracy = .9f;
+        stats.ProjectileMovementSpeed = 3f;
+        stats.FireCooldown = 3f;
+        stats.ProjectileLifespan = 20f;
+        stats.Range = 5f;
+        stats.ExplosionRadius = .3f;
+        return stats;
     }
 
     protected override void SetProjectileValues(UnityEngine.GameObject p, InputDAO input)
     {
         p.GetComponent<ITargetEntityFlyingProjectile>().SetParameters(
-            this.ProjectileDamage,
-            this.ProjectileLifespan,
-            this.ProjectilePierce,
+            Stats.Damage,
+            Stats.ProjectileLifespan,
+            Stats.Pierce,
             this,
-            this.projectileExplosionRadius,
+            Stats.ExplosionRadius,
             ((TargetObjectAutoInput)this.inputController).input.Target,
-            this.ProjectileMovementSpeed
+            Stats.ProjectileMovementSpeed
         );
     }
 }

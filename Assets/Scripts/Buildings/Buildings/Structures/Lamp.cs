@@ -28,16 +28,9 @@ public class Lamp : Building
 
     protected override void OnDeath()
     {
-        Vector2 curPos = this.transform.position;
-        Vector2 gridPos = darkness.WorldPointToGridPoint(curPos.x, curPos.y);
-        darkness.RemoveLight((int)gridPos.x, (int)gridPos.y);
     }
 
     public override void Setup()
     {
-        this.darkness = GameObject.Find("Night").GetComponent<Darkness>();
-        Vector2 curPos = this.transform.position;
-        Vector2 gridPos = darkness.WorldPointToGridPoint(curPos.x, curPos.y);
-        darkness.AddLight((int)gridPos.x, (int)gridPos.y, 10, strength);
     }
 }

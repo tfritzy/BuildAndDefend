@@ -103,6 +103,14 @@ public abstract class Building : MonoBehaviour
         this.startingHealthbarScale = this.healthbar.transform.localScale.y;
     }
 
+    public Vector2 GetWorldPointFromGridPoint(Vector2Int gridPoint)
+    {
+        Vector2Int topRight = gridPoint + this.Size;
+        Vector2 deltaVector = Map.GridPointToWorldPoint(topRight) - Map.GridPointToWorldPoint(gridPoint);
+        deltaVector = deltaVector / 2;
+        return Map.GridPointToWorldPoint(gridPoint) + deltaVector;
+    }
+
     protected void updateHealthbar()
     {
         Vector3 scale = this.healthbar.transform.localScale;

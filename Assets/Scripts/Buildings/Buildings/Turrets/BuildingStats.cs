@@ -1,3 +1,7 @@
+
+using System;
+
+[Serializable]
 public class BuildingStats
 {
     public int Health;

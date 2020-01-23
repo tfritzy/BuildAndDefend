@@ -29,6 +29,7 @@ public abstract class Tower : Building
     {
         return GetTowerParameters(level, tier);
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -72,6 +73,7 @@ public abstract class Tower : Building
             return _inputController;
         }
     }
+
     protected InputController _inputController;
     protected InputDAO GetInput()
     {

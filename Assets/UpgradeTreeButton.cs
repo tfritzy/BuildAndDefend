@@ -57,7 +57,6 @@ public class UpgradeTreeButton : MonoBehaviour
         {
             SetPowerUpValues();
         }
-
     }
 
     private void SetLevelUpValues()

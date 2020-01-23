@@ -29,6 +29,22 @@ public class MapLoader : MonoBehaviour
         MapDAO map = ReadMapFile(mapName);
         LoadGrid(map);
         LoadSpawners(map);
+        LoadBuildings(map);
+    }
+
+    public void LoadBuildings(MapDAO map)
+    {
+        foreach (BuildingOnMapDAO building in map.buildings)
+        {
+            Vector2Int position = new Vector2Int(building.xPos, building.yPos);
+            Instantiate(
+                GameObjectCache.Buildings[building.Type],
+                GameObjectCache.Buildings[building.Type]
+                    .GetComponent<Building>()
+                    .GetWorldPointFromGridPoint(position),
+                new Quaternion(),
+                null);
+        }
     }
 
     public void ResetMapData(int width, int height)

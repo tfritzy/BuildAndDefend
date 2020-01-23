@@ -4862,4 +4862,11 @@
             "spawnRate": 6
         }
     ],
+    "buildings": [
+        {
+            "Type": 4,
+            "xPos": 25,
+            "yPos": 28,
+        }
+    ]
 }

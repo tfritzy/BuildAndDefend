@@ -126,10 +126,7 @@ public class Builder : MonoBehaviour
     private GameObject InstantiateBuilding(Vector2Int gridLoc)
     {
         Building building = SelectedBuilding.GetComponent<Building>();
-        Vector2Int topRight = building.Position + building.Size;
-        Vector2 deltaVector = Map.GridPointToWorldPoint(topRight) - Map.GridPointToWorldPoint(building.Position);
-        deltaVector = deltaVector / 2;
-        Vector2 buildingPos = Map.GridPointToWorldPoint(building.Position) + deltaVector;
+        Vector2 buildingPos = building.GetWorldPointFromGridPoint(gridLoc);
         GameObject inst = Instantiate(SelectedBuilding,
                                       buildingPos,
                                       new Quaternion());

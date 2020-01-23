@@ -8,4 +8,5 @@ public class MapDAO
     public int height;
     public EnvironmentTileType[] environment;
     public List<ZombieSpawnerDAO> zombieSpawners;
+    public List<BuildingOnMapDAO> buildings;
 }

@@ -6,17 +6,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static Player Data;
-    public PlayerDataDAO vals;
+    public static Player PlayerData;
+    public PlayerDataDAO Values;
+    public static PlayerDataDAO Data
+    {
+        get
+        {
+            return Player.PlayerData.Values;
+        }
+    }
 
     void Awake()
     {
-        if (Data == null)
+        if (PlayerData == null)
         {
-            Data = this;
+            PlayerData = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else if (Data != this)
+        else if (PlayerData != this)
         {
             Destroy(this.gameObject);
         }
@@ -39,7 +46,7 @@ public class Player : MonoBehaviour
                 return;
             }
             reader.Close();
-            Player.Data.vals = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
+            Player.PlayerData.Values = JsonConvert.DeserializeObject<PlayerDataDAO>(jsonPlayerData);
         }
         else
         {
@@ -49,13 +56,13 @@ public class Player : MonoBehaviour
 
     private void CreateNewSaveFile()
     {
-        Player.Data.vals = new PlayerDataDAO();
+        Player.PlayerData.Values = new PlayerDataDAO();
         Save();
     }
 
     public void Save()
     {
-        string serializedObject = JsonConvert.SerializeObject(Player.Data.vals).ToString();
+        string serializedObject = JsonConvert.SerializeObject(Player.PlayerData.Values).ToString();
         string fullPath = $"{Application.persistentDataPath}/{fileName}";
         StreamWriter writer = new StreamWriter(fullPath, false);
         writer.Write(serializedObject);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RapidFireTower : StretchProjectileTower
 {
-    public override TowerType Type => TowerType.RapidFire;
+    public override BuildingType Type => BuildingType.RapidFire;
     public override string Name => "Rapid Fire";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost

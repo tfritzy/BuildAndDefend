@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TowerControlSelect : MonoBehaviour
 {
-    public TowerType selectType;
+    public BuildingType selectType;
 
     public void SelectTowerType()
     {

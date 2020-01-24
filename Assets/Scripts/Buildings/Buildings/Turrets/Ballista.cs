@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Ballista : ChargeAttack
 {
-    public override TowerType Type => TowerType.Ballista;
+    public override BuildingType Type => BuildingType.Ballista;
     public override ResourceDAO BuildCost { get => new ResourceDAO(wood: 250, gold: 25, stone: 10); }
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override string Name => "Ballista";

@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class BuildingOnMapDAO
 {
-    public TowerType Type;
+    public BuildingType Type;
     public int xPos;
     public int yPos;
+    public string BuildingId;
 }

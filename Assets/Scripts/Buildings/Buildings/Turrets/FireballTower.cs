@@ -1,6 +1,6 @@
 public class FireballTower : Tower
 {
-    public override TowerType Type => TowerType.Fireball;
+    public override BuildingType Type => BuildingType.Fireball;
     public override string Name => "Fireball";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost

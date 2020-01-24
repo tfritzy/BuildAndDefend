@@ -3,14 +3,14 @@ using Newtonsoft.Json;
 [System.Serializable]
 public class BuildingDAO
 {
-    public TowerType Type;
+    public BuildingType Type;
     public int Level;
     public int Tier;
     public int XP;
     public int Kills;
     public double DamageDealt;
 
-    public BuildingDAO(TowerType type)
+    public BuildingDAO(BuildingType type)
     {
         this.Type = type;
     }

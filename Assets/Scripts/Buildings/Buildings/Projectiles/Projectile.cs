@@ -11,7 +11,7 @@ public abstract class Projectile : MonoBehaviour
     public Tower Owner;
     protected float CreationTime;
     public float MovementSpeed;
-    protected abstract TowerType TowerType { get; }
+    protected abstract BuildingType TowerType { get; }
     protected HashSet<GameObject> hits;
     public float ExplosionRadius;
 

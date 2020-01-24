@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class TowerSelectManager
 {
-    private static Dictionary<TowerType, GameObject> _towerSelectButtons;
-    public static Dictionary<TowerType, GameObject> TowerSelectButtons
+    private static Dictionary<BuildingType, GameObject> _towerSelectButtons;
+    public static Dictionary<BuildingType, GameObject> TowerSelectButtons
     {
         get
         {
             if (_towerSelectButtons == null)
             {
-                _towerSelectButtons = new Dictionary<TowerType, GameObject>();
+                _towerSelectButtons = new Dictionary<BuildingType, GameObject>();
             }
             return _towerSelectButtons;
         }
@@ -47,7 +47,7 @@ public class TowerSelectManager
         }
     }
 
-    public static void AddTowerButton(TowerType type)
+    public static void AddTowerButton(BuildingType type)
     {
         if (TowerSelectButtons.ContainsKey(type))
         {

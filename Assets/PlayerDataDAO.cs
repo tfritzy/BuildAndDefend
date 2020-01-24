@@ -15,17 +15,17 @@ public class PlayerDataDAO
 
     public string CurrentLevel;
 
-    private Dictionary<TowerType, BuildingDAO> _buildingUpgrades;
+    private Dictionary<BuildingType, BuildingDAO> _buildingUpgrades;
 
-    public Dictionary<TowerType, BuildingDAO> BuildingUpgrades
+    public Dictionary<BuildingType, BuildingDAO> BuildingUpgrades
     {
         get
         {
             if (_buildingUpgrades == null)
             {
-                _buildingUpgrades = new Dictionary<TowerType, BuildingDAO>();
+                _buildingUpgrades = new Dictionary<BuildingType, BuildingDAO>();
             }
-            foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
+            foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
             {
                 if (!_buildingUpgrades.ContainsKey(type))
                 {
@@ -39,4 +39,26 @@ public class PlayerDataDAO
             _buildingUpgrades = value;
         }
     }
+
+    /// <summary>
+    /// The resource collection rate of each map in units per hour.
+    /// key = mapName, value = resourcesPerHour
+    /// </summary>
+    public Dictionary<string, ResourceDAO> ResourceHarvestByMapPerHour
+    {
+        get
+        {
+            if (_resourceHarvestByMapPerHour == null)
+            {
+                _resourceHarvestByMapPerHour = new Dictionary<string, ResourceDAO>();
+            }
+            return _resourceHarvestByMapPerHour;
+        }
+        set
+        {
+            _resourceHarvestByMapPerHour = value;
+        }
+    }
+
+    private Dictionary<string, ResourceDAO> _resourceHarvestByMapPerHour;
 }

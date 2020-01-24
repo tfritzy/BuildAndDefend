@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PurchaseUpgradeButton : MonoBehaviour
 {
     public UpgradeTreeButton ParentUpgradeTreeButton;
-    public TowerType Type;
+    public BuildingType Type;
     public bool OnConfirmationStage = false;
     private Color originalColor;
     private string originalText;
@@ -18,7 +18,7 @@ public class PurchaseUpgradeButton : MonoBehaviour
         }
         else
         {
-            Player.Data.vals.BuildingUpgrades[Type].BuyLevelUp();
+            Player.PlayerData.Values.BuildingUpgrades[Type].BuyLevelUp();
             GameObjectCache.Buildings[Type].GetComponent<Building>().SetStats();
             SetBaseValues();
         }
@@ -33,7 +33,7 @@ public class PurchaseUpgradeButton : MonoBehaviour
         }
         else
         {
-            Player.Data.vals.BuildingUpgrades[Type].BuyPowerUp();
+            Player.PlayerData.Values.BuildingUpgrades[Type].BuyPowerUp();
             GameObjectCache.Buildings[Type].GetComponent<Building>().SetStats();
             SetBaseValues();
         }

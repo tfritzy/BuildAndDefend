@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FlameStalkerTower : Tower
 {
-    public override TowerType Type => TowerType.FlameStalker;
+    public override BuildingType Type => BuildingType.FlameStalker;
     public override Vector2Int Size => new Vector2Int(0, 0);
     public override string Name => "Flame Stalker";
     public override Faction Faction => Faction.Fire;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireWallTower : Tower
 {
-    public override TowerType Type => TowerType.FireWall;
+    public override BuildingType Type => BuildingType.FireWall;
     public int MaxFireSegments;
     public float FireDamageTickGapInSeconds;
     public override string Name => "Fire Wall";

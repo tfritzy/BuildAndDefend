@@ -8,7 +8,6 @@ public abstract class Building : MonoBehaviour
     private GameObject Structure;
     public abstract ResourceDAO BuildCost { get; }
     protected int startingHealth;
-    public abstract bool IsTower { get; }
 
     /// <summary>
     /// The Size of the building where x=Lenth, y=Height. Zero indexed.
@@ -16,20 +15,34 @@ public abstract class Building : MonoBehaviour
     /// <value>The size of the building in <Length, Height> </value>
     public abstract Vector2Int Size { get; }
     public abstract string Name { get; }
-    public abstract TowerType Type { get; }
+    public abstract BuildingType Type { get; }
     public abstract PathableType PathableType { get; }
     public virtual bool StopsProjectiles => false;
     public abstract Faction Faction { get; }
     public abstract ResourceDAO PowerUpCost { get; }
     private ResourceDAO _levelUpCost = new ResourceDAO(skillPoints: 1);
     public virtual ResourceDAO LevelUpCost { get { return _levelUpCost; } }
+    public string BuildingId
+    {
+        get
+        {
+            if (_id == null)
+            {
+                _id = $"{this.Name}_{Guid.NewGuid().ToString("N").Substring(0, 6)}";
+            }
+            return _id;
+        }
+        set { _id = value; }
+    }
+    private string _id;
+
     public int Level
     {
-        get { return Player.Data.vals.BuildingUpgrades[this.Type].Level; }
+        get { return Player.PlayerData.Values.BuildingUpgrades[this.Type].Level; }
     }
     public int Tier
     {
-        get { return Player.Data.vals.BuildingUpgrades[this.Type].Tier; }
+        get { return Player.PlayerData.Values.BuildingUpgrades[this.Type].Tier; }
     }
     public BuildingStats Stats;
 

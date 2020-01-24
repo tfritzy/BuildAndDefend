@@ -7,41 +7,41 @@ public static class Purchaser
         {
             throw new System.Exception("Not enough resources to buy this!");
         }
-        Player.Data.vals.Iron -= cost.Iron;
-        Player.Data.vals.Gold -= cost.Gold;
-        Player.Data.vals.Wood -= cost.Wood;
-        Player.Data.vals.Stone -= cost.Stone;
-        Player.Data.vals.SkillPoints -= cost.SkillPoints;
+        Player.PlayerData.Values.Iron -= cost.Iron;
+        Player.PlayerData.Values.Gold -= cost.Gold;
+        Player.PlayerData.Values.Wood -= cost.Wood;
+        Player.PlayerData.Values.Stone -= cost.Stone;
+        Player.PlayerData.Values.SkillPoints -= cost.SkillPoints;
     }
 
     public static void Give(ResourceDAO amount)
     {
-        Player.Data.vals.Iron += amount.Iron;
-        Player.Data.vals.Gold += amount.Gold;
-        Player.Data.vals.Wood += amount.Wood;
-        Player.Data.vals.Stone += amount.Stone;
-        Player.Data.vals.SkillPoints += amount.SkillPoints;
+        Player.PlayerData.Values.Iron += amount.Iron;
+        Player.PlayerData.Values.Gold += amount.Gold;
+        Player.PlayerData.Values.Wood += amount.Wood;
+        Player.PlayerData.Values.Stone += amount.Stone;
+        Player.PlayerData.Values.SkillPoints += amount.SkillPoints;
     }
 
     public static bool CanBuy(ResourceDAO cost)
     {
-        if (Player.Data.vals.Iron < cost.Iron)
+        if (Player.PlayerData.Values.Iron < cost.Iron)
         {
             return false;
         }
-        if (Player.Data.vals.Gold < cost.Gold)
+        if (Player.PlayerData.Values.Gold < cost.Gold)
         {
             return false;
         }
-        if (Player.Data.vals.Wood < cost.Wood)
+        if (Player.PlayerData.Values.Wood < cost.Wood)
         {
             return false;
         }
-        if (Player.Data.vals.Stone < cost.Stone)
+        if (Player.PlayerData.Values.Stone < cost.Stone)
         {
             return false;
         }
-        if (Player.Data.vals.SkillPoints < cost.SkillPoints)
+        if (Player.PlayerData.Values.SkillPoints < cost.SkillPoints)
         {
             return false;
         }

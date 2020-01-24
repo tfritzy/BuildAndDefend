@@ -17,9 +17,12 @@ public class MapBuilder : MonoBehaviour
     public static EnvironmentTileType SelectedTileType = EnvironmentTileType.Water;
 
     private static GameObject tileParent;
-    public static GameObject TileParent {
-        get {
-            if (tileParent == null){
+    public static GameObject TileParent
+    {
+        get
+        {
+            if (tileParent == null)
+            {
                 tileParent = GameObject.Find("TileParent");
             }
             return tileParent;

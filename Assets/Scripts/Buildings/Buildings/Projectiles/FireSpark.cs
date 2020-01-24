@@ -1,4 +1,4 @@
 public class FireSpark : Projectile
 {
-    protected override TowerType TowerType => TowerType.FireSpark;
+    protected override BuildingType TowerType => BuildingType.FireSpark;
 }

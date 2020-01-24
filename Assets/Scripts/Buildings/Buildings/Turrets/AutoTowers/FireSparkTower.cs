@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FireSparkTower : Tower
 {
-    public override TowerType Type => TowerType.FireSpark;
+    public override BuildingType Type => BuildingType.FireSpark;
     public override string Name => "Fire Spark";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost

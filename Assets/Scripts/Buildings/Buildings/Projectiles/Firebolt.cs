@@ -1,4 +1,4 @@
 public class Firebolt : Projectile
 {
-    protected override TowerType TowerType => TowerType.FireBolt;
+    protected override BuildingType TowerType => BuildingType.FireBolt;
 }

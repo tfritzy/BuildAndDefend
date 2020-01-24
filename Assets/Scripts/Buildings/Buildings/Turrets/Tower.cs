@@ -7,7 +7,6 @@ public abstract class Tower : Building
     public override Vector2Int Size => new Vector2Int(1, 1);
     public override PathableType PathableType => PathableType.UnPathable;
     protected virtual string projectilePrefabName => this.Type.ToString();
-    public override bool IsTower => true;
     public float lastFireTime;
     public new TowerStats Stats;
 

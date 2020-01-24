@@ -5,7 +5,7 @@ public class FireHawkProjectile : TargetLocationFlyingProjectile, ITargetLocatio
 {
     public float initialZVelocity = -50f;
     public float initialOpposingSpeed = 10f;
-    protected override TowerType TowerType => TowerType.FireHawks;
+    protected override BuildingType TowerType => BuildingType.FireHawks;
     protected override bool ConstantVelocity => false;
 
     protected override void Startup()

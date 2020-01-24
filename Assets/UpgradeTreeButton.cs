@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class UpgradeTreeButton : MonoBehaviour
 {
-    public TowerType Type;
+    public BuildingType Type;
     public static GameObject UpgradePane;
     public GameObject ParentUpgradeTreeButton;
     public bool LevelValuesSelected = true;
@@ -83,8 +83,8 @@ public class UpgradeTreeButton : MonoBehaviour
         {
             return;
         }
-        this.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[Type].Tier.ToString();
-        this.transform.Find("Level").gameObject.GetComponent<Text>().text = Player.Data.vals.BuildingUpgrades[Type].Level.ToString();
+        this.transform.Find("Tier").gameObject.GetComponent<Text>().text = Player.PlayerData.Values.BuildingUpgrades[Type].Tier.ToString();
+        this.transform.Find("Level").gameObject.GetComponent<Text>().text = Player.PlayerData.Values.BuildingUpgrades[Type].Level.ToString();
         this.transform.Find("Name").gameObject.GetComponent<Text>().text = GameObjectCache.Buildings[Type].GetComponent<Building>().Name;
     }
 

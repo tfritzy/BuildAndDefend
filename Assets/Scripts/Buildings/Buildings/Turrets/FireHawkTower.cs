@@ -1,6 +1,6 @@
 public class FireHawkTower : TargetLocationFlyingProjTower
 {
-    public override TowerType Type => TowerType.FireHawks;
+    public override BuildingType Type => BuildingType.FireHawks;
     public override string Name => "Fire Hawk";
     public override Faction Faction => Faction.Fire;
     protected override InputController inputController

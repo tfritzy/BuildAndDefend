@@ -366,8 +366,8 @@ public class Zombie : MonoBehaviour
     public void TakeDamage(int damage, Tower attacker)
     {
         this.health -= damage;
-        Player.Data.vals.BuildingUpgrades[attacker.Type].DamageDealt += damage;
-        Player.Data.vals.BuildingUpgrades[attacker.Type].XP += this.XP;
+        Player.PlayerData.Values.BuildingUpgrades[attacker.Type].DamageDealt += damage;
+        Player.PlayerData.Values.BuildingUpgrades[attacker.Type].XP += this.XP;
         updateHealthbar();
 
         if (health <= 0 && !hasAlreadyDied)
@@ -383,7 +383,7 @@ public class Zombie : MonoBehaviour
     protected virtual void OnDeath(Tower attacker)
     {
         Purchaser.Give(this.KillReward);
-        Player.Data.vals.BuildingUpgrades[attacker.Type].Kills += 1;
+        Player.PlayerData.Values.BuildingUpgrades[attacker.Type].Kills += 1;
         Destroy(this.gameObject);
     }
 

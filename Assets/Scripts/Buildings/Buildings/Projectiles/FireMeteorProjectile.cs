@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FireMeteorProjectile : TargetLocationFlyingProjectile
 {
-    protected override TowerType TowerType => TowerType.FireMeteor;
+    protected override BuildingType TowerType => BuildingType.FireMeteor;
 
     protected override bool ConstantVelocity => true;
 

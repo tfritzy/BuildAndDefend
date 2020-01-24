@@ -1,6 +1,6 @@
 public class FireMeteorTower : TargetLocationFlyingProjTower
 {
-    public override TowerType Type => TowerType.FireMeteor;
+    public override BuildingType Type => BuildingType.FireMeteor;
     public override string Name => "Fire Meteor";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class FlamePlumeProjectile : TimedExplosionProjectile
 {
-    protected override TowerType TowerType => TowerType.FlamePlume;
+    protected override BuildingType TowerType => BuildingType.FlamePlume;
 }

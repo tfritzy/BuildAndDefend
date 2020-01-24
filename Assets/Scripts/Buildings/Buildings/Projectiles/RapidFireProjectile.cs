@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RapidFireProjectile : Projectile
 {
-    protected override TowerType TowerType => TowerType.RapidFire;
+    protected override BuildingType TowerType => BuildingType.RapidFire;
 
     protected override bool IsHaltingObject(Collider2D collision)
     {

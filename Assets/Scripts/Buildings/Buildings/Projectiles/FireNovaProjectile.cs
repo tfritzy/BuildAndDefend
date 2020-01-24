@@ -1,4 +1,4 @@
 public class FireNovaProjectile : ConstantDamageProjectile
 {
-    protected override TowerType TowerType => TowerType.FireNova;
+    protected override BuildingType TowerType => BuildingType.FireNova;
 }

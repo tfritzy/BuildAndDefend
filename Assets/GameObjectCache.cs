@@ -31,15 +31,15 @@ public static class GameObjectCache
         }
     }
 
-    private static Dictionary<TowerType, GameObject> _buildings;
-    public static Dictionary<TowerType, GameObject> Buildings
+    private static Dictionary<BuildingType, GameObject> _buildings;
+    public static Dictionary<BuildingType, GameObject> Buildings
     {
         get
         {
             if (_buildings == null)
             {
-                _buildings = new Dictionary<TowerType, GameObject>();
-                foreach (TowerType type in Enum.GetValues(typeof(TowerType)))
+                _buildings = new Dictionary<BuildingType, GameObject>();
+                foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
                 {
                     GameObject building = Resources.Load<GameObject>($"{FilePaths.Buildings}/{type}");
                     building.GetComponent<Building>().SetStats();

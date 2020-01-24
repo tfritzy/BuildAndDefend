@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FireNovaTower : Tower
 {
-    public override TowerType Type => TowerType.FireNova;
+    public override BuildingType Type => BuildingType.FireNova;
     private int numProjectiles = 18;
     private float offset;
     protected float damageTickGap;

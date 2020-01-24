@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FlamePlumeTower : TargetLocationTower
 {
-    public override TowerType Type => TowerType.FlamePlume;
+    public override BuildingType Type => BuildingType.FlamePlume;
     public override string Name => "Flame Plume";
     public override Faction Faction => Faction.Fire;
     public override ResourceDAO PowerUpCost

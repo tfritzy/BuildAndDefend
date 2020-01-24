@@ -21,7 +21,7 @@ public class MapLoader : MonoBehaviour
         {
             tileMap.Add(type, Resources.Load<GameObject>($"{FilePaths.Terrain}/{type}"));
         }
-        LoadMap(Player.Data.vals.CurrentLevel);
+        LoadMap(Player.PlayerData.Values.CurrentLevel);
     }
 
     public void LoadMap(string mapName)
@@ -36,14 +36,7 @@ public class MapLoader : MonoBehaviour
     {
         foreach (BuildingOnMapDAO building in map.buildings)
         {
-            Vector2Int position = new Vector2Int(building.xPos, building.yPos);
-            Instantiate(
-                GameObjectCache.Buildings[building.Type],
-                GameObjectCache.Buildings[building.Type]
-                    .GetComponent<Building>()
-                    .GetWorldPointFromGridPoint(position),
-                new Quaternion(),
-                null);
+            Map.InstantiateBuilding(building);
         }
     }
 

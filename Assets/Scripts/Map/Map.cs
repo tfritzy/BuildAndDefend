@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using System.IO;
 
 public static class Map
 {
@@ -8,6 +10,8 @@ public static class Map
     public static Building[,] Buildings;
     public static PathableType[,] PathingGrid;
     public static Dictionary<string, HashSet<Zombie>> PathTakers = new Dictionary<string, HashSet<Zombie>>();
+    public static Dictionary<string, ResourceDAO> Harvesters = new Dictionary<string, ResourceDAO>();
+
 
     /// <summary>
     /// A dictionary containing all the player's buildings.
@@ -26,6 +30,19 @@ public static class Map
             Environment[location.x, location.y]?.PathableType == PathableType.UnPathable) ?
             PathableType.UnPathable : PathableType.Pathable;
         PathingGrid[location.x, location.y] = pathingType;
+    }
+
+    public static void InstantiateBuilding(BuildingOnMapDAO building)
+    {
+        Vector2Int position = new Vector2Int(building.xPos, building.yPos);
+        GameObject buildingInst = GameObject.Instantiate(
+            GameObjectCache.Buildings[building.Type],
+            GameObjectCache.Buildings[building.Type]
+                .GetComponent<Building>()
+                .GetWorldPointFromGridPoint(position),
+            new Quaternion(),
+            null);
+        buildingInst.GetComponent<Building>().BuildingId = building.BuildingId;
     }
 
     /// <summary>
@@ -144,5 +161,31 @@ public static class Map
             ((float)gridLoc[1] - Map.Environment.GetLength(1) / 2) / 2f + .5f);
 
         return loc;
+    }
+
+    public static void SaveMapToFile()
+    {
+        MapDAO mapSave = new MapDAO();
+        mapSave.width = Map.Environment.GetLength(0);
+        mapSave.height = Map.Environment.GetLength(1);
+        mapSave.name = Player.Data.CurrentLevel;
+        List<EnvironmentTileType> tiles = new List<EnvironmentTileType>();
+        foreach (EnvironmentTile block in Map.Environment)
+        {
+            if (block == null)
+            {
+                tiles.Add(EnvironmentTileType.Nothing);
+            }
+            else
+            {
+                tiles.Add(block.Type);
+            }
+        }
+        mapSave.environment = tiles.ToArray();
+
+        string path = $"{FilePaths.Maps}/{Player.Data.CurrentLevel}.json";
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.Write(JsonConvert.SerializeObject(mapSave));
+        writer.Close();
     }
 }

@@ -22,14 +22,14 @@ public class UIManager : MonoBehaviour
     private void SetupUpgradeMenuButtons(GameObject parent)
     {
         int i = 1;
-        foreach (TowerType tower in FactionTowers.Towers[Faction.Fire])
+        foreach (BuildingType tower in FactionTowers.Towers[Faction.Fire])
         {
             CreateTowerButton(tower, parent, i);
             i += 1;
         }
     }
 
-    private void CreateTowerButton(TowerType towerType, GameObject parent, int i)
+    private void CreateTowerButton(BuildingType towerType, GameObject parent, int i)
     {
         GameObject towerButton = Resources.Load<GameObject>($"{FilePaths.UI}/UpgradeTreeButton");
         Vector2 position = new Vector2((i % 10) * 1.1f - 5f, (i / 10) * 1.1f);

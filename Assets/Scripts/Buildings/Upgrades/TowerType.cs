@@ -1,8 +1,12 @@
-public enum TowerType
+public enum BuildingType
 {
     Ballista,
+
+    // Shared defense buildings
     Lamp,
     Wall,
+
+    // Fire Towers 
     FireBolt,
     Fireball,
     FireWall,
@@ -13,4 +17,7 @@ public enum TowerType
     RapidFire,
     FireSpark,
     FlameStalker,
+
+    // Wood harvesters
+    LumberCamp,
 }

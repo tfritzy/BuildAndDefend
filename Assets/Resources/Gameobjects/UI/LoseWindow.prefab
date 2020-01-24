@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1576425599572220642}
   - component: {fileID: 2951171184369498989}
   - component: {fileID: 8246773638659406536}
-  - component: {fileID: 882929498}
+  - component: {fileID: 5559443334541511218}
   m_Layer: 5
   m_Name: AcceptButton
   m_TagString: Untagged
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 882929498}
+      - m_Target: {fileID: 5559443334541511218}
         m_MethodName: ReturnToMap
         m_Mode: 1
         m_Arguments:
@@ -130,7 +130,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &882929498
+--- !u!114 &5559443334541511218
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4244733415657294814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 938f762a60dfa8b41bf7ea6dbf332609, type: 3}
+  m_Script: {fileID: 11500000, guid: bd12dc260276bb74c9f2d7deb4a85691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5139351209565490792

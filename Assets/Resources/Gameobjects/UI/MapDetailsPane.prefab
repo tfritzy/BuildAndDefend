@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 6591885843452109164}
   - component: {fileID: 8076240161539516127}
   - component: {fileID: 2206582006374494426}
-  - component: {fileID: 8770982831905133216}
+  - component: {fileID: 2453496866132650475}
   m_Layer: 5
   m_Name: StartLevelButton
   m_TagString: Untagged
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8770982831905133216}
+      - m_Target: {fileID: 2453496866132650475}
         m_MethodName: StartLevel
         m_Mode: 1
         m_Arguments:
@@ -207,7 +207,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8770982831905133216
+--- !u!114 &2453496866132650475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2400622758378679810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 938f762a60dfa8b41bf7ea6dbf332609, type: 3}
+  m_Script: {fileID: 11500000, guid: bd12dc260276bb74c9f2d7deb4a85691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3354725985613590516

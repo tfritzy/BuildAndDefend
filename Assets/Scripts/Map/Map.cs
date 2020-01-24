@@ -163,6 +163,12 @@ public static class Map
         return loc;
     }
 
+    public static void SaveState()
+    {
+        SaveMapToFile();
+        UpdateTotalResourceProduction();
+    }
+
     public static void SaveMapToFile()
     {
         MapDAO mapSave = new MapDAO();
@@ -187,5 +193,16 @@ public static class Map
         StreamWriter writer = new StreamWriter(path, false);
         writer.Write(JsonConvert.SerializeObject(mapSave));
         writer.Close();
+    }
+
+    public static void UpdateTotalResourceProduction()
+    {
+        ResourceDAO totalResourceProductionOnThisMap = new ResourceDAO();
+        foreach (ResourceDAO production in Harvesters.Values)
+        {
+            totalResourceProductionOnThisMap.Add(production);
+        }
+
+        Player.Data.ResourceHarvestByMapPerHour[Player.Data.CurrentLevel] = totalResourceProductionOnThisMap;
     }
 }

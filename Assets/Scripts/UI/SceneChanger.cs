@@ -3,11 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    public void StartLevel(){
+    public static void StartLevel()
+    {
         SceneManager.LoadScene("Game");
     }
 
-    public void ReturnToMap(){
+    public static void ReturnToMap()
+    {
         SceneManager.LoadScene("Map");
     }
 }

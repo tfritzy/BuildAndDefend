@@ -1,8 +1,11 @@
+using UnityEngine;
+
 public class FireMeteorTower : TargetLocationFlyingProjTower
 {
     public override BuildingType Type => BuildingType.FireMeteor;
     public override string Name => "Fire Meteor";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
     public override ResourceDAO PowerUpCost
     {
         get

@@ -8,6 +8,7 @@ public class FireWallTower : Tower
     public float FireDamageTickGapInSeconds;
     public override string Name => "Fire Wall";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
     public override ResourceDAO PowerUpCost
     {
         get

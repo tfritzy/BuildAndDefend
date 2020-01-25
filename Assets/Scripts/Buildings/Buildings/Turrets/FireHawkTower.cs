@@ -1,8 +1,11 @@
+using UnityEngine;
+
 public class FireHawkTower : TargetLocationFlyingProjTower
 {
     public override BuildingType Type => BuildingType.FireHawks;
     public override string Name => "Fire Hawk";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
     protected override InputController inputController
     {
         get

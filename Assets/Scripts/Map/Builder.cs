@@ -130,8 +130,6 @@ public class Builder : MonoBehaviour
         GameObject inst = Instantiate(SelectedBuilding,
                                       buildingPos,
                                       new Quaternion());
-        inst.name = "Block" + gridLoc[0] + "," + gridLoc[1];
-        inst.GetComponent<Building>().Position = gridLoc;
         return inst;
     }
 

@@ -5,6 +5,7 @@ public class FireSparkTower : Tower
     public override BuildingType Type => BuildingType.FireSpark;
     public override string Name => "Fire Spark";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(0, 0);
     public override ResourceDAO PowerUpCost
     {
         get
@@ -27,10 +28,6 @@ public class FireSparkTower : Tower
             return this._inputController;
         }
     }
-
-    public override Vector2Int Size => new Vector2Int(0, 0);
-
-
 
     public override TowerStats GetTowerParameters(int level, int tier)
     {

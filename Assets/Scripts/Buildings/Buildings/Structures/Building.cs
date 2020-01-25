@@ -87,6 +87,8 @@ public abstract class Building : MonoBehaviour
     {
         SetupHealthbar();
         this.startingHealth = Stats.Health;
+        this.Position = Map.WorldPointToGridPoint(this.transform.position);
+        this.name = BuildingId;
     }
 
     private bool hasAlreadyBeenDeleted = false;
@@ -129,5 +131,47 @@ public abstract class Building : MonoBehaviour
         Vector3 scale = this.healthbar.transform.localScale;
         scale.x = ((float)Stats.Health / this.startingHealth) * this.startingHealthbarScale;
         this.healthbar.transform.localScale = scale;
+    }
+
+    public BuildingOnMapDAO ToBuildingOnMapDAO()
+    {
+        return new BuildingOnMapDAO
+        {
+            BuildingId = this.BuildingId,
+            Type = this.Type,
+            xPos = this.Position.x,
+            yPos = this.Position.y,
+        };
+    }
+
+    public Vector2Int GetClosestPointOnBuildingToGridPosition(Vector2Int gridPos)
+    {
+        Vector2Int closestPos = Vector2Int.zero;
+        if (gridPos.x >= this.Position.x + this.Size.x)
+        {
+            closestPos.x = this.Position.x + this.Size.x;
+        }
+        else if (gridPos.x <= this.Position.x)
+        {
+            closestPos.x = this.Position.x;
+        }
+        else
+        {
+            closestPos.x = gridPos.x;
+        }
+
+        if (gridPos.y >= this.Position.y + this.Size.y)
+        {
+            closestPos.y = this.Position.y + this.Size.y;
+        }
+        else if (gridPos.y <= this.Position.y)
+        {
+            closestPos.y = this.Position.y;
+        }
+        else
+        {
+            closestPos.y = gridPos.y;
+        }
+        return closestPos;
     }
 }

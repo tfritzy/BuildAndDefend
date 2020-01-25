@@ -12,14 +12,13 @@ public static class Map
     public static Dictionary<string, HashSet<Zombie>> PathTakers = new Dictionary<string, HashSet<Zombie>>();
     public static Dictionary<string, ResourceDAO> Harvesters = new Dictionary<string, ResourceDAO>();
 
-
     /// <summary>
     /// A dictionary containing all the player's buildings.
     /// </summary>
-    /// <typeparam name="string">The position of the tower in form 'x,y'</typeparam>
-    /// <typeparam name="GameObject">The tower object.</typeparam>
+    /// <typeparam name="string"> The building id. </typeparam>
+    /// <typeparam name="GameObject"> The tower object. </typeparam>
     /// <returns></returns>
-    public static Dictionary<string, GameObject> BuildingsDict = new Dictionary<string, GameObject>();
+    public static Dictionary<string, Building> BuildingDict = new Dictionary<string, Building>();
 
     public static Dictionary<string, GameObject> Spawners = new Dictionary<string, GameObject>();
 
@@ -32,7 +31,7 @@ public static class Map
         PathingGrid[location.x, location.y] = pathingType;
     }
 
-    public static void InstantiateBuilding(BuildingOnMapDAO building)
+    public static GameObject InstantiateBuilding(BuildingOnMapDAO building)
     {
         Vector2Int position = new Vector2Int(building.xPos, building.yPos);
         GameObject buildingInst = GameObject.Instantiate(
@@ -43,6 +42,9 @@ public static class Map
             new Quaternion(),
             null);
         buildingInst.GetComponent<Building>().BuildingId = building.BuildingId;
+        Map.AddBuildingToMap(buildingInst.GetComponent<Building>(), new Vector2Int(building.xPos, building.yPos));
+
+        return buildingInst;
     }
 
     /// <summary>
@@ -69,20 +71,14 @@ public static class Map
 
     /// <summary>
     /// Adds the given building to the Map.Buildings object.
-    /// building.Size = 3, 2
-    /// position = s = 1, 2
-    /// x b b b x
-    /// x s b b x
-    /// x x x x x
-    /// x x x x x
     /// </summary>
     /// <param name="building"></param>
     /// <param name="position">The starting position of the building.</param>
     public static void AddBuildingToMap(Building building, Vector2Int position)
     {
-        for (int x = building.Position.x; x <= building.Position.x + building.Size.x; x++)
+        for (int x = position.x; x <= position.x + building.Size.x; x++)
         {
-            for (int y = building.Position.y; y <= building.Position.y + building.Size.y; y++)
+            for (int y = position.y; y <= position.y + building.Size.y; y++)
             {
                 if (Buildings[x, y] != null)
                 {
@@ -91,9 +87,9 @@ public static class Map
                 Buildings[x, y] = building;
                 ReprocessPathingLoc(new Vector2Int(x, y));
                 NotifyPathTakersOfBuildingChange(x, y);
-                BuildingsDict.Add($"{x},{y}", building.gameObject);
             }
         }
+        BuildingDict.Add(building.BuildingId, building);
     }
 
     public static void RemoveBuildingFromMap(Building building)
@@ -109,10 +105,10 @@ public static class Map
                 }
                 Buildings[x, y] = null;
                 ReprocessPathingLoc(new Vector2Int(x, y));
-                BuildingsDict.Remove($"{x},{y}");
             }
         }
 
+        BuildingDict.Remove(building.BuildingId);
         TellAllZombiesToGetNewPath();
     }
 
@@ -169,30 +165,22 @@ public static class Map
         UpdateTotalResourceProduction();
     }
 
+    public static List<BuildingOnMapDAO> GetCurrentBuildingsOnMap()
+    {
+        List<BuildingOnMapDAO> currentBuildings = new List<BuildingOnMapDAO>();
+        foreach (string towerId in Map.BuildingDict.Keys)
+        {
+            currentBuildings.Add(Map.BuildingDict[towerId].ToBuildingOnMapDAO());
+        }
+        return currentBuildings;
+    }
+
     public static void SaveMapToFile()
     {
-        MapDAO mapSave = new MapDAO();
-        mapSave.width = Map.Environment.GetLength(0);
-        mapSave.height = Map.Environment.GetLength(1);
-        mapSave.name = Player.Data.CurrentLevel;
-        List<EnvironmentTileType> tiles = new List<EnvironmentTileType>();
-        foreach (EnvironmentTile block in Map.Environment)
-        {
-            if (block == null)
-            {
-                tiles.Add(EnvironmentTileType.Nothing);
-            }
-            else
-            {
-                tiles.Add(block.Type);
-            }
-        }
-        mapSave.environment = tiles.ToArray();
-
-        string path = $"{FilePaths.Maps}/{Player.Data.CurrentLevel}.json";
-        StreamWriter writer = new StreamWriter(path, false);
-        writer.Write(JsonConvert.SerializeObject(mapSave));
-        writer.Close();
+        MapDAO mapFile = MapLoader.ReadMapFile(Player.Data.CurrentLevel);
+        mapFile.resourceProduction = Map.Harvesters;
+        mapFile.buildings = GetCurrentBuildingsOnMap();
+        MapLoader.SaveMapToFile(mapFile);
     }
 
     public static void UpdateTotalResourceProduction()

@@ -101,10 +101,7 @@ public class MapBuilder : MonoBehaviour
         }
         mapSave.environment = tiles.ToArray();
 
-        string path = $"{FilePaths.Maps}/{this.mapName}.json";
-        StreamWriter writer = new StreamWriter(path, false);
-        writer.Write(JsonConvert.SerializeObject(mapSave));
-        writer.Close();
+        MapLoader.SaveMapToFile(mapSave);
     }
 
     void BuildBlock()

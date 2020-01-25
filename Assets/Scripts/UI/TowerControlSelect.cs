@@ -8,17 +8,17 @@ public class TowerControlSelect : MonoBehaviour
 
     public void SelectTowerType()
     {
-        foreach (string key in Map.BuildingsDict.Keys)
+        foreach (string key in Map.BuildingDict.Keys)
         {
-            if (Map.BuildingsDict[key].CompareTag(Tags.Tower))
+            if (Map.BuildingDict[key].CompareTag(Tags.Tower))
             {
-                if (Map.BuildingsDict[key].GetComponent<Tower>().Type == selectType)
+                if (Map.BuildingDict[key].GetComponent<Tower>().Type == selectType)
                 {
-                    Map.BuildingsDict[key].GetComponent<Tower>().SetIsActive(true);
+                    Map.BuildingDict[key].GetComponent<Tower>().SetIsActive(true);
                 }
                 else
                 {
-                    Map.BuildingsDict[key].GetComponent<Tower>().SetIsActive(false);
+                    Map.BuildingDict[key].GetComponent<Tower>().SetIsActive(false);
                 }
             }
         }

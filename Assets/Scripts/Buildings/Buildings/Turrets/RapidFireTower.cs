@@ -5,6 +5,7 @@ public class RapidFireTower : StretchProjectileTower
     public override BuildingType Type => BuildingType.RapidFire;
     public override string Name => "Rapid Fire";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
     public override ResourceDAO PowerUpCost
     {
         get

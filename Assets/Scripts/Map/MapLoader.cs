@@ -34,9 +34,13 @@ public class MapLoader : MonoBehaviour
 
     public void LoadBuildings(MapDAO map)
     {
+        if (map.buildings == null)
+        {
+            return;
+        }
         foreach (BuildingOnMapDAO building in map.buildings)
         {
-            Map.InstantiateBuilding(building);
+            GameObject inst = Map.InstantiateBuilding(building);
         }
     }
 
@@ -46,15 +50,24 @@ public class MapLoader : MonoBehaviour
         Map.Buildings = new Building[width, height];
         Map.PathingGrid = new PathableType[width, height];
         Map.Spawners = new Dictionary<string, GameObject>();
-        Map.BuildingsDict = new Dictionary<string, GameObject>();
+        Map.BuildingDict = new Dictionary<string, Building>();
     }
 
-    private MapDAO ReadMapFile(String mapName)
+    public static MapDAO ReadMapFile(String mapName)
     {
         string path = $"{FilePaths.Maps}/{mapName}.json";
         StreamReader reader = new StreamReader(path);
         string jsonMap = reader.ReadToEnd();
-        return JsonConvert.DeserializeObject<MapDAO>(jsonMap); ;
+        reader.Close();
+        return JsonConvert.DeserializeObject<MapDAO>(jsonMap);
+    }
+
+    public static void SaveMapToFile(MapDAO mapData)
+    {
+        string path = $"{FilePaths.Maps}/{mapData.name}.json";
+        StreamWriter writer = new StreamWriter(path, false);
+        writer.Write(JsonConvert.SerializeObject(mapData));
+        writer.Close();
     }
 
     private void LoadGrid(MapDAO map)
@@ -75,6 +88,10 @@ public class MapLoader : MonoBehaviour
 
     private void LoadSpawners(MapDAO map)
     {
+        if (map.zombieSpawners == null)
+        {
+            return;
+        }
         GameObject spawnerParent = new GameObject();
         spawnerParent.name = "Spawners";
         Instantiate(spawnerParent, Vector3.zero, new Quaternion(), null);

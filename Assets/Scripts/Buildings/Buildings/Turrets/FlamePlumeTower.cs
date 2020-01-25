@@ -5,6 +5,8 @@ public class FlamePlumeTower : TargetLocationTower
     public override BuildingType Type => BuildingType.FlamePlume;
     public override string Name => "Flame Plume";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
+
     public override ResourceDAO PowerUpCost
     {
         get

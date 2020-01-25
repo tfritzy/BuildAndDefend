@@ -3111,7 +3111,7 @@ MonoBehaviour:
   timeBetweenWaves: 25
   waveStartBanner: {fileID: 0}
   waveGroupCount: 2
-  levelDuration: 120
+  levelDuration: 10
 --- !u!1 &2071138794
 GameObject:
   m_ObjectHideFlags: 0

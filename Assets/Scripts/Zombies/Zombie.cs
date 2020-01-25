@@ -229,22 +229,25 @@ public class Zombie : MonoBehaviour
 
     private (Vector2Int, GameObject) findClosestBuilding(bool findOnlyTowers = false)
     {
-        int closestDist = int.MaxValue;
+        float closestDist = float.MaxValue;
         Vector2Int closestPos = Vector2Int.zero;
         GameObject closestTarget = null;
-        foreach (string towerPos in Map.BuildingsDict.Keys)
+        Vector2Int zombieGridPos = Map.WorldPointToGridPoint(this.transform.position);
+        foreach (string towerId in Map.BuildingDict.Keys)
         {
-            if (findOnlyTowers && Map.BuildingsDict[towerPos].GetComponent<Tower>() == null)
+            if (findOnlyTowers && Map.BuildingDict[towerId].GetComponent<Tower>() == null)
             {
                 continue;
             }
 
-            int distance = Mathf.Abs((towerPos.ToVector2Int().x - this.locationInGrid.x)) + Mathf.Abs((towerPos.ToVector2Int().y - this.locationInGrid.y));
-            if (distance < closestDist)
+            Vector2Int size = Map.BuildingDict[towerId].GetComponent<Building>().Size;
+            Vector2Int closestPosToZombie = Map.BuildingDict[towerId].GetClosestPointOnBuildingToGridPosition(zombieGridPos);
+            float lineOfSightDistance = Vector2Int.Distance(closestPos, zombieGridPos);
+            if (lineOfSightDistance < closestDist)
             {
-                closestDist = distance;
-                closestTarget = Map.BuildingsDict[towerPos];
-                closestPos = towerPos.ToVector2Int();
+                closestDist = lineOfSightDistance;
+                closestPos = closestPosToZombie;
+                closestTarget = Map.BuildingDict[towerId].gameObject;
             }
         }
         return (closestPos, closestTarget);
@@ -290,7 +293,8 @@ public class Zombie : MonoBehaviour
                         continue;
                     }
 
-                    if ((Map.PathingGrid[newX, newY] == PathableType.Pathable || (newX == endLoc[0] && newY == endLoc[1])) &&
+                    if ((Map.PathingGrid[newX, newY] == PathableType.Pathable ||
+                        (newX == endLoc[0] && newY == endLoc[1])) &&
                         !v.Contains(newX + "," + newY))
                     {
                         List<Vector2Int> newList = new List<Vector2Int>(cur);

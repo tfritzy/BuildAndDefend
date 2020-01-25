@@ -1,8 +1,11 @@
+using UnityEngine;
+
 public class FireBoltTower : Tower
 {
     public override BuildingType Type => BuildingType.FireBolt;
     public override string Name => "Fire Bolt";
     public override Faction Faction => Faction.Fire;
+    public override Vector2Int Size => new Vector2Int(1, 1);
     public override ResourceDAO PowerUpCost
     {
         get

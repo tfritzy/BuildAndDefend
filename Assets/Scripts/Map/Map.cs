@@ -42,6 +42,7 @@ public static class Map
             new Quaternion(),
             null);
         buildingInst.GetComponent<Building>().BuildingId = building.BuildingId;
+        buildingInst.GetComponent<Building>().Position = position;
         Map.AddBuildingToMap(buildingInst.GetComponent<Building>(), new Vector2Int(building.xPos, building.yPos));
 
         return buildingInst;

@@ -69,7 +69,7 @@ public class VectorAutoInput : InputController
 
     protected GameObject FindClosestZombieWithinRange()
     {
-        Collider2D[] zombiesWithinRange = Physics2D.OverlapCircleAll(Tower.gameObject.transform.position, Tower.Stats.Range).Where(col => col.gameObject.CompareTag(Tags.Zombie)).ToArray();
+        Collider2D[] zombiesWithinRange = Physics2D.OverlapCircleAll(Tower.transform.position, Tower.Stats.Range).Where(col => col.gameObject.CompareTag(Tags.Zombie)).ToArray();
         float closestDist = float.MaxValue;
         GameObject closestZombie = null;
         foreach (Collider2D zombie in zombiesWithinRange)

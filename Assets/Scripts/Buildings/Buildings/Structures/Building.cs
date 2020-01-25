@@ -28,7 +28,7 @@ public abstract class Building : MonoBehaviour
         {
             if (_id == null)
             {
-                _id = $"{this.Name}_{Guid.NewGuid().ToString("N").Substring(0, 6)}";
+                _id = $"{this.Name}_{Guid.NewGuid().ToString("N")}";
             }
             return _id;
         }
@@ -87,7 +87,6 @@ public abstract class Building : MonoBehaviour
     {
         SetupHealthbar();
         this.startingHealth = Stats.Health;
-        this.Position = Map.WorldPointToGridPoint(this.transform.position);
         this.name = BuildingId;
     }
 

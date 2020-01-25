@@ -130,6 +130,7 @@ public class Builder : MonoBehaviour
         GameObject inst = Instantiate(SelectedBuilding,
                                       buildingPos,
                                       new Quaternion());
+        inst.GetComponent<Building>().Position = gridLoc;
         return inst;
     }
 

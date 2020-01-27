@@ -36,13 +36,13 @@ public abstract class Projectile : MonoBehaviour
         CheckLifespan();
     }
 
-    public virtual void SetParameters(int damage, float lifespan, int pierceCount, Tower owner, float explosionRadius = default(float))
+    public virtual void SetParameters(ProjectileStatsDAO projectileStats)
     {
-        this.Damage = damage;
-        this.Lifespan = lifespan;
-        this.PierceCount = pierceCount;
-        this.Owner = owner;
-        this.ExplosionRadius = explosionRadius;
+        this.Damage = projectileStats.Damage;
+        this.Lifespan = projectileStats.Lifespan;
+        this.PierceCount = projectileStats.PierceCount;
+        this.Owner = projectileStats.Owner;
+        this.ExplosionRadius = projectileStats.ExplosionRadius;
     }
 
     protected void CheckLifespan()

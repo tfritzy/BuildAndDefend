@@ -146,12 +146,15 @@ public abstract class Tower : Building
 
     protected virtual void SetProjectileValues(GameObject p, InputDAO input)
     {
-        p.GetComponent<Projectile>().SetParameters(
-            Stats.Damage,
-            Stats.ProjectileLifespan,
-            Stats.Pierce,
-            this,
-            Stats.ExplosionRadius);
+        ProjectileStatsDAO stats = new ProjectileStatsDAO
+        {
+            Damage = Stats.Damage,
+            Lifespan = Stats.ProjectileLifespan,
+            PierceCount = Stats.Pierce,
+            Owner = this,
+            ExplosionRadius = Stats.ExplosionRadius,
+        };
+        p.GetComponent<Projectile>().SetParameters(stats);
     }
 
     protected override void OnDeath()

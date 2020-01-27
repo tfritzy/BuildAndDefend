@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationProjectile : Projectile, ITargetLocationProjectile
+public abstract class TargetLocationProjectile : Projectile
 {
     private Vector3 targetPosition;
     public Vector3 TargetPosition { get => targetPosition; set => targetPosition = value; }
@@ -16,20 +16,14 @@ public abstract class TargetLocationProjectile : Projectile, ITargetLocationProj
         }
     }
 
-    public virtual void SetParameters(
-        int damage,
-        float lifespan,
-        int pierceCount,
-        Tower owner,
-        float explosionRadius,
-        Vector3 targetPosition)
+    public override void SetParameters(ProjectileStatsDAO projectileStats)
     {
-        this.Damage = damage;
-        this.Lifespan = lifespan;
-        this.Owner = owner;
-        this.TargetPosition = targetPosition;
-        this.ExplosionRadius = explosionRadius;
-        this.PierceCount = pierceCount;
+        if (!(projectileStats is TargetLocationProjectileStatsDAO))
+        {
+            throw new ArgumentException("Projectile stats must be of the type TargetLocationProjectileStatsDAO.");
+        }
+        base.SetParameters(projectileStats);
+        this.targetPosition = ((TargetLocationProjectileStatsDAO)projectileStats).TargetPosition;
     }
 
     protected override void OnTargetCollisionEnter(GameObject target)

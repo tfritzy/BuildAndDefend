@@ -34,14 +34,17 @@ public class FlamePlumeTower : TargetLocationTower
 
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
-        p.GetComponent<ITimedExplosionProjectile>().SetParameters(
-            Stats.Damage,
-            Stats.ProjectileLifespan,
-            Stats.Pierce,
-            this,
-            Stats.ExplosionRadius,
-            this.explosionDelay
-        );
+        TargetLocationSpawningProjectileStatsDAO stats = new TargetLocationSpawningProjectileStatsDAO
+        {
+            Damage = Stats.Damage,
+            Lifespan = Stats.ProjectileLifespan,
+            PierceCount = Stats.Pierce,
+            Owner = this,
+            ExplosionRadius = Stats.ExplosionRadius,
+            ExplosionDelay = this.explosionDelay,
+        };
+
+        p.GetComponent<Projectile>().SetParameters(stats);
     }
 
     protected override GameObject CreateProjectile(InputDAO input)

@@ -50,11 +50,15 @@ public class FireNovaTower : Tower
 
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
-        p.GetComponent<IConstantDamageProjectile>().SetParameters(
-            Stats.Damage,
-            Stats.ProjectileLifespan,
-            this,
-            this.damageTickGap);
+        ConstantDamageProjectileStatsDAO stats = new ConstantDamageProjectileStatsDAO
+        {
+            Damage = Stats.Damage,
+            Lifespan = Stats.ProjectileLifespan,
+            Owner = this,
+            DamageTickGapInSeconds = this.damageTickGap,
+        };
+
+        p.GetComponent<Projectile>().SetParameters(stats);
     }
 
     public override TowerStats GetTowerParameters(int level, int tier)

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class ConstantDamageProjectile : Projectile, IConstantDamageProjectile
+public abstract class ConstantDamageProjectile : Projectile
 {
 
     /// <summary>
@@ -25,17 +25,15 @@ public abstract class ConstantDamageProjectile : Projectile, IConstantDamageProj
 
     public float DamageTickGapInSeconds { get; set; }
 
-    public virtual void SetParameters(
-        int damage,
-        float lifespan,
-        Tower owner,
-        float damageTickGapInSeconds)
+    public override void SetParameters(ProjectileStatsDAO projectileStats)
     {
-        this.Damage = damage;
-        this.Lifespan = lifespan;
-        this.PierceCount = int.MaxValue;
-        this.Owner = owner;
-        this.DamageTickGapInSeconds = damageTickGapInSeconds;
+        if (!(projectileStats is ConstantDamageProjectileStatsDAO))
+        {
+            throw new ArgumentException("projectileStats must be of type ConstantDamageProjectileStatsDAO");
+        }
+
+        base.SetParameters(projectileStats);
+        this.DamageTickGapInSeconds = ((ConstantDamageProjectileStatsDAO)projectileStats).DamageTickGapInSeconds;
     }
 
     protected override void UpdateLoop()

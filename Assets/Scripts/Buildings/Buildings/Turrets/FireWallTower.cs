@@ -31,7 +31,6 @@ public class FireWallTower : Tower
         }
     }
 
-
     public override TowerStats GetTowerParameters(int level, int tier)
     {
         TowerStats stats = new TowerStats();
@@ -79,11 +78,15 @@ public class FireWallTower : Tower
 
     protected override void SetProjectileValues(GameObject p, InputDAO input)
     {
-        p.GetComponent<ConstantDamageProjectile>().SetParameters(
-            Stats.Damage,
-            Stats.ProjectileLifespan,
-            Stats.Pierce,
-            this,
-            this.FireDamageTickGapInSeconds);
+        ConstantDamageProjectileStatsDAO stats = new ConstantDamageProjectileStatsDAO
+        {
+            Damage = Stats.Damage,
+            Lifespan = Stats.ProjectileLifespan,
+            PierceCount = Stats.Pierce,
+            Owner = this,
+            DamageTickGapInSeconds = this.FireDamageTickGapInSeconds,
+        };
+
+        p.GetComponent<Projectile>().SetParameters(stats);
     }
 }

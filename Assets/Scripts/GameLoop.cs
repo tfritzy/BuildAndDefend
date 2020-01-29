@@ -5,6 +5,7 @@ public class GameLoop : MonoBehaviour
     public void ReturnToMap()
     {
         Map.SaveState();
+        Player.Save();
         SceneChanger.ReturnToMap();
     }
 

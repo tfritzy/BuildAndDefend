@@ -9,4 +9,5 @@ public class LumberCamp : Harvester
     public override PathableType PathableType => PathableType.UnPathable;
     public override Faction Faction => Faction.All;
     public override ResourceDAO PowerUpCost => new ResourceDAO(wood: 2 * this.Tier, gold: 3 * this.Tier);
+    public override ResourceDAO ResourceProductionPerHour => new ResourceDAO(wood: 10);
 }

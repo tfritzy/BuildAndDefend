@@ -1,6 +1,6 @@
 public abstract class Harvester : Building
 {
-    public ResourceDAO ResourceProductionPerHour;
+    public abstract ResourceDAO ResourceProductionPerHour { get; }
 
     public override void Setup()
     {

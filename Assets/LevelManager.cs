@@ -63,7 +63,6 @@ public class LevelManager : MonoBehaviour
         {
             EndWave();
             EndNight();
-            Player.PlayerData.Save();
             ShowWinScreen();
             return;
         }

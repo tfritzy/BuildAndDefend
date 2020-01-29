@@ -162,8 +162,8 @@ public static class Map
 
     public static void SaveState()
     {
-        SaveMapToFile();
         UpdateTotalResourceProduction();
+        SaveMapToFile();
     }
 
     public static List<BuildingOnMapDAO> GetCurrentBuildingsOnMap()

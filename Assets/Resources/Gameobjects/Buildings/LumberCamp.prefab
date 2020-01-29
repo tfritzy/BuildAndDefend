@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2257133676150758451}
   - component: {fileID: 4938396873866704718}
   - component: {fileID: 5367065917723169660}
-  - component: {fileID: 2763262578276893742}
+  - component: {fileID: 2638551608219502597}
   m_Layer: 10
   m_Name: LumberCamp
   m_TagString: Tower
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2587548409969257976}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.07, y: 1.05, z: 0}
-  m_LocalScale: {x: 7.4468613, y: 6.0174828, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -108,7 +108,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
---- !u!114 &2763262578276893742
+--- !u!114 &2638551608219502597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,10 +117,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2587548409969257976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a1b73766e553c04ca4e4ade632e1768, type: 3}
+  m_Script: {fileID: 11500000, guid: 55eb0d624c20e0347ab5b4ae4c55c3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Stats:
-    Health: 0
-  Position: {x: 13, y: 10}
-  lastFireTime: 0
+    Health: 100
+  Position: {x: 35, y: 33}
+  ResourceProductionPerHour:
+    Gold: 0
+    Wood: 0
+    Stone: 0
+    Iron: 0
+    SkillPoints: 0

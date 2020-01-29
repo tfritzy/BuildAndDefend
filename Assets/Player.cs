@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         Save();
     }
 
-    public void Save()
+    public static void Save()
     {
         string serializedObject = JsonConvert.SerializeObject(Player.PlayerData.Values).ToString();
         string fullPath = $"{Application.persistentDataPath}/{fileName}";

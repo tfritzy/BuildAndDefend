@@ -97,6 +97,11 @@ public class MapLoader : MonoBehaviour
         Instantiate(spawnerParent, Vector3.zero, new Quaternion(), null);
         foreach (ZombieSpawnerDAO spawner in map.zombieSpawners)
         {
+            if (Map.Environment[spawner.Pos.x, spawner.Pos.y].CanBeBuiltUpon == false)
+            {
+                continue;
+            }
+
             Vector3 spawnerPos = Map.GridPointToWorldPoint(spawner.Pos);
             GameObject spawnerInst = Instantiate(this.zombieSpawner, spawnerPos, new Quaternion(), spawnerParent.transform);
             spawnerInst.GetComponent<ZombieSpawner>().SpawnRate = spawner.SpawnRate;

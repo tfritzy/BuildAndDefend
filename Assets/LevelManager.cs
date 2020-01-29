@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
     public float waveDuration = 2f;
     public float timeBetweenWaves = 25f;
     public GameObject waveStartBanner;
-    public int waveGroupCount = 2;
+    public int waveGroupCount = 0;
     public float levelDuration = 10f;
 
     private void Awake()

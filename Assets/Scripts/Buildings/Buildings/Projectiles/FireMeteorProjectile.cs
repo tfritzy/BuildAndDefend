@@ -4,11 +4,6 @@ using UnityEngine;
 public class FireMeteorProjectile : TargetLocationFlyingProjectile
 {
     protected override BuildingType TowerType => BuildingType.FireMeteor;
-
-    protected override bool ConstantVelocity => true;
-
-    public float startSize = 20f;
-    public float endSize = 6f;
     public float startZ = -200;
 
     protected override void UpdateLoop()
@@ -37,7 +32,7 @@ public class FireMeteorProjectile : TargetLocationFlyingProjectile
             Random.Range(GenerateStartingPosition(), GenerateStartingPosition()),
             Random.Range(GenerateStartingPosition(), GenerateStartingPosition()),
             startZ);
-        Vector3 diffVector = this.TargetPosition - this.transform.position;
+        Vector3 diffVector = this.targetPosition - this.transform.position;
         diffVector /= diffVector.magnitude;
         diffVector *= this.MovementSpeed;
         Vector3 initialVelocity = diffVector;

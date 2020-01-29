@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TargetLocationFlyingProjectile : Projectile, ITargetLocationFlyingProjectile
+public abstract class TargetFlyingProjectile : Projectile
 {
-    private Vector3 targetPosition;
-    public Vector3 TargetPosition { get => targetPosition; set => targetPosition = value; }
-    protected abstract bool ConstantVelocity { get; }
-    public float projectileMoveForce = 50;
+    protected abstract Vector3 targetPosition { get; }
+    protected float movementForce;
 
     protected override void UpdateLoop()
     {
         base.UpdateLoop();
-        Vector3 diffVector = this.TargetPosition - this.transform.position;
-        float distance = Vector3.SqrMagnitude(this.TargetPosition - this.transform.position);
+        Vector3 diffVector = this.targetPosition - this.transform.position;
+        float distance = Vector3.SqrMagnitude(this.targetPosition - this.transform.position);
         if (Mathf.Abs(distance) < .1f || this.transform.position.z > 0)
         {
             this.OnHalt(this.gameObject);
@@ -31,14 +29,14 @@ public abstract class TargetLocationFlyingProjectile : Projectile, ITargetLocati
     protected virtual void Move(Vector3 diffVector)
     {
         diffVector /= diffVector.magnitude;
-        if (ConstantVelocity)
+        if (this.movementForce == default)
         {
             diffVector *= MovementSpeed;
             SetVelocity(diffVector);
         }
         else
         {
-            diffVector *= projectileMoveForce;
+            diffVector *= movementForce;
             AddForce(diffVector);
         }
     }
@@ -65,24 +63,6 @@ public abstract class TargetLocationFlyingProjectile : Projectile, ITargetLocati
         {
             this.GetComponent<Rigidbody2D>().velocity = velocity;
         }
-    }
-
-    public virtual void SetParameters(
-        int damage,
-        float lifespan,
-        int pierceCount,
-        Tower owner,
-        float explosionRadius,
-        Vector3 targetPosition,
-        float movementSpeed)
-    {
-        this.Damage = damage;
-        this.Lifespan = lifespan;
-        this.Owner = owner;
-        this.TargetPosition = targetPosition;
-        this.ExplosionRadius = explosionRadius;
-        this.PierceCount = pierceCount;
-        this.MovementSpeed = movementSpeed;
     }
 
     protected override void OnTargetCollisionEnter(GameObject target)

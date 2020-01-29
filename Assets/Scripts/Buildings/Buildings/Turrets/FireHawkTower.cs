@@ -24,7 +24,8 @@ public class FireHawkTower : TargetLocationFlyingProjTower
             return new ResourceDAO(
                 gold: 100 * this.Tier,
                 wood: 40 * this.Tier,
-                stone: 10 * this.Tier);
+                stone: 10 * this.Tier
+            );
         }
     }
 

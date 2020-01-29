@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class FireHawkProjectile : TargetLocationFlyingProjectile, ITargetLocationFlyingProjectile
+public class FireHawkProjectile : TargetLocationFlyingProjectile
 {
     public float initialZVelocity = -50f;
     public float initialOpposingSpeed = 10f;
     protected override BuildingType TowerType => BuildingType.FireHawks;
-    protected override bool ConstantVelocity => false;
 
     protected override void Startup()
     {
         base.Startup();
-        Vector3 clickDirection = this.TargetPosition - this.transform.position;
+        Vector3 clickDirection = this.targetPosition - this.transform.position;
         clickDirection /= clickDirection.magnitude;
         clickDirection *= initialOpposingSpeed;
         clickDirection = new Vector2(

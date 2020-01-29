@@ -72,14 +72,17 @@ public class FlameStalkerTower : Tower
 
     protected override void SetProjectileValues(UnityEngine.GameObject p, InputDAO input)
     {
-        p.GetComponent<ITargetEntityFlyingProjectile>().SetParameters(
-            Stats.Damage,
-            Stats.ProjectileLifespan,
-            Stats.Pierce,
-            this,
-            Stats.ExplosionRadius,
-            ((TargetObjectAutoInput)this.inputController).input.Target,
-            Stats.ProjectileMovementSpeed
-        );
+        TargetEntityProjectileStatsDAO stats = new TargetEntityProjectileStatsDAO
+        {
+            Damage = Stats.Damage,
+            Lifespan = Stats.ProjectileLifespan,
+            PierceCount = Stats.Pierce,
+            Owner = this,
+            ExplosionRadius = Stats.ExplosionRadius,
+            Target = ((TargetObjectAutoInput)this.inputController).input.Target,
+            MovementSpeed = Stats.ProjectileMovementSpeed,
+        };
+
+        p.GetComponent<Projectile>().SetParameters(stats);
     }
 }
